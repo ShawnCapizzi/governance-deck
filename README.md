@@ -20,8 +20,10 @@ supabase/seed.sql (service role).
 
     npm run gates
 
-Gate 1 transpiles every ts/tsx file with esbuild. Gate 2 SSR-renders all
-four views under Node and asserts content markers. Both must pass.
+Gate 1 transpiles every ts/tsx file with esbuild. Gate 2 type-checks the
+project with tsc --noEmit, the same check Next runs during a production
+build. Gate 3 SSR-renders all views under Node and asserts content
+markers. All three must pass before any commit.
 
 ## Repo map
 
@@ -32,6 +34,8 @@ four views under Node and asserts content markers. Both must pass.
 | app/converge/page.tsx | Convergence and reconciliation |
 | app/artifacts/page.tsx | Artifact previews with provenance |
 | app/start/page.tsx | Onboarding manual with playable demo and lead-gen card |
+| app/roles/page.tsx | Roles, departments, async decision modes, pairing |
+| components/Wordmark.tsx | Brand wordmark and watermark (generated from SVG) |
 | components/AppShell.tsx | Sidebar cockpit shell |
 | components/ui.tsx | Widget (laser and glow props), chips, suit-rail card |
 | components/ParticleField.tsx | Site constellation background (ported) |

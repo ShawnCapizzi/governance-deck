@@ -8,6 +8,7 @@ import GatherView from "../components/views/GatherView";
 import ConvergeView from "../components/views/ConvergeView";
 import ArtifactsView from "../components/views/ArtifactsView";
 import StartView from "../components/views/StartView";
+import RolesView from "../components/views/RolesView";
 
 export function renderAll(): Record<string, string> {
   const wrap = (active: NavKey, node: React.ReactNode) =>
@@ -18,6 +19,7 @@ export function renderAll(): Record<string, string> {
     );
   return {
     start: wrap("start", <StartView />),
+    roles: wrap("roles", <RolesView />),
     health: wrap("health", <HealthView />),
     gather: wrap("gather", <GatherView />),
     converge: wrap("converge", <ConvergeView />),

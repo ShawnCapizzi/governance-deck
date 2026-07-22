@@ -45,14 +45,14 @@ export default function ArtifactsView() {
     <div className="space-y-4">
       <div className="bg-surface rounded-xl border border-line p-5">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3 mb-1">Prove it worked</p>
-        <p className="text-xs text-ink-2">
+        <p className="text-sm text-ink-2">
           Artifacts generate from reconciled and aligned cards, one file per suit. Versions are immutable. Amendments create a new version with provenance, never an overwrite. This is the rollback rule the deck teaches, enforced by the platform. Reconcile cards in Converge and watch these fill in.
         </p>
       </div>
       {[truthSignals, decisionRights].map((md, i) => (
         <pre key={i} className="bg-ground border border-line text-ink-2 text-xs rounded-xl p-4 overflow-x-auto whitespace-pre-wrap font-mono">{md}</pre>
       ))}
-      <p className="text-xs text-ink-3">guardrails.md, rollback-rules.md, and change-protocol.md generate the same way from their suits.</p>
+      <p className="text-sm text-ink-3">guardrails.md, rollback-rules.md, and change-protocol.md generate the same way from their suits.</p>
     </div>
   );
 }

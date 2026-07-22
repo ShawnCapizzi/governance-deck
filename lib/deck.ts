@@ -21,7 +21,37 @@ export interface Resolution { value: string; rationale: string; }
 export type ResponseMap = Record<string, Record<string, string>>;
 
 export const SESSION_DATE = "2026-07-07";
-export const ROLES = ["Creative Director", "Strategy Lead", "Design Lead", "Brand Owner", "Project Lead"];
+// How a role reaches a decision when the team is working async. This is
+// the governance answer to "who decides, and how, when we are not in a room."
+export const DECISION_MODES = [
+  "Decides alone",
+  "Consults, then decides",
+  "Consensus with paired role",
+  "Escalates to a lead",
+] as const;
+export type DecisionMode = (typeof DECISION_MODES)[number];
+
+export interface Role {
+  id: string;
+  title: string;
+  department: string;
+  decisionMode: DecisionMode;
+  pairedWith: string | null;
+}
+
+export const DEFAULT_ROLES: Role[] = [
+  { id: "r1", title: "Creative Director", department: "Creative", decisionMode: "Decides alone", pairedWith: null },
+  { id: "r2", title: "Strategy Lead", department: "Strategy", decisionMode: "Consults, then decides", pairedWith: "r5" },
+  { id: "r3", title: "Design Lead", department: "Design Ops", decisionMode: "Consults, then decides", pairedWith: "r1" },
+  { id: "r4", title: "Brand Owner", department: "Brand", decisionMode: "Consensus with paired role", pairedWith: "r1" },
+  { id: "r5", title: "Project Lead", department: "Delivery", decisionMode: "Escalates to a lead", pairedWith: null },
+];
+
+export const DEPARTMENTS = ["Creative", "Strategy", "Design Ops", "Content Ops", "Brand", "Delivery", "Legal and Compliance", "Product"];
+
+// Seed labels, kept so the shipped demo responses stay coherent. Live
+// option lists come from the roles in the session store, not from here.
+export const ROLES = DEFAULT_ROLES.map((r) => r.title);
 export const FREQ = ["Never", "Rarely", "Sometimes", "Often", "Always"];
 export const STAGES = ["Ad hoc", "Documented", "Practiced", "Enforced", "Self-correcting"];
 

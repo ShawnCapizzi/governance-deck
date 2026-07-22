@@ -10,6 +10,7 @@ import { CARDS, ISSUES, STAGES } from "../../lib/deck";
 import { classifyCard, openWork } from "../../lib/converge";
 import { useSession } from "../../lib/store";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
+import { WordmarkWatermark } from "../Wordmark";
 
 export default function HealthView() {
   const { responses, resolved } = useSession();
@@ -21,6 +22,7 @@ export default function HealthView() {
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <Widget eyebrow="Prove it worked" title="Governance Health" sub="Workshop 01" className="md:col-span-2" laser>
+        <WordmarkWatermark className="-right-6 -bottom-4 w-64 md:w-80 text-ink opacity-[0.045]" />
         <div className="flex items-end justify-between gap-4">
           <p className="text-sm text-ink-2 max-w-md">
             Progress of every active issue toward its target stage. Success met when all issues hold at or above target. Diagnostics re-run on cadence, and the deltas are the road.
@@ -40,7 +42,7 @@ export default function HealthView() {
             {queue.map(({ card, result }) => (
               <div key={card.id} className="py-3 first:pt-0 last:pb-0">
                 <p className="text-sm text-ink">{card.prompt}</p>
-                <p className="text-xs text-ink-2 mt-1">
+                <p className="text-sm text-ink-2 mt-1">
                   {result.gap
                     ? "Leads and team answered differently. Reconcile before it hardens into two realities."
                     : "Answers split in gather. The named decider resolves with a documented rationale."}
@@ -67,7 +69,7 @@ export default function HealthView() {
         const alignCard = diags.find((d) => d.result.alignment != null);
         return (
           <Widget key={issue.id} eyebrow={issue.domain} title={issue.title} sub={"Target: " + STAGES[issue.target - 1]}>
-            <p className="text-xs text-ink-2 mb-4">{issue.problem}</p>
+            <p className="text-sm text-ink-2 mb-4">{issue.problem}</p>
             <div className="flex gap-1 mb-3">
               {STAGES.map((s, idx) => {
                 const n = idx + 1;

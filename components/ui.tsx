@@ -22,7 +22,7 @@ export function Widget({ eyebrow, title, sub, children, className = "", laser = 
           <p className="eyebrow">{eyebrow}</p>
           <div className="flex flex-wrap items-baseline justify-between gap-2 mt-1">
             <h2 className="text-ink text-base md:text-lg font-semibold tracking-tight">{title}</h2>
-            {sub && <span className="text-xs text-ink-2">{sub}</span>}
+            {sub && <span className="text-sm text-ink-2">{sub}</span>}
           </div>
         </header>
         {children}
@@ -75,7 +75,7 @@ export function SuitCard({ card, children }: { card: DeckCard; children?: ReactN
           <span className={"text-xs px-2.5 py-0.5 rounded-full " + s.chip}>{card.suit}</span>
           {card.feeds && <span className="text-xs font-mono text-ink-3">&rarr; {card.feeds}</span>}
         </div>
-        <p className="text-sm text-ink mb-3">{card.prompt}</p>
+        <p className="text-base text-ink mb-3 leading-relaxed">{card.prompt}</p>
         {children}
       </div>
     </div>

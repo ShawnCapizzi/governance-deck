@@ -20,7 +20,8 @@ const { renderAll } = await import(path.resolve(".gates/ssr-bundle.mjs"));
 const html = renderAll();
 const checks = {
   start: ["How the deck works", "Try the loop", "Bring this to your org", "Start here"],
-  health: ["CAPIZZI", "Governance Health", "Facilitator queue", "Manuscript discipline", "sc-frame"],
+  roles: ["Roles and decision rights", "Creative Director", "Add a role", "Paired with"],
+  health: ["aria-label=\"Capizzi\"", "Governance Health", "Facilitator queue", "Manuscript discipline", "sc-frame"],
   gather: ["Async gather", "SIG-1", "answered"],
   converge: ["Facilitator", "SIG-4", "aligned"],
   artifacts: ["truth-signals.md", "decision-rights.md"],

@@ -21,7 +21,7 @@ export default function ConvergeView() {
     <div className="space-y-4">
       <div className="bg-surface rounded-xl border border-line p-5">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3 mb-1">Make it visible</p>
-        <p className="text-xs text-ink-2 mb-3">
+        <p className="text-sm text-ink-2 mb-3">
           Convergence. Aligned cards settle on their own. Split and review cards are the real governance work: the named decider reconciles each with a documented rationale. Only the conflicts need a room.
         </p>
         <div className="flex flex-wrap gap-2">
@@ -45,7 +45,7 @@ export default function ConvergeView() {
             </div>
             <div className="space-y-1.5 mb-3">
               {result.entries.map((e) => (
-                <div key={e.personaId} className="flex gap-3 text-sm">
+                <div key={e.personaId} className="flex gap-3 text-sm md:text-base">
                   <span className="font-mono text-xs text-ink-3 w-24 shrink-0 pt-0.5">{e.name} &middot; {e.tier}</span>
                   <span className="text-ink-2">{e.value}</span>
                 </div>
@@ -59,7 +59,7 @@ export default function ConvergeView() {
             )}
             {needsWork && (
               <div className="border-t border-line pt-3 space-y-2">
-                <p className="text-xs text-ink-3">Facilitator: adopt an answer or write the resolved value, then record the rationale.</p>
+                <p className="text-sm text-ink-3">Facilitator: adopt an answer or write the resolved value, then record the rationale.</p>
                 <div className="flex flex-wrap gap-2">
                   {uniqueValues.map((v) => (
                     <button key={v} onClick={() => setDrafts({ ...drafts, [card.id]: { ...draft, value: v } })}

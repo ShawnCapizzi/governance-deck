@@ -10,6 +10,7 @@ import Link from "next/link";
 import { CARDS } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
+import { useSession } from "../../lib/store";
 
 const DEMO_SEED: Record<string, string> = {
   p1: "Creative Director",
@@ -40,6 +41,7 @@ const SETUP = [
 ];
 
 export default function StartView() {
+  const { roles } = useSession();
   const demoCard = CARDS.find((c) => c.id === "SIG-4")!;
   const [step, setStep] = useState(0);
   const [pick, setPick] = useState("");
@@ -67,7 +69,7 @@ export default function StartView() {
             <div key={l.n} className="bg-ground border border-line rounded-lg p-3">
               <p className="font-mono text-[11px] text-ink-3">{l.n}</p>
               <p className="text-sm text-ink mt-0.5">{l.name}</p>
-              <p className="text-xs text-ink-2 mt-1">{l.copy}</p>
+              <p className="text-sm text-ink-2 mt-1">{l.copy}</p>
             </div>
           ))}
         </div>
@@ -83,9 +85,9 @@ export default function StartView() {
         {step === 0 && (
           <div>
             <p className="text-sm text-ink mb-1">{demoCard.prompt}</p>
-            <p className="text-xs text-ink-3 mb-3">Four teammates already answered async. Their answers are hidden from you, and yours is hidden from them. Pick honestly.</p>
+            <p className="text-sm text-ink-3 mb-3">Four teammates already answered async. Their answers are hidden from you, and yours is hidden from them. Pick honestly.</p>
             <div className="flex flex-wrap gap-2">
-              {(demoCard.options || []).map((opt) => (
+              {roles.map((r) => r.title).map((opt) => (
                 <button key={opt} onClick={() => setPick(opt)}
                   className={"px-3 py-1.5 rounded-full text-sm border " +
                     (pick === opt ? "bg-ink border-ink text-ink-inverse" : "border-line-strong text-ink-2 hover:text-ink hover:border-ink-3")}>
@@ -108,7 +110,7 @@ export default function StartView() {
             </div>
             <div className="space-y-1.5 mb-3">
               {result.entries.map((e) => (
-                <div key={e.personaId} className="flex gap-3 text-sm">
+                <div key={e.personaId} className="flex gap-3 text-sm md:text-base">
                   <span className="font-mono text-xs text-ink-3 w-24 shrink-0 pt-0.5">
                     {e.personaId === "p3" ? "You" : e.name} &middot; {e.tier}
                   </span>
@@ -116,7 +118,7 @@ export default function StartView() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-ink-2 mb-4 max-w-xl">
+            <p className="text-sm text-ink-2 mb-4 max-w-xl">
               This is the moment most teams never see. Leads believe one thing, the team believes another, and both sides think everyone agrees. Left alone, this hardens into two realities. The deck catches it while it is still just a card.
             </p>
             <button onClick={() => setStep(2)} className="pill-primary px-5 py-2.5 text-sm">
@@ -127,7 +129,7 @@ export default function StartView() {
 
         {step === 2 && result && (
           <div className="space-y-2">
-            <p className="text-xs text-ink-3">You are the facilitator now. Adopt an answer or write the resolved value, then record the rationale. The rationale becomes provenance.</p>
+            <p className="text-sm text-ink-3">You are the facilitator now. Adopt an answer or write the resolved value, then record the rationale. The rationale becomes provenance.</p>
             <div className="flex flex-wrap gap-2">
               {[...new Set(result.entries.map((e) => e.value))].map((v) => (
                 <button key={v} onClick={() => setResValue(v)}
@@ -169,7 +171,7 @@ export default function StartView() {
             {ROLES_INFO.map((r) => (
               <div key={r.name} className="py-3 first:pt-0 last:pb-0">
                 <p className="text-sm text-ink">{r.name}</p>
-                <p className="text-xs text-ink-2 mt-0.5">{r.copy}</p>
+                <p className="text-sm text-ink-2 mt-0.5">{r.copy}</p>
               </div>
             ))}
           </div>
@@ -182,7 +184,7 @@ export default function StartView() {
                 <span className="font-mono text-xs text-ink-3 pt-0.5">{s.n}</span>
                 <div>
                   <p className="text-sm text-ink">{s.name}</p>
-                  <p className="text-xs text-ink-2 mt-0.5">{s.copy}</p>
+                  <p className="text-sm text-ink-2 mt-0.5">{s.copy}</p>
                 </div>
               </div>
             ))}

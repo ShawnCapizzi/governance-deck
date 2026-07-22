@@ -8,9 +8,11 @@
 
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
+import { Wordmark } from "./Wordmark";
 
 const NAV = [
   { key: "start", label: "Start here", href: "/start" },
+  { key: "roles", label: "Roles", href: "/roles" },
   { key: "health", label: "Governance Health", href: "/" },
   { key: "gather", label: "Gather", href: "/gather" },
   { key: "converge", label: "Converge", href: "/converge" },
@@ -34,8 +36,8 @@ export default function AppShell({ active, children }: { active: NavKey; childre
       <div className="mx-auto flex max-w-6xl">
         <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-line bg-raised/90 backdrop-blur-sm min-h-screen sticky top-0">
           <div className="px-5 pt-6 pb-4 border-b border-line">
-            <p className="font-mono text-xs tracking-[0.3em] text-ink">CAPIZZI</p>
-            <p className="text-xs text-ink-2 mt-1 tracking-tight">Governance Deck</p>
+            <Wordmark className="h-5 w-auto text-ink" />
+            <p className="text-sm text-ink-2 mt-2 tracking-tight">Governance Deck</p>
           </div>
           <nav className="flex-1 px-3 py-4 space-y-1">
             {NAV.map((n) => (
@@ -57,7 +59,7 @@ export default function AppShell({ active, children }: { active: NavKey; childre
         </aside>
         <div className="flex-1 min-w-0">
           <header className="md:hidden sticky top-0 z-40 bg-raised/85 backdrop-blur-md border-b border-line px-4 h-14 flex items-center justify-between">
-            <p className="font-mono text-xs tracking-[0.3em] text-ink">CAPIZZI</p>
+            <Wordmark className="h-4 w-auto text-ink" />
             <button type="button" onClick={() => setMobileOpen((v) => !v)}
               className="inline-flex items-center justify-center w-10 h-10 -mr-2 text-ink"
               aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen}>

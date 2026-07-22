@@ -28,6 +28,14 @@ ground #000F1F, surface #021626, raised #061C2F, line #262626,
 line-strong #404040, ink #F5F5F4, ink-2 #A3A3A3, ink-3 #737373,
 brand #6B5CFF, peri #A798FF, cobalt #4F46E5, magenta #E879F9, ember #FF5722.
 
+Accessibility, non-negotiable: every text token must clear WCAG AA (4.5:1)
+against both #000F1F and the #04192B card-surface base. ink-3 is #8E96A3,
+raised from the site's #737373 which measured 3.76 and failed. Never use
+brand #6B5CFF or cobalt #4F46E5 as text or icon color on dark surfaces
+(3.90 and 2.83); they are fills, rails, and borders only. Body copy is
+text-sm minimum, card prompts text-base. text-xs is reserved for chips
+and mono metadata labels.
+
 Rules:
 - The 95/5 rule: 95 percent of every screen is ground, surface, ink, and
   hairlines. Tier 3 color is signal, not decoration.
@@ -62,13 +70,26 @@ Rules:
 
 npm run gates
 - Gate 1 (scripts/gate-transpile.mjs): esbuild transpile of every ts/tsx.
-- Gate 2 (scripts/gate-ssr.mjs): SSR render of all four views under Node
-  with content-marker assertions. Compile-clean is not sufficient.
-Add markers to gate-ssr.mjs when adding views.
+- Gate 2 (tsc --noEmit): full type check, identical to what Next runs in
+  a production build. esbuild strips types without checking them, so this
+  gate is what catches type errors before they reach Vercel.
+- Gate 3 (scripts/gate-ssr.mjs): SSR render of all views under Node with
+  content-marker assertions. Compile-clean is not sufficient.
+Add markers to gate-ssr.mjs when adding views. Note: scripts/ is excluded
+from tsconfig because it is gate tooling, not app code; the gates verify
+themselves by running.
 
 ## Current state (v1, verified)
 
-- Five routes: / (Governance Health cockpit), /start (onboarding manual with a playable 60-second demo loop and workshop lead-gen card), /gather, /converge, /artifacts.
+- Seven routes: / (Governance Health cockpit), /start (onboarding manual
+  with a playable 60-second demo loop and workshop lead-gen card), /roles
+  (roles, departments, async decision modes, and pairing), /gather,
+  /converge, /artifacts.
+- Roles are live session state, not a constant. Every decider card reads
+  its options from store.roles, so editing a role changes what the team
+  can choose during gather. Role carries department, decisionMode (decides
+  alone, consults then decides, consensus with paired role, escalates to a
+  lead), and pairedWith.
 - In-memory session store (lib/store.tsx) seeded from lib/deck.ts. State
   survives client navigation via SessionProvider in the root layout.
 - Convergence engine (lib/converge.ts): status classification, tier
