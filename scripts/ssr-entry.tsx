@@ -1,0 +1,26 @@
+// SSR gate entry: renders every view inside the real shell and provider.
+import React from "react";
+import { renderToString } from "react-dom/server";
+import { SessionProvider } from "../lib/store";
+import AppShell, { NavKey } from "../components/AppShell";
+import HealthView from "../components/views/HealthView";
+import GatherView from "../components/views/GatherView";
+import ConvergeView from "../components/views/ConvergeView";
+import ArtifactsView from "../components/views/ArtifactsView";
+import StartView from "../components/views/StartView";
+
+export function renderAll(): Record<string, string> {
+  const wrap = (active: NavKey, node: React.ReactNode) =>
+    renderToString(
+      <SessionProvider>
+        <AppShell active={active}>{node}</AppShell>
+      </SessionProvider>
+    );
+  return {
+    start: wrap("start", <StartView />),
+    health: wrap("health", <HealthView />),
+    gather: wrap("gather", <GatherView />),
+    converge: wrap("converge", <ConvergeView />),
+    artifacts: wrap("artifacts", <ArtifactsView />),
+  };
+}

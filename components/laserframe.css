@@ -1,0 +1,91 @@
+/* ============================================================
+   LaserFrame — orbiting comet gleam (shawncapizzi.com)
+   A soft indigo light orbits the card edge: bright head, glowing
+   halo, slow continuous loop. Darker and luminous, not chrome.
+   Used by components/LaserFrame.tsx (imports this file directly).
+   ============================================================ */
+
+.sc-frame {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+/* shared: all three comet layers ride the same rounded path */
+.sc-frame .comet {
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0; /* hidden until the card is in view */
+}
+
+/* soft outer halo — the cursor-cloud glow, wide and low */
+.sc-frame .comet-glow {
+  stroke: #6b5cff;
+  stroke-width: 1.6;
+  stroke-dasharray: 22 78;
+  filter: drop-shadow(0 0 14px rgba(107, 92, 255, 0.42))
+          drop-shadow(0 0 26px rgba(107, 92, 255, 0.3))
+          drop-shadow(0 0 42px rgba(107, 92, 255, 0.2));
+}
+
+/* mid streak — the body of the comet */
+.sc-frame .comet-mid {
+  stroke: #b9c4ff;
+  stroke-width: 0.8;
+  stroke-dasharray: 11 89;
+  filter: drop-shadow(0 0 11px rgba(150, 170, 255, 0.4))
+          drop-shadow(0 0 22px rgba(150, 170, 255, 0.26));
+}
+
+/* bright head — the leading point of light */
+.sc-frame .comet-head {
+  stroke: #eaf0ff;
+  stroke-width: 0.5;
+  stroke-dasharray: 3 97;
+  filter: drop-shadow(0 0 8px rgba(234, 240, 255, 0.58))
+          drop-shadow(0 0 15px rgba(210, 220, 255, 0.4));
+}
+
+/* in view: reveal and orbit, slow and continuous */
+.sc-frame.is-inview .comet-glow {
+  opacity: 0.22;
+  animation: sc-orbit 10s linear infinite;
+  animation-delay: var(--sc-delay, 0s);
+}
+.sc-frame.is-inview .comet-mid {
+  opacity: 0.3;
+  animation: sc-orbit 10s linear infinite;
+  animation-delay: var(--sc-delay, 0s);
+}
+.sc-frame.is-inview .comet-head {
+  opacity: 0.4;
+  animation: sc-orbit 10s linear infinite;
+  animation-delay: var(--sc-delay, 0s);
+}
+
+/* head leads, halo trails: motion runs path-backward (offset 0 -> 100) */
+@keyframes sc-orbit {
+  to {
+    stroke-dashoffset: 100;
+  }
+}
+
+/* reduced motion: no orbit, just a faint static indigo edge */
+@media (prefers-reduced-motion: reduce) {
+  .sc-frame .comet {
+    animation: none !important;
+  }
+  .sc-frame .comet-glow {
+    opacity: 0.1;
+    stroke-dasharray: none;
+  }
+  .sc-frame .comet-mid,
+  .sc-frame .comet-head {
+    opacity: 0;
+  }
+}
