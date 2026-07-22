@@ -4,7 +4,8 @@ import { useState } from "react";
 import { CARDS, Resolution } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { useSession } from "../../lib/store";
-import { SuitCard, StatusChip, GapChip, Chip } from "../ui";
+import { SuitCard, StatusChip, GapChip, Chip, Widget } from "../ui";
+import { IconAligned, IconSplit, IconReview } from "../Icons";
 
 export default function ConvergeView() {
   const { responses, resolved, reconcile } = useSession();
@@ -19,18 +20,17 @@ export default function ConvergeView() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-surface rounded-xl border border-line p-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3 mb-1">Make it visible</p>
-        <p className="text-sm text-ink-2 mb-3">
-          Convergence. Aligned cards settle on their own. Split and review cards are the real governance work: the named decider reconciles each with a documented rationale. Only the conflicts need a room.
+      <Widget eyebrow="Make it visible" title="Convergence" sub={counts.split + counts.review + " need attention"}>
+        <p className="text-sm text-ink-2 mb-4">
+          Aligned cards settle on their own. Split and review cards are the real governance work: the named decider reconciles each with a documented rationale. Only the conflicts need a room.
         </p>
         <div className="flex flex-wrap gap-2">
-          <Chip tone="peri">{counts.aligned} aligned</Chip>
-          <Chip tone="ember">{counts.split} split</Chip>
-          <Chip tone="cobalt">{counts.review} in review</Chip>
-          <Chip tone="brand">{counts.reconciled} reconciled</Chip>
+          <Chip tone="peri" icon={<IconAligned size={13} />}>{counts.aligned} aligned</Chip>
+          <Chip tone="ember" icon={<IconSplit size={13} />}>{counts.split} split</Chip>
+          <Chip tone="cobalt" icon={<IconReview size={13} />}>{counts.review} in review</Chip>
+          <Chip tone="brand" icon={<IconAligned size={13} />}>{counts.reconciled} reconciled</Chip>
         </div>
-      </div>
+      </Widget>
       {results.map(({ card, result }) => {
         const res = resolved[card.id];
         const draft = drafts[card.id] || { value: "", rationale: "" };

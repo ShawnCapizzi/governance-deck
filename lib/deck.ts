@@ -34,17 +34,20 @@ export type DecisionMode = (typeof DECISION_MODES)[number];
 export interface Role {
   id: string;
   title: string;
+  // Who currently holds the seat. Governance decides by role so the answer
+  // survives turnover, but a session still needs to know who to chase today.
+  heldBy: string;
   department: string;
   decisionMode: DecisionMode;
   pairedWith: string | null;
 }
 
 export const DEFAULT_ROLES: Role[] = [
-  { id: "r1", title: "Creative Director", department: "Creative", decisionMode: "Decides alone", pairedWith: null },
-  { id: "r2", title: "Strategy Lead", department: "Strategy", decisionMode: "Consults, then decides", pairedWith: "r5" },
-  { id: "r3", title: "Design Lead", department: "Design Ops", decisionMode: "Consults, then decides", pairedWith: "r1" },
-  { id: "r4", title: "Brand Owner", department: "Brand", decisionMode: "Consensus with paired role", pairedWith: "r1" },
-  { id: "r5", title: "Project Lead", department: "Delivery", decisionMode: "Escalates to a lead", pairedWith: null },
+  { id: "r1", title: "Creative Director", heldBy: "Dana Whitfield", department: "Creative", decisionMode: "Decides alone", pairedWith: null },
+  { id: "r2", title: "Strategy Lead", heldBy: "Marcus Reyes", department: "Strategy", decisionMode: "Consults, then decides", pairedWith: "r5" },
+  { id: "r3", title: "Design Lead", heldBy: "Priya Anand", department: "Design Ops", decisionMode: "Consults, then decides", pairedWith: "r1" },
+  { id: "r4", title: "Brand Owner", heldBy: "Jo Nakamura", department: "Brand", decisionMode: "Consensus with paired role", pairedWith: "r1" },
+  { id: "r5", title: "Project Lead", heldBy: "Sam Ortiz", department: "Delivery", decisionMode: "Escalates to a lead", pairedWith: null },
 ];
 
 export const DEPARTMENTS = ["Creative", "Strategy", "Design Ops", "Content Ops", "Brand", "Delivery", "Legal and Compliance", "Product"];
@@ -55,12 +58,12 @@ export const ROLES = DEFAULT_ROLES.map((r) => r.title);
 export const FREQ = ["Never", "Rarely", "Sometimes", "Often", "Always"];
 export const STAGES = ["Ad hoc", "Documented", "Practiced", "Enforced", "Self-correcting"];
 
-export const SUIT_STYLE: Record<Suit, { rail: string; chip: string }> = {
-  Signals: { rail: "bg-peri", chip: "bg-peri/10 text-peri border border-peri/30" },
-  Bounds: { rail: "bg-cobalt", chip: "bg-cobalt/10 text-peri border border-cobalt/40" },
-  Trace: { rail: "bg-brand", chip: "bg-brand/10 text-peri border border-brand/40" },
-  Spine: { rail: "bg-magenta", chip: "bg-magenta/10 text-magenta border border-magenta/30" },
-  Diagnostic: { rail: "bg-ember", chip: "bg-ember/10 text-ember border border-ember/30" },
+export const SUIT_STYLE: Record<Suit, { rail: string; chip: string; shade: string; glyph: string }> = {
+  Signals: { rail: "bg-[#6355BB]", chip: "bg-peri/10 text-peri border border-peri/30", shade: "shade-signals", glyph: "\u25C6" },
+  Bounds: { rail: "bg-[#42499E]", chip: "bg-cobalt/10 text-[#9DA9FF] border border-cobalt/40", shade: "shade-bounds", glyph: "\u25A0" },
+  Trace: { rail: "bg-[#AC64B4]", chip: "bg-magenta/10 text-magenta border border-magenta/30", shade: "shade-trace", glyph: "\u25B2" },
+  Spine: { rail: "bg-[#1B6D68]", chip: "bg-[#1B6D68]/25 text-[#5FC9C0] border border-[#5FC9C0]/40", shade: "shade-spine", glyph: "\u2726" },
+  Diagnostic: { rail: "bg-ember", chip: "bg-ember/10 text-ember border border-ember/30", shade: "shade-diagnostic", glyph: "\u25CF" },
 };
 
 export const PERSONAS: Persona[] = [
@@ -175,6 +178,7 @@ export const SEED: ResponseMap = {
 
 export interface RoleKit {
   id: string;
+  icon: "product" | "transformation" | "system" | "regulated";
   name: string;
   bestFor: string;
   outcome: string;
@@ -184,51 +188,68 @@ export interface RoleKit {
 export const ROLE_KITS: RoleKit[] = [
   {
     id: "kit-product",
+    icon: "product",
     name: "Product team",
     bestFor: "Product, design, and engineering shipping on a release cadence.",
     outcome: "Craft calls stay with the practice leads, scope and timing calls stay with product, and nothing ships without one named signer.",
     roles: [
-      { title: "Product Lead", department: "Product", decisionMode: "Decides alone", pairedWith: null },
-      { title: "Design Lead", department: "Design Ops", decisionMode: "Consults, then decides", pairedWith: null },
-      { title: "Engineering Lead", department: "Product", decisionMode: "Consults, then decides", pairedWith: null },
-      { title: "Content Lead", department: "Content Ops", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Product Lead", heldBy: "", department: "Product", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Design Lead", heldBy: "", department: "Design Ops", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Engineering Lead", heldBy: "", department: "Product", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Content Lead", heldBy: "", department: "Content Ops", decisionMode: "Consults, then decides", pairedWith: null },
     ],
   },
   {
     id: "kit-transformation",
+    icon: "transformation",
     name: "Internal business transformation",
     bestFor: "Cross-functional change programs with executive sponsorship and real budget.",
     outcome: "Decision rights are explicit across functions, so the program stops stalling on who gets to call it.",
     roles: [
-      { title: "Transformation Sponsor", department: "Delivery", decisionMode: "Decides alone", pairedWith: null },
-      { title: "Workstream Lead", department: "Delivery", decisionMode: "Escalates to a lead", pairedWith: null },
-      { title: "Operations Owner", department: "Delivery", decisionMode: "Consults, then decides", pairedWith: null },
-      { title: "Change and Comms Lead", department: "Strategy", decisionMode: "Consults, then decides", pairedWith: null },
-      { title: "Risk and Compliance Lead", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "Transformation Sponsor", heldBy: "", department: "Delivery", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Workstream Lead", heldBy: "", department: "Delivery", decisionMode: "Escalates to a lead", pairedWith: null },
+      { title: "Operations Owner", heldBy: "", department: "Delivery", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Change and Comms Lead", heldBy: "", department: "Strategy", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Risk and Compliance Lead", heldBy: "", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
     ],
   },
   {
     id: "kit-design-system",
+    icon: "system",
     name: "Design system governance",
     bestFor: "Teams stewarding a shared system they use daily but did not build.",
     outcome: "Component changes get a named owner and a review gate, so detaching under deadline stops being invisible.",
     roles: [
-      { title: "System Owner", department: "Design Ops", decisionMode: "Decides alone", pairedWith: null },
-      { title: "Contributing Designer", department: "Design", decisionMode: "Escalates to a lead", pairedWith: null },
-      { title: "Accessibility Reviewer", department: "Design Ops", decisionMode: "Consensus with paired role", pairedWith: null },
-      { title: "Brand Owner", department: "Brand", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "System Owner", heldBy: "", department: "Design Ops", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Contributing Designer", heldBy: "", department: "Design", decisionMode: "Escalates to a lead", pairedWith: null },
+      { title: "Accessibility Reviewer", heldBy: "", department: "Design Ops", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "Brand Owner", heldBy: "", department: "Brand", decisionMode: "Consensus with paired role", pairedWith: null },
+    ],
+  },
+  {
+    id: "kit-ai-guardrails",
+    icon: "regulated",
+    name: "AI usage guardrails",
+    bestFor: "Any team where staff are already using AI daily and nobody has written the rules down.",
+    outcome: "What AI may draft, what it may never finalize, and who reviews output before it ships all become named, checkable rules.",
+    roles: [
+      { title: "AI Usage Owner", heldBy: "", department: "Delivery", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Practice Lead", heldBy: "", department: "Creative", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Data and Privacy Reviewer", heldBy: "", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "Output Reviewer", heldBy: "", department: "Content Ops", decisionMode: "Escalates to a lead", pairedWith: null },
     ],
   },
   {
     id: "kit-regulated",
+    icon: "regulated",
     name: "Regulated content operations",
     bestFor: "Pharma, financial services, and any team shipping claims through a review gate.",
     outcome: "Nothing reaches a public surface without medical, legal, and regulatory sign-off recorded against a role.",
     roles: [
-      { title: "Medical Review Lead", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
-      { title: "Regulatory Lead", department: "Legal and Compliance", decisionMode: "Decides alone", pairedWith: null },
-      { title: "Brand Owner", department: "Brand", decisionMode: "Consults, then decides", pairedWith: null },
-      { title: "Creative Director", department: "Creative", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Medical Review Lead", heldBy: "", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "Regulatory Lead", heldBy: "", department: "Legal and Compliance", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Brand Owner", heldBy: "", department: "Brand", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Creative Director", heldBy: "", department: "Creative", decisionMode: "Consults, then decides", pairedWith: null },
     ],
   },
 ];

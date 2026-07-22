@@ -18,11 +18,14 @@ export interface SpineCardData {
 const INK = "#16161A";
 const MUTE = "#6A6A73";
 
-export function SpineCard({ card, tilt = 0 }: { card: SpineCardData; tilt?: number }) {
+export function SpineCard({ card, tilt = 0, dealIndex, dealing = false }: {
+  card: SpineCardData; tilt?: number; dealIndex?: number; dealing?: boolean;
+}) {
   return (
     <div
-      className="spine-card relative shrink-0 bg-white flex overflow-hidden"
+      className={"spine-card relative shrink-0 bg-white flex overflow-hidden" + (dealing ? " is-dealing" : "")}
       style={{
+        ["--deal-i" as string]: dealIndex ?? 0,
         width: "var(--card-w)",
         height: "calc(var(--card-w) * 1.45)",
         borderRadius: "calc(var(--card-w) * 0.045)",

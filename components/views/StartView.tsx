@@ -5,12 +5,13 @@
 // The demo uses the real convergence engine on one real card, with
 // teammates pre-seeded so the perception gap always fires.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CARDS } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
 import { SpineCard, SpineCardData } from "../SpineCard";
+import { IconTransformation } from "../Icons";
 import { useSession } from "../../lib/store";
 
 const DEMO_SEED: Record<string, string> = {
@@ -51,6 +52,15 @@ const SETUP = [
 
 export default function StartView() {
   const { roles } = useSession();
+  // The loop deals in order and is never shuffled: 01 through 04 is a
+  // sequence, and randomizing it would damage first-read comprehension.
+  const [dealKey, setDealKey] = useState(0);
+  const [dealing, setDealing] = useState(false);
+  useEffect(() => {
+    setDealing(true);
+    const t = setTimeout(() => setDealing(false), 1100);
+    return () => clearTimeout(t);
+  }, [dealKey]);
   const demoCard = CARDS.find((c) => c.id === "SIG-4")!;
   const [step, setStep] = useState(0);
   const [pick, setPick] = useState("");
@@ -75,8 +85,16 @@ export default function StartView() {
         </p>
         <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
           {LOOP.map((card, i) => (
-            <SpineCard key={card.rank} card={card} tilt={[-2.5, 1.5, -1.5, 2.5][i]} />
+            <SpineCard key={card.rank + "-" + dealKey} card={card}
+              tilt={[-2.5, 1.5, -1.5, 2.5][i]} dealIndex={i} dealing={dealing} />
           ))}
+        </div>
+        <div className="flex justify-center pt-4">
+          <button onClick={() => setDealKey((k) => k + 1)}
+            className="text-sm text-peri hover:text-ink inline-flex items-center gap-2">
+            <IconTransformation size={15} />
+            Deal again
+          </button>
         </div>
       </Widget>
 

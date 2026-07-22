@@ -9,14 +9,15 @@
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 import { Wordmark } from "./Wordmark";
+import { IconHealth, IconStart, IconRoles, IconGather, IconConverge, IconArtifacts } from "./Icons";
 
 const NAV = [
-  { key: "start", label: "Start here", href: "/start" },
-  { key: "roles", label: "Roles", href: "/roles" },
-  { key: "health", label: "Governance Health", href: "/" },
-  { key: "gather", label: "Gather", href: "/gather" },
-  { key: "converge", label: "Converge", href: "/converge" },
-  { key: "artifacts", label: "Artifacts", href: "/artifacts" },
+  { key: "start", label: "Start here", href: "/start", Icon: IconStart },
+  { key: "roles", label: "Roles", href: "/roles", Icon: IconRoles },
+  { key: "health", label: "Governance Health", href: "/", Icon: IconHealth },
+  { key: "gather", label: "Gather", href: "/gather", Icon: IconGather },
+  { key: "converge", label: "Converge", href: "/converge", Icon: IconConverge },
+  { key: "artifacts", label: "Artifacts", href: "/artifacts", Icon: IconArtifacts },
 ] as const;
 
 export type NavKey = (typeof NAV)[number]["key"];
@@ -47,7 +48,10 @@ export default function AppShell({ active, children }: { active: NavKey; childre
                   (active === n.key
                     ? "border-brand bg-surface text-ink font-medium"
                     : "border-transparent text-ink-2 hover:text-ink hover:bg-surface")}>
-                {n.label}
+                <span className="flex items-center gap-2.5">
+                  <n.Icon size={17} />
+                  {n.label}
+                </span>
               </Link>
             ))}
           </nav>
@@ -83,7 +87,10 @@ export default function AppShell({ active, children }: { active: NavKey; childre
                     aria-current={active === n.key ? "page" : undefined}
                     className={"py-4 border-b border-line text-2xl tracking-tight " +
                       (active === n.key ? "text-ink font-semibold" : "text-ink-2 font-medium")}>
-                    {n.label}
+                    <span className="flex items-center gap-3">
+                      <n.Icon size={22} />
+                      {n.label}
+                    </span>
                   </Link>
                 ))}
                 <a href="https://www.shawncapizzi.com" onClick={() => setMobileOpen(false)}

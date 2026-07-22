@@ -158,3 +158,53 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .spine-card, .spine-card:hover { transition: none; }
 }
+
+/* ============================================================
+   SUIT SHADES
+   In-app cards carry the same suit identity as the physical deck
+   faces. Each shade is the suit color as a low-alpha wash from the
+   rail edge, so a card is identifiable by suit before its label is
+   read. Alpha stays low: this is identity, not decoration.
+   ============================================================ */
+.shade-signals, .shade-bounds, .shade-trace, .shade-spine, .shade-diagnostic {
+  background-color: #04192B;
+}
+.shade-signals {
+  background-image: linear-gradient(100deg, rgba(99, 85, 187, 0.22) 0%, rgba(99, 85, 187, 0.06) 30%, transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.18) 100%);
+}
+.shade-bounds {
+  background-image: linear-gradient(100deg, rgba(66, 73, 158, 0.26) 0%, rgba(66, 73, 158, 0.07) 30%, transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.18) 100%);
+}
+.shade-trace {
+  background-image: linear-gradient(100deg, rgba(172, 100, 180, 0.20) 0%, rgba(172, 100, 180, 0.05) 30%, transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.18) 100%);
+}
+.shade-spine {
+  background-image: linear-gradient(100deg, rgba(27, 109, 104, 0.30) 0%, rgba(27, 109, 104, 0.08) 30%, transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.18) 100%);
+}
+.shade-diagnostic {
+  background-image: linear-gradient(100deg, rgba(255, 87, 34, 0.16) 0%, rgba(255, 87, 34, 0.04) 30%, transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.18) 100%);
+}
+
+/* ============================================================
+   DECK DEAL
+   The loop cards deal in sequence, never shuffled: 01 to 04 is a
+   sequence, and randomizing it would damage comprehension. Delay is
+   set per card via --deal-i. Reduced motion lands them instantly.
+   ============================================================ */
+@keyframes sc-deal {
+  from { opacity: 0; transform: translateY(26px) rotate(0deg) scale(0.96); }
+  to { opacity: 1; }
+}
+.spine-card.is-dealing {
+  opacity: 0;
+  animation: sc-deal 0.52s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--deal-i, 0) * 0.11s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .spine-card.is-dealing { opacity: 1; animation: none; }
+}

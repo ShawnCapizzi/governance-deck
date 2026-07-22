@@ -45,6 +45,35 @@ Clarity Cards sticky-note coding. To add a pillar, extend PILLAR_SURFACE in
 components/ui.tsx and add the matching .surface-* and .eyebrow-* rules.
 All four eyebrow colors verified at or above AA on the card base.
 
+Iconography: components/Icons.tsx is a hand-drawn geometric set on a 24
+grid, 1.5 stroke, currentColor, no icon-library dependency. Shapes are
+structural (rails, gates, stacks, splits) because the subject is
+governance. Every Widget renders a pillar icon in a tinted tile, every
+status chip carries its shape, nav items carry theirs, role kits carry a
+category icon, and decision modes carry a mode icon. Add new icons to this
+file rather than importing a library.
+
+Color blocking: each Widget draws a solid 3px pillar rule across its head
+and a matching tinted icon tile. That is the squint-test hierarchy, and it
+is what makes the app scan as an enterprise tool rather than a page of
+uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
+
+Deck faces in-app: components/ui.tsx SuitCard carries the same anatomy as
+the physical cards. The card id reads as the rank in a suit-colored rail,
+the suit name runs vertically up the rail, and the suit glyph anchors the
+foot. The card body takes a suit shade (.shade-signals and siblings), so a
+card is identifiable by suit before its label is read.
+
+The loop deck deals, it never shuffles. 01 through 04 is a sequence and
+randomizing it would damage first-read comprehension. Cards deal in order
+via .is-dealing with a per-card --deal-i delay, and Deal again replays it.
+Reduced motion lands them instantly.
+
+Roles carry heldBy, the person in the seat today. The deck still decides by
+role so answers survive turnover, but a live session needs to know who to
+chase. Empty heldBy renders a Seat unfilled flag. Naming a role is the most
+frequent task on that page, so it sits at the top, above the kits.
+
 Physical deck faces: components/SpineCard.tsx reproduces the Clarity Cards
 Spine anatomy (white card, suit-colored rail with rank, rotated suit name,
 glyph, then eyebrow, prompt, clarifier). Every dimension is a calc() off

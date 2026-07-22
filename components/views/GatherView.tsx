@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { CARDS, FREQ, PERSONAS } from "../../lib/deck";
 import { useSession } from "../../lib/store";
-import { SuitCard } from "../ui";
+import { SuitCard, Widget } from "../ui";
+import { IconDecidesAlone } from "../Icons";
 
 export default function GatherView() {
   const { responses, setResponse, roles } = useSession();
@@ -13,30 +14,30 @@ export default function GatherView() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-surface rounded-xl border border-line p-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3 mb-1">Listen first</p>
-        <p className="text-sm text-ink-2 mb-3">
-          Async gather. Each participant answers on their own time. In production, answers stay private until convergence to prevent anchoring. Switch personas to simulate the distributed team.
+      <Widget eyebrow="Listen first" title="Async gather" sub={answered + " of " + CARDS.length + " answered"}>
+        <p className="text-sm text-ink-2 mb-4">
+          Each participant answers on their own time. In production, answers stay private until convergence to prevent anchoring. Switch personas to simulate the distributed team.
         </p>
         <div className="flex flex-wrap gap-2">
           {PERSONAS.map((p) => (
             <button key={p.id} onClick={() => setActivePersona(p.id)}
-              className={"px-3 py-1.5 rounded-full text-sm border " +
+              className={"px-3 py-1.5 rounded-full text-sm border inline-flex items-center gap-2 " +
                 (p.id === activePersona ? "bg-ink border-ink text-ink-inverse" : "border-line-strong text-ink-2 hover:text-ink hover:border-ink-3")}>
+              <IconDecidesAlone size={14} />
               {p.name} <span className="text-xs opacity-70">&middot; {p.tier}</span>
             </button>
           ))}
         </div>
         <div className="mt-4">
-          <div className="flex justify-between text-xs text-ink-2 mb-1">
+          <div className="flex justify-between text-sm text-ink-2 mb-1.5">
             <span>{persona.name}, {persona.role}</span>
-            <span className="font-mono">{answered}/{CARDS.length} answered</span>
+            <span className="font-mono">{Math.round((answered / CARDS.length) * 100)}%</span>
           </div>
-          <div className="h-1.5 rounded-full bg-ground border border-line overflow-hidden">
-            <div className="h-full bg-brand" style={{ width: Math.round((answered / CARDS.length) * 100) + "%" }} />
+          <div className="h-2 rounded-full bg-ground border border-line overflow-hidden">
+            <div className="h-full bg-peri" style={{ width: Math.round((answered / CARDS.length) * 100) + "%" }} />
           </div>
         </div>
-      </div>
+      </Widget>
       {CARDS.map((card) => {
         const value = (responses[card.id] || {})[activePersona] || "";
         return (

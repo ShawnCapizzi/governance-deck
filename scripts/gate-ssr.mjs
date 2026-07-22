@@ -19,12 +19,12 @@ await build({
 const { renderAll } = await import(path.resolve(".gates/ssr-bundle.mjs"));
 const html = renderAll();
 const checks = {
-  start: ["How the deck works", "Try the loop", "Bring this to your org", "spine-card", "clarity-deck"],
-  roles: ["Roles and decision rights", "Start from a kit", "Design system governance", "Add a custom role", "surface-visible"],
+  start: ["How the deck works", "Try the loop", "Bring this to your org", "spine-card", "Deal again"],
+  roles: ["Name a role", "Held by (person)", "Start from a kit", "AI usage guardrails", "Held by Dana Whitfield", "surface-visible"],
   health: ["aria-label=\"Capizzi\"", "Governance Health", "Facilitator queue", "Manuscript discipline", "sc-frame"],
-  gather: ["Async gather", "SIG-1", "answered"],
-  converge: ["Facilitator", "SIG-4", "aligned"],
-  artifacts: ["truth-signals.md", "decision-rights.md"],
+  gather: ["Async gather", "SIG-1", "shade-signals", "surface-listen"],
+  converge: ["Convergence", "SIG-4", "aligned", "surface-visible"],
+  artifacts: ["truth-signals.md", "decision-rights.md", "surface-proved"],
 };
 let fail = false;
 for (const [view, markers] of Object.entries(checks)) {

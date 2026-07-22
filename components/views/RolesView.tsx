@@ -10,6 +10,24 @@ import { useState } from "react";
 import { DECISION_MODES, DEPARTMENTS, DecisionMode, Role, ROLE_KITS } from "../../lib/deck";
 import { useSession } from "../../lib/store";
 import { Widget, Chip } from "../ui";
+import {
+  IconProduct, IconTransformation, IconSystem, IconRegulated,
+  IconDecidesAlone, IconConsults, IconConsensus, IconEscalates, IconAdd,
+} from "../Icons";
+
+const KIT_ICON = {
+  product: IconProduct,
+  transformation: IconTransformation,
+  system: IconSystem,
+  regulated: IconRegulated,
+} as const;
+
+const MODE_ICON: Record<DecisionMode, (p: { size?: number }) => React.ReactElement> = {
+  "Decides alone": IconDecidesAlone,
+  "Consults, then decides": IconConsults,
+  "Consensus with paired role": IconConsensus,
+  "Escalates to a lead": IconEscalates,
+};
 
 const MODE_NOTE: Record<DecisionMode, string> = {
   "Decides alone": "Resolves split cards without waiting. Fastest, and the rationale carries the weight.",
@@ -34,6 +52,7 @@ export default function RolesView() {
   const { roles, addRole, updateRole, removeRole, applyKit } = useSession();
   const [draft, setDraft] = useState({
     title: "",
+    heldBy: "",
     department: DEPARTMENTS[0],
     decisionMode: DECISION_MODES[0] as DecisionMode,
     pairedWith: "" as string,
@@ -46,11 +65,12 @@ export default function RolesView() {
     if (!draft.title.trim()) return;
     addRole({
       title: draft.title.trim(),
+      heldBy: draft.heldBy.trim(),
       department: draft.department,
       decisionMode: draft.decisionMode,
       pairedWith: draft.pairedWith || null,
     });
-    setDraft({ title: "", department: DEPARTMENTS[0], decisionMode: DECISION_MODES[0], pairedWith: "" });
+    setDraft({ title: "", heldBy: "", department: DEPARTMENTS[0], decisionMode: DECISION_MODES[0], pairedWith: "" });
   };
 
   return (
@@ -61,6 +81,47 @@ export default function RolesView() {
         </p>
       </Widget>
 
+      <Widget eyebrow="Listen first" title="Name a role" sub="The task you will do most">
+        <p className="text-sm text-ink-2 max-w-2xl mb-4">
+          Governance decides by role so the answer survives turnover, but a live session still needs to know who is in the seat today. Name the role, then name the person holding it. The role is what the deck asks about; the person is who gets chased when a card is waiting.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="Role">
+            <input className={inputClass} value={draft.title} placeholder="Medical Review Lead"
+              onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
+          </Field>
+          <Field label="Held by (person)">
+            <input className={inputClass} value={draft.heldBy} placeholder="Alex Moreau"
+              onChange={(e) => setDraft({ ...draft, heldBy: e.target.value })} />
+          </Field>
+          <Field label="Department">
+            <select className={inputClass} value={draft.department}
+              onChange={(e) => setDraft({ ...draft, department: e.target.value })}>
+              {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
+            </select>
+          </Field>
+          <Field label="How this role decides async">
+            <select className={inputClass} value={draft.decisionMode}
+              onChange={(e) => setDraft({ ...draft, decisionMode: e.target.value as DecisionMode })}>
+              {DECISION_MODES.map((m) => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </Field>
+          <Field label="Paired with">
+            <select className={inputClass} value={draft.pairedWith}
+              onChange={(e) => setDraft({ ...draft, pairedWith: e.target.value })}>
+              <option value="">No pairing</option>
+              {roles.map((r) => <option key={r.id} value={r.id}>{r.title}</option>)}
+            </select>
+          </Field>
+          <div className="sm:col-span-2">
+            <button onClick={submit} disabled={!draft.title.trim()} className="pill-primary px-5 py-2.5 text-sm gap-1.5">
+              <IconAdd size={15} />
+              Add role
+            </button>
+          </div>
+        </div>
+      </Widget>
+
       <Widget eyebrow="Make it visible" title="Start from a kit" sub="Loads in one click, edit anything after">
         <p className="text-sm text-ink-2 max-w-2xl mb-4">
           Nobody should start governance from a blank form. Each kit is a working set of roles with departments, decision modes, and pairing already reasoned through for a common shape of team. Load the closest one, then edit until it matches how you actually work.
@@ -68,8 +129,13 @@ export default function RolesView() {
         <div className="grid gap-3 md:grid-cols-2">
           {ROLE_KITS.map((kit) => (
             <div key={kit.id} className="rounded-xl border border-line bg-ground/60 p-4 flex flex-col">
-              <p className="text-base text-ink font-medium tracking-tight">{kit.name}</p>
-              <p className="text-sm text-ink-2 mt-1">{kit.bestFor}</p>
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="grid place-items-center w-8 h-8 rounded-lg border bg-cobalt/18 border-cobalt/45 text-[#9DA9FF] shrink-0">
+                  {(() => { const I = KIT_ICON[kit.icon]; return <I size={17} />; })()}
+                </span>
+                <p className="text-base text-ink font-medium tracking-tight">{kit.name}</p>
+              </div>
+              <p className="text-sm text-ink-2">{kit.bestFor}</p>
               <p className="text-sm text-ink-3 mt-2 flex-1">{kit.outcome}</p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {kit.roles.map((r) => <Chip key={r.title}>{r.title}</Chip>)}
@@ -92,12 +158,16 @@ export default function RolesView() {
         const editing = editingId === role.id;
         return (
           <Widget key={role.id} eyebrow={role.department} title={role.title}
-            sub={editing ? "Editing" : undefined}>
+            sub={editing ? "Editing" : role.heldBy ? "Held by " + role.heldBy : "Seat unfilled"}>
             {editing ? (
               <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Role title">
                   <input className={inputClass} value={role.title}
                     onChange={(e) => updateRole(role.id, { title: e.target.value })} />
+                </Field>
+                <Field label="Held by (person)">
+                  <input className={inputClass} value={role.heldBy} placeholder="Unassigned"
+                    onChange={(e) => updateRole(role.id, { heldBy: e.target.value })} />
                 </Field>
                 <Field label="Department">
                   <select className={inputClass} value={role.department}
@@ -133,10 +203,11 @@ export default function RolesView() {
             ) : (
               <div>
                 <div className="flex flex-wrap gap-2 mb-3">
-                  <Chip tone="peri">{role.decisionMode}</Chip>
+                  <Chip tone="peri" icon={(() => { const I = MODE_ICON[role.decisionMode]; return <I size={13} />; })()}>{role.decisionMode}</Chip>
                   {role.pairedWith
                     ? <Chip tone="cobalt">Paired with {nameOf(role.pairedWith)}</Chip>
                     : <Chip>No pairing</Chip>}
+                  {!role.heldBy && <Chip tone="ember">Seat unfilled</Chip>}
                 </div>
                 <p className="text-sm text-ink-2 max-w-xl">{MODE_NOTE[role.decisionMode]}</p>
                 <button onClick={() => setEditingId(role.id)}
@@ -149,38 +220,6 @@ export default function RolesView() {
         );
       })}
 
-      <Widget eyebrow="Continuity" title="Add a custom role" sub="For anything the kits do not cover">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Role title">
-            <input className={inputClass} value={draft.title} placeholder="Medical Review Lead"
-              onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
-          </Field>
-          <Field label="Department">
-            <select className={inputClass} value={draft.department}
-              onChange={(e) => setDraft({ ...draft, department: e.target.value })}>
-              {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
-            </select>
-          </Field>
-          <Field label="How this role decides async">
-            <select className={inputClass} value={draft.decisionMode}
-              onChange={(e) => setDraft({ ...draft, decisionMode: e.target.value as DecisionMode })}>
-              {DECISION_MODES.map((m) => <option key={m} value={m}>{m}</option>)}
-            </select>
-          </Field>
-          <Field label="Paired with">
-            <select className={inputClass} value={draft.pairedWith}
-              onChange={(e) => setDraft({ ...draft, pairedWith: e.target.value })}>
-              <option value="">No pairing</option>
-              {roles.map((r) => <option key={r.id} value={r.id}>{r.title}</option>)}
-            </select>
-          </Field>
-          <div className="sm:col-span-2">
-            <button onClick={submit} disabled={!draft.title.trim()} className="pill-primary px-5 py-2.5 text-sm">
-              Add role
-            </button>
-          </div>
-        </div>
-      </Widget>
     </div>
   );
 }

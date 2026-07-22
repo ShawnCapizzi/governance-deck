@@ -3,6 +3,7 @@
 import { CARDS, SESSION_DATE } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { useSession } from "../../lib/store";
+import { Widget } from "../ui";
 
 export default function ArtifactsView() {
   const { responses, resolved } = useSession();
@@ -43,12 +44,11 @@ export default function ArtifactsView() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-surface rounded-xl border border-line p-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3 mb-1">Prove it worked</p>
+      <Widget eyebrow="Prove it worked" title="Generated artifacts" sub="Immutable versions">
         <p className="text-sm text-ink-2">
           Artifacts generate from reconciled and aligned cards, one file per suit. Versions are immutable. Amendments create a new version with provenance, never an overwrite. This is the rollback rule the deck teaches, enforced by the platform. Reconcile cards in Converge and watch these fill in.
         </p>
-      </div>
+      </Widget>
       {[truthSignals, decisionRights].map((md, i) => (
         <pre key={i} className="bg-ground border border-line text-ink-2 text-xs rounded-xl p-4 overflow-x-auto whitespace-pre-wrap font-mono">{md}</pre>
       ))}

@@ -11,6 +11,13 @@ import { classifyCard, openWork } from "../../lib/converge";
 import { useSession } from "../../lib/store";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
 import { WordmarkWatermark } from "../Wordmark";
+import { IconSystem, IconArtifacts, IconListen, IconSplit } from "../Icons";
+
+const DOMAIN_ICON: Record<string, (p: { size?: number }) => React.ReactElement> = {
+  "Design Ops": IconSystem,
+  "Content Ops": IconArtifacts,
+  Strategy: IconListen,
+};
 
 export default function HealthView() {
   const { responses, resolved } = useSession();
@@ -52,7 +59,7 @@ export default function HealthView() {
                   <StatusChip status={result.status} resolved={false} />
                   {result.gap && <Chip tone="magenta">gap</Chip>}
                   <Chip tone={result.gap ? "ember" : "neutral"}>priority {result.gap ? "9/10" : "6/10"}</Chip>
-                  <Link href="/converge" className="text-xs text-peri hover:text-ink ml-auto">
+                  <Link href="/converge" className="text-sm text-peri hover:text-ink ml-auto">
                     Open in Converge &rarr;
                   </Link>
                 </div>
@@ -68,7 +75,8 @@ export default function HealthView() {
         const gaps = diags.filter((d) => d.result.gap);
         const alignCard = diags.find((d) => d.result.alignment != null);
         return (
-          <Widget key={issue.id} eyebrow={issue.domain} title={issue.title} sub={"Target: " + STAGES[issue.target - 1]}>
+          <Widget key={issue.id} eyebrow={issue.domain} title={issue.title} sub={"Target: " + STAGES[issue.target - 1]}
+            icon={(() => { const I = DOMAIN_ICON[issue.domain] ?? IconSystem; return <I size={19} />; })()}>
             <p className="text-sm text-ink-2 mb-4">{issue.problem}</p>
             <div className="flex gap-1 mb-3">
               {STAGES.map((s, idx) => {
@@ -77,7 +85,7 @@ export default function HealthView() {
                 const isTarget = n === issue.target;
                 return (
                   <div key={s} className="flex-1 min-w-0">
-                    <div className={"h-2 rounded " + (filled ? "bg-brand" : "bg-ground border border-line") + (isTarget ? " ring-2 ring-ember" : "")} />
+                    <div className={"h-2.5 rounded-sm " + (filled ? "bg-magenta/80" : "bg-ground border border-line") + (isTarget ? " ring-2 ring-ember ring-offset-1 ring-offset-transparent" : "")} />
                     <p className={"text-[10px] mt-1 truncate " + (filled ? "text-ink-2" : "text-ink-3")}>{s}</p>
                   </div>
                 );
