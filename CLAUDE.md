@@ -36,6 +36,26 @@ brand #6B5CFF or cobalt #4F46E5 as text or icon color on dark surfaces
 text-sm minimum, card prompts text-base. text-xs is reserved for chips
 and mono metadata labels.
 
+Pillar segmentation: Widget derives its surface tint and eyebrow color from
+its eyebrow text, so the screen segments itself by Capizzi pillar with no
+per-view decisions. Listen First warm-indigo (surface-listen), Make It
+Visible cobalt (surface-visible), Prove It Worked magenta (surface-proved),
+Continuity teal (surface-continuity), anything else neutral. Hues follow the
+Clarity Cards sticky-note coding. To add a pillar, extend PILLAR_SURFACE in
+components/ui.tsx and add the matching .surface-* and .eyebrow-* rules.
+All four eyebrow colors verified at or above AA on the card base.
+
+Physical deck faces: components/SpineCard.tsx reproduces the Clarity Cards
+Spine anatomy (white card, suit-colored rail with rank, rotated suit name,
+glyph, then eyebrow, prompt, clarifier). Every dimension is a calc() off
+--card-w, set on the .clarity-deck wrapper. Suit colors are the Clarity
+Cards palette so both decks read as one product family.
+
+Role kits (lib/deck.ts ROLE_KITS) are the on-ramp: pre-built role sets for
+product teams, internal transformation, design system governance, and
+regulated content ops. They lead the Roles page; blank-form authoring sits
+at the bottom. Never let a team face an empty form first.
+
 Rules:
 - The 95/5 rule: 95 percent of every screen is ground, surface, ink, and
   hairlines. Tier 3 color is signal, not decoration.

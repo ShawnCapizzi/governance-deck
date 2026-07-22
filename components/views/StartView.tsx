@@ -10,6 +10,7 @@ import Link from "next/link";
 import { CARDS } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
+import { SpineCard, SpineCardData } from "../SpineCard";
 import { useSession } from "../../lib/store";
 
 const DEMO_SEED: Record<string, string> = {
@@ -20,11 +21,19 @@ const DEMO_SEED: Record<string, string> = {
 };
 const STEPS = ["Answer", "See the split", "Reconcile", "Artifact"];
 
-const LOOP = [
-  { n: "01", name: "Gather", copy: "Everyone answers on their own time. Answers stay private until convergence, so nobody anchors on the first voice." },
-  { n: "02", name: "Converge", copy: "Aligned cards settle themselves. Only the conflicts need attention, and each gets reconciled with a written rationale." },
-  { n: "03", name: "Health", copy: "Every governance issue climbs a five-stage road from Ad hoc to Self-correcting. The deltas each cadence are the progress." },
-  { n: "04", name: "Artifacts", copy: "Sessions emit versioned markdown artifacts. Amendments create new versions with provenance, never an overwrite." },
+const LOOP: SpineCardData[] = [
+  { rank: "01", suit: "Signals", color: "#6355BB", glyph: "\u25C6",
+    eyebrow: "Listen first", prompt: "Gather",
+    clarifier: "Everyone answers on their own time. Answers stay private until convergence, so nobody anchors on the first voice." },
+  { rank: "02", suit: "Bounds", color: "#42499E", glyph: "\u25A0",
+    eyebrow: "Make it visible", prompt: "Converge",
+    clarifier: "Aligned cards settle themselves. Only the conflicts need attention, and each is reconciled with a written rationale." },
+  { rank: "03", suit: "Trace", color: "#AC64B4", glyph: "\u25B2",
+    eyebrow: "Prove it worked", prompt: "Health",
+    clarifier: "Every issue climbs five stages from Ad hoc to Self-correcting. The deltas each cadence are the progress." },
+  { rank: "04", suit: "Spine", color: "#1B6D68", glyph: "\u2726",
+    eyebrow: "Continuity", prompt: "Artifacts",
+    clarifier: "Sessions emit versioned markdown. Amendments create new versions with provenance, never an overwrite." },
 ];
 
 const ROLES_INFO = [
@@ -64,13 +73,9 @@ export default function StartView() {
         <p className="text-sm text-ink-2 mb-4 max-w-2xl">
           The Governance Deck turns the uncomfortable conversations every team avoids into a repeatable loop. You answer cards, the system finds where your team actually disagrees, a named decider settles it on the record, and the decisions become living documents your whole org can fall in line with.
         </p>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {LOOP.map((l) => (
-            <div key={l.n} className="bg-ground border border-line rounded-lg p-3">
-              <p className="font-mono text-[11px] text-ink-3">{l.n}</p>
-              <p className="text-sm text-ink mt-0.5">{l.name}</p>
-              <p className="text-sm text-ink-2 mt-1">{l.copy}</p>
-            </div>
+        <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
+          {LOOP.map((card, i) => (
+            <SpineCard key={card.rank} card={card} tilt={[-2.5, 1.5, -1.5, 2.5][i]} />
           ))}
         </div>
       </Widget>

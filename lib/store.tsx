@@ -5,7 +5,7 @@
 // and Artifacts. Production wiring to Supabase is specified in CLAUDE.md.
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { SEED, ResponseMap, Resolution, Role, DEFAULT_ROLES } from "./deck";
+import { SEED, ResponseMap, Resolution, Role, DEFAULT_ROLES, RoleKit } from "./deck";
 
 interface SessionState {
   responses: ResponseMap;
@@ -16,6 +16,7 @@ interface SessionState {
   addRole: (role: Omit<Role, "id">) => void;
   updateRole: (id: string, patch: Partial<Omit<Role, "id">>) => void;
   removeRole: (id: string) => void;
+  applyKit: (kit: RoleKit) => void;
 }
 
 const Ctx = createContext<SessionState | null>(null);
@@ -36,11 +37,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const updateRole = (id: string, patch: Partial<Omit<Role, "id">>) => {
     setRoles((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)));
   };
+  const applyKit = (kit: RoleKit) => {
+    setRoles(kit.roles.map((r, i) => ({ ...r, id: kit.id + "-" + i })));
+  };
   const removeRole = (id: string) => {
     setRoles((prev) => prev.filter((r) => r.id !== id).map((r) => (r.pairedWith === id ? { ...r, pairedWith: null } : r)));
   };
   return (
-    <Ctx.Provider value={{ responses, setResponse, resolved, reconcile, roles, addRole, updateRole, removeRole }}>
+    <Ctx.Provider value={{ responses, setResponse, resolved, reconcile, roles, addRole, updateRole, removeRole, applyKit }}>
       {children}
     </Ctx.Provider>
   );

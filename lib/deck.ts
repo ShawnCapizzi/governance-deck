@@ -163,3 +163,72 @@ export const SEED: ResponseMap = {
     p5: "Shipped, measured, and documented.",
   },
 };
+
+
+// ---------------------------------------------------------------------------
+// ROLE KITS
+// Pre-built starting points so a team never faces a blank form. Each kit is
+// a working set of roles with departments, async decision modes, and pairing
+// already reasoned through. Teams load one, then edit. This is the on-ramp:
+// the fastest path from "we have no governance" to "we have a draft spine."
+// ---------------------------------------------------------------------------
+
+export interface RoleKit {
+  id: string;
+  name: string;
+  bestFor: string;
+  outcome: string;
+  roles: Omit<Role, "id">[];
+}
+
+export const ROLE_KITS: RoleKit[] = [
+  {
+    id: "kit-product",
+    name: "Product team",
+    bestFor: "Product, design, and engineering shipping on a release cadence.",
+    outcome: "Craft calls stay with the practice leads, scope and timing calls stay with product, and nothing ships without one named signer.",
+    roles: [
+      { title: "Product Lead", department: "Product", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Design Lead", department: "Design Ops", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Engineering Lead", department: "Product", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Content Lead", department: "Content Ops", decisionMode: "Consults, then decides", pairedWith: null },
+    ],
+  },
+  {
+    id: "kit-transformation",
+    name: "Internal business transformation",
+    bestFor: "Cross-functional change programs with executive sponsorship and real budget.",
+    outcome: "Decision rights are explicit across functions, so the program stops stalling on who gets to call it.",
+    roles: [
+      { title: "Transformation Sponsor", department: "Delivery", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Workstream Lead", department: "Delivery", decisionMode: "Escalates to a lead", pairedWith: null },
+      { title: "Operations Owner", department: "Delivery", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Change and Comms Lead", department: "Strategy", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Risk and Compliance Lead", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
+    ],
+  },
+  {
+    id: "kit-design-system",
+    name: "Design system governance",
+    bestFor: "Teams stewarding a shared system they use daily but did not build.",
+    outcome: "Component changes get a named owner and a review gate, so detaching under deadline stops being invisible.",
+    roles: [
+      { title: "System Owner", department: "Design Ops", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Contributing Designer", department: "Design", decisionMode: "Escalates to a lead", pairedWith: null },
+      { title: "Accessibility Reviewer", department: "Design Ops", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "Brand Owner", department: "Brand", decisionMode: "Consensus with paired role", pairedWith: null },
+    ],
+  },
+  {
+    id: "kit-regulated",
+    name: "Regulated content operations",
+    bestFor: "Pharma, financial services, and any team shipping claims through a review gate.",
+    outcome: "Nothing reaches a public surface without medical, legal, and regulatory sign-off recorded against a role.",
+    roles: [
+      { title: "Medical Review Lead", department: "Legal and Compliance", decisionMode: "Consensus with paired role", pairedWith: null },
+      { title: "Regulatory Lead", department: "Legal and Compliance", decisionMode: "Decides alone", pairedWith: null },
+      { title: "Brand Owner", department: "Brand", decisionMode: "Consults, then decides", pairedWith: null },
+      { title: "Creative Director", department: "Creative", decisionMode: "Consults, then decides", pairedWith: null },
+    ],
+  },
+];

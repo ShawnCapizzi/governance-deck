@@ -7,19 +7,35 @@ import { ReactNode } from "react";
 import { DeckCard, SUIT_STYLE } from "../lib/deck";
 import { LaserFrame } from "./LaserFrame";
 
+// Pillar segmentation. The eyebrow already names the pillar, so the
+// surface tint and eyebrow color derive from it automatically. No view
+// has to remember which class to use, and the coding stays consistent.
+const PILLAR_SURFACE: Record<string, { surface: string; eyebrow: string }> = {
+  "listen first": { surface: "surface-listen", eyebrow: "eyebrow-listen" },
+  "make it visible": { surface: "surface-visible", eyebrow: "eyebrow-visible" },
+  "prove it worked": { surface: "surface-proved", eyebrow: "eyebrow-proved" },
+  continuity: { surface: "surface-continuity", eyebrow: "eyebrow-continuity" },
+  spine: { surface: "surface-continuity", eyebrow: "eyebrow-continuity" },
+};
+
+function pillarClasses(eyebrow: string) {
+  return PILLAR_SURFACE[eyebrow.trim().toLowerCase()] ?? { surface: "surface-neutral", eyebrow: "" };
+}
+
 export function Widget({ eyebrow, title, sub, children, className = "", laser = false, glow = false, laserDelay = 0 }: {
   eyebrow: string; title: string; sub?: string; children: ReactNode;
   className?: string; laser?: boolean; glow?: boolean; laserDelay?: number;
 }) {
+  const p = pillarClasses(eyebrow);
   return (
-    <section className={"relative overflow-hidden card-surface border border-line rounded-2xl p-5 md:p-6 " + className}>
+    <section className={"relative overflow-hidden border border-line rounded-2xl p-5 md:p-6 " + p.surface + " " + className}>
       {glow && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(107,92,255,0.22) 0%, rgba(107,92,255,0.06) 45%, transparent 75%)" }} />
       )}
       <div className="relative">
         <header className="mb-4">
-          <p className="eyebrow">{eyebrow}</p>
+          <p className={"eyebrow " + p.eyebrow}>{eyebrow}</p>
           <div className="flex flex-wrap items-baseline justify-between gap-2 mt-1">
             <h2 className="text-ink text-base md:text-lg font-semibold tracking-tight">{title}</h2>
             {sub && <span className="text-sm text-ink-2">{sub}</span>}

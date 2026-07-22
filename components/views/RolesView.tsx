@@ -7,7 +7,7 @@
 // pairing answers who has to agree before it counts.
 
 import { useState } from "react";
-import { DECISION_MODES, DEPARTMENTS, DecisionMode, Role } from "../../lib/deck";
+import { DECISION_MODES, DEPARTMENTS, DecisionMode, Role, ROLE_KITS } from "../../lib/deck";
 import { useSession } from "../../lib/store";
 import { Widget, Chip } from "../ui";
 
@@ -31,7 +31,7 @@ const inputClass =
   "w-full rounded-lg bg-ground border border-line-strong px-3 py-2 text-base text-ink placeholder:text-ink-3 focus:outline-none focus:ring-2 focus:ring-brand";
 
 export default function RolesView() {
-  const { roles, addRole, updateRole, removeRole } = useSession();
+  const { roles, addRole, updateRole, removeRole, applyKit } = useSession();
   const [draft, setDraft] = useState({
     title: "",
     department: DEPARTMENTS[0],
@@ -58,6 +58,33 @@ export default function RolesView() {
       <Widget eyebrow="Listen first" title="Roles and decision rights" sub={roles.length + " roles"}>
         <p className="text-sm text-ink-2 max-w-2xl">
           The deck asks who decides, and it asks for a role rather than a person so the answer survives turnover. Every decider card pulls its options from this list. Set the department that owns each call, how that role decides when the team is working async, and which role it has to agree with before anything is final.
+        </p>
+      </Widget>
+
+      <Widget eyebrow="Make it visible" title="Start from a kit" sub="Loads in one click, edit anything after">
+        <p className="text-sm text-ink-2 max-w-2xl mb-4">
+          Nobody should start governance from a blank form. Each kit is a working set of roles with departments, decision modes, and pairing already reasoned through for a common shape of team. Load the closest one, then edit until it matches how you actually work.
+        </p>
+        <div className="grid gap-3 md:grid-cols-2">
+          {ROLE_KITS.map((kit) => (
+            <div key={kit.id} className="rounded-xl border border-line bg-ground/60 p-4 flex flex-col">
+              <p className="text-base text-ink font-medium tracking-tight">{kit.name}</p>
+              <p className="text-sm text-ink-2 mt-1">{kit.bestFor}</p>
+              <p className="text-sm text-ink-3 mt-2 flex-1">{kit.outcome}</p>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {kit.roles.map((r) => <Chip key={r.title}>{r.title}</Chip>)}
+              </div>
+              <button onClick={() => applyKit(kit)} className="pill-primary mt-4 px-4 py-2 text-sm self-start">
+                Use this kit
+              </button>
+            </div>
+          ))}
+        </div>
+      </Widget>
+
+      <Widget eyebrow="Prove it worked" title="Your roles" sub={roles.length + " active"}>
+        <p className="text-sm text-ink-2 max-w-2xl">
+          These are the options your team will see on every decider card during gather. Edit a role and the change reaches the whole session.
         </p>
       </Widget>
 
@@ -122,7 +149,7 @@ export default function RolesView() {
         );
       })}
 
-      <Widget eyebrow="Make it visible" title="Add a role">
+      <Widget eyebrow="Continuity" title="Add a custom role" sub="For anything the kits do not cover">
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="Role title">
             <input className={inputClass} value={draft.title} placeholder="Medical Review Lead"

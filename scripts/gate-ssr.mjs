@@ -19,8 +19,8 @@ await build({
 const { renderAll } = await import(path.resolve(".gates/ssr-bundle.mjs"));
 const html = renderAll();
 const checks = {
-  start: ["How the deck works", "Try the loop", "Bring this to your org", "Start here"],
-  roles: ["Roles and decision rights", "Creative Director", "Add a role", "Paired with"],
+  start: ["How the deck works", "Try the loop", "Bring this to your org", "spine-card", "clarity-deck"],
+  roles: ["Roles and decision rights", "Start from a kit", "Design system governance", "Add a custom role", "surface-visible"],
   health: ["aria-label=\"Capizzi\"", "Governance Health", "Facilitator queue", "Manuscript discipline", "sc-frame"],
   gather: ["Async gather", "SIG-1", "answered"],
   converge: ["Facilitator", "SIG-4", "aligned"],
