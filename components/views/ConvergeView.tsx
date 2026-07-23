@@ -22,7 +22,7 @@ export default function ConvergeView() {
     <div className="space-y-4">
       <Widget eyebrow="Disagreements" title="Where you disagree" sub={counts.split + counts.review + " need attention"}
         tone={counts.split + counts.review > 0 ? "action" : "done"} icon={<IconSplit size={19} />}>
-        <p className="text-sm text-ink-2 mb-4">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
           Questions your team answered the same way are already settled. The ones below split, and that is the real work. Pick the answer that stands, say why, and it goes on the record with your name against it.
         </p>
         <div className="flex flex-wrap gap-2">

@@ -57,7 +57,7 @@ export default function ArtifactsView() {
     <div className="space-y-4">
       <Widget eyebrow="Documents" title="Your documents" sub={finalCount + " of " + docs.length + " final"}
         tone={finalCount === docs.length ? "done" : "neutral"} icon={<IconArtifacts size={19} />}>
-        <p className="text-sm text-ink-2 mb-4">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
           One document per area, built from the questions your team has settled. Each version is dated and kept: changes create a new version rather than overwriting the old one, so you can always see what was agreed and when. Download it, drop the image into a deck, or print it for a review packet.
         </p>
         <div className="flex flex-wrap gap-2">

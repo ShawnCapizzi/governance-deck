@@ -59,7 +59,7 @@ export default function GatherView() {
       >
         {done ? (
           <div>
-            <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+            <p className="text-base text-ink-2 mb-4 max-w-2xl">
               Every question has your answer on it. Nothing else is needed from you right now. Once your teammates finish, whoever is settling disagreements will work through the ones where the team split, and the decisions become documents everyone can read.
             </p>
             <div className="flex flex-wrap items-center gap-3">
@@ -71,7 +71,7 @@ export default function GatherView() {
           </div>
         ) : (
           <div>
-            <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+            <p className="text-base text-ink-2 mb-4 max-w-2xl">
               Answer honestly and briefly. A few words is a real answer. Nobody sees what you wrote until everyone has finished, so there is nothing to gain by matching what you think the room wants.
             </p>
             <div className="h-2 rounded-full bg-ground border border-line overflow-hidden">

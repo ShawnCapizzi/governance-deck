@@ -76,13 +76,13 @@ export default function RolesView() {
   return (
     <div className="grid gap-4">
       <Widget eyebrow="Roles" title="Roles and decision rights" sub={roles.length + " roles"}>
-        <p className="text-sm text-ink-2 max-w-2xl">
+        <p className="text-base text-ink-2 max-w-2xl">
           The deck asks who decides, and it asks for a role rather than a person so the answer survives turnover. Every decider card pulls its options from this list. Set the department that owns each call, how that role decides when the team is working async, and which role it has to agree with before anything is final.
         </p>
       </Widget>
 
       <Widget eyebrow="Roles" title="Name a role" sub="The task you will do most">
-        <p className="text-sm text-ink-2 max-w-2xl mb-4">
+        <p className="text-base text-ink-2 max-w-2xl mb-4">
           Governance decides by role so the answer survives turnover, but a live session still needs to know who is in the seat today. Name the role, then name the person holding it. The role is what the deck asks about; the person is who gets chased when a card is waiting.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -123,7 +123,7 @@ export default function RolesView() {
       </Widget>
 
       <Widget eyebrow="Templates" title="Start from a kit" sub="Loads in one click, edit anything after">
-        <p className="text-sm text-ink-2 max-w-2xl mb-4">
+        <p className="text-base text-ink-2 max-w-2xl mb-4">
           Nobody should start governance from a blank form. Each kit is a working set of roles with departments, decision modes, and pairing already reasoned through for a common shape of team. Load the closest one, then edit until it matches how you actually work.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
@@ -149,7 +149,7 @@ export default function RolesView() {
       </Widget>
 
       <Widget eyebrow="Your roles" title="Your roles" sub={roles.length + " active"}>
-        <p className="text-sm text-ink-2 max-w-2xl">
+        <p className="text-base text-ink-2 max-w-2xl">
           These are the options your team will see on every decider card during gather. Edit a role and the change reaches the whole session.
         </p>
       </Widget>

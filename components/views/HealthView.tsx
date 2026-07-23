@@ -55,7 +55,7 @@ export default function HealthView() {
         tone={waiting.length === 0 ? "done" : "action"}
         icon={waiting.length === 0 ? <IconAligned size={19} /> : <IconSplit size={19} />}
         className="md:col-span-2">
-        <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
           {waiting.length === 0
             ? "Every person has finished their questions, so nothing is blocked. What is left is settling the ones where the team disagreed."
             : "A round cannot be settled until everyone has answered, because a missing voice looks the same as agreement. These people still have questions open."}

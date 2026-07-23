@@ -53,7 +53,7 @@ export function HowItWorks() {
               <span className="font-mono text-xs text-ink-3">{String(i + 1).padStart(2, "0")}</span>
             </div>
             <p className="text-base text-ink font-medium tracking-tight">{s.title}</p>
-            <p className="text-sm text-ink-2 mt-1">{s.copy}</p>
+            <p className="text-[15px] leading-relaxed text-ink-2 mt-1">{s.copy}</p>
             {s.chips && (
               <div className="mt-2.5 flex flex-wrap gap-1.5">
                 {s.chips.map((c) => (

@@ -35,7 +35,7 @@ export default function SignInView() {
   if (!isConfigured) {
     return (
       <Widget eyebrow="Sign in" title="Running in demo mode" icon={<IconStart size={19} />}>
-        <p className="text-sm text-ink-2 max-w-2xl">
+        <p className="text-base text-ink-2 max-w-2xl">
           Sign in is not available because this copy has no database connected. Everything still works with sample data, and nothing you enter is saved. To run a real round with your team, add your Supabase URL and anon key to the environment and redeploy.
         </p>
       </Widget>

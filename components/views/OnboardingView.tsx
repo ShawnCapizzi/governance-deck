@@ -49,10 +49,10 @@ export default function OnboardingView() {
 
   const intro = (
     <Widget eyebrow="How this works" title="How this works" sub="One minute">
-      <p className="text-sm text-ink-2 max-w-2xl mb-2">
+      <p className="text-base text-ink-2 max-w-2xl mb-2">
         An organization here is simply your team&apos;s shared space. Your people, the roles you agree on, the questions you answer, and the documents that come out of it all live inside one organization. One of you creates it, everyone else joins it with a code.
       </p>
-      <p className="text-sm text-ink-2 max-w-2xl mb-5">
+      <p className="text-base text-ink-2 max-w-2xl mb-5">
         Then the loop below runs on your schedule, not a meeting&apos;s. Most teams assume they agree on who decides what. This is how you find out, and write down, what is actually true.
       </p>
       <HowItWorks />
@@ -69,7 +69,7 @@ export default function OnboardingView() {
   if (!isConfigured) {
     return wrap(
       <Widget eyebrow="Setup" title="Demo mode" icon={<IconProduct size={19} />}>
-        <p className="text-sm text-ink-2 max-w-2xl">
+        <p className="text-base text-ink-2 max-w-2xl">
           There is no database connected, so there is nothing to set up. The app runs on sample data and everything works, but nothing is saved between visits.
         </p>
       </Widget>
@@ -94,7 +94,7 @@ export default function OnboardingView() {
       <div className="grid gap-4">
         <Widget eyebrow="You are set up" title={org.orgName} sub={"You are " + org.level}
           icon={<IconAligned size={19} />}>
-          <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+          <p className="text-base text-ink-2 mb-4 max-w-2xl">
             You are set up. Share the code below with teammates so they can join. Anyone who joins starts as a Contributor, and you can raise their level on the Team page.
           </p>
           {org.joinCode && (

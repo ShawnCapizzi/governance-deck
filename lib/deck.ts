@@ -65,9 +65,9 @@ export const STAGES = ["Ad hoc", "Documented", "Practiced", "Enforced", "Self-co
 export const SUIT_STYLE: Record<Suit, { label: string; rail: string; chip: string; shade: string; glyph: string }> = {
   Signals: { label: "Beliefs", rail: "bg-[#6355BB]", chip: "bg-peri/10 text-peri border border-peri/30", shade: "shade-signals", glyph: "\u25C6" },
   Bounds: { label: "Guardrails", rail: "bg-[#42499E]", chip: "bg-cobalt/10 text-[#9DA9FF] border border-cobalt/40", shade: "shade-bounds", glyph: "\u25A0" },
-  Trace: { label: "Recovery", rail: "bg-[#AC64B4]", chip: "bg-magenta/10 text-magenta border border-magenta/30", shade: "shade-trace", glyph: "\u25B2" },
+  Trace: { label: "Recovery", rail: "bg-[#9B519F]", chip: "bg-magenta/10 text-magenta border border-magenta/30", shade: "shade-trace", glyph: "\u25B2" },
   Spine: { label: "Change", rail: "bg-[#1B6D68]", chip: "bg-[#1B6D68]/25 text-[#5FC9C0] border border-[#5FC9C0]/40", shade: "shade-spine", glyph: "\u2726" },
-  Diagnostic: { label: "Reality check", rail: "bg-ember", chip: "bg-ember/10 text-ember border border-ember/30", shade: "shade-diagnostic", glyph: "\u25CF" },
+  Diagnostic: { label: "Reality check", rail: "bg-[#CC3D10]", chip: "bg-ember/10 text-ember border border-ember/30", shade: "shade-diagnostic", glyph: "\u25CF" },
 };
 
 // The seat a visitor answers from in demo mode. Deliberately outside

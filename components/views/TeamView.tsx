@@ -77,7 +77,7 @@ export default function TeamView() {
   return (
     <div className="grid gap-4">
       <Widget eyebrow="People" title="Your team" sub={people.length + (people.length === 1 ? " person" : " people")}>
-        <p className="text-sm text-ink-2 max-w-2xl">
+        <p className="text-base text-ink-2 max-w-2xl">
           Everyone who takes part sits here. Levels decide what a person can do: run things, answer questions, or just watch. When somebody goes away or leaves, hand their questions to someone else so a round never stalls waiting on an empty chair.
         </p>
       </Widget>
@@ -98,7 +98,7 @@ export default function TeamView() {
 
       <Widget eyebrow="Programs" title="Programs" sub={programs.length === 0 ? "None yet" : programs.length + (programs.length === 1 ? " program" : " programs")}
         icon={<IconProduct size={19} />}>
-        <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
           A program is one brand, client, or initiative. Rounds run inside it on a cadence, so you can compare where a team stood last quarter against where it stands now. A curator owns each one.
         </p>
         {live && (
@@ -145,7 +145,7 @@ export default function TeamView() {
 
       {live && user && (
         <Widget eyebrow="Your profile" title="How you appear to your team" sub="Everyone sees this">
-          <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+          <p className="text-base text-ink-2 mb-4 max-w-2xl">
             Your name came from your email address, so it probably needs fixing. This is what teammates see next to your answers.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -174,7 +174,7 @@ export default function TeamView() {
 
       {live ? (
         <Widget eyebrow="People" title="Invite your team" sub="Share this code">
-          <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+          <p className="text-base text-ink-2 mb-4 max-w-2xl">
             Send this code to anyone you want in. They sign in with their email, choose Join with a code, and land here as a Contributor. You can raise anyone to Curator below once they need to run rounds.
           </p>
           {org?.joinCode ? (
@@ -252,7 +252,7 @@ export default function TeamView() {
                 <Chip key={cv.id} tone="magenta" icon={<IconTransformation size={13} />}>Covering for {cv.name}</Chip>
               ))}
             </div>
-            <p className="text-sm text-ink-2 max-w-2xl">{LEVEL_DESC[p.level]}</p>
+            <p className="text-base text-ink-2 max-w-2xl">{LEVEL_DESC[p.level]}</p>
 
             {mine && (
               <div className="mt-3 rounded-lg border border-line bg-ground/60 p-3">

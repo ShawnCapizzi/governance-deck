@@ -106,7 +106,7 @@ export default function StartView() {
       </Widget>
 
       <Widget eyebrow="Start here" title="How it works" sub="Four steps, on your schedule">
-        <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
           You answer questions privately, the app finds where the team truly disagrees, a named decider settles each one with a reason attached, and the decisions become dated documents anyone new can pick up and follow.
         </p>
         <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
@@ -245,7 +245,7 @@ export default function StartView() {
       </div>
 
       <Widget eyebrow="Going further" title="Bring this to your org" laser>
-        <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
           You can run everything here on your own. When a team needs to go wider than the app, there is a facilitated version: a printed card deck and a workshop that works through the same questions in a room, plus the broader method behind it. Worth exploring only if you want to take this further than the app.
         </p>
         <div className="flex flex-wrap items-center gap-3">

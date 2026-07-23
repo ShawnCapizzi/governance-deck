@@ -58,6 +58,15 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+READABILITY TOKENS, COMPUTED NOT EYEBALLED. ink-2 is #CBD0D9 (8.6:1 on the
+worst shaded card edge) and ink-3 is #A2ABBA (5.8:1 worst case). The old
+values passed AA on flat panels but fell to 5.3:1 on suit shade edges,
+which is why body copy read as weak. Main explanatory paragraphs are
+text-base, never text-sm; text-sm is for metadata, chips, and row detail.
+Question prompts are the content of a card: text-lg md:text-xl, medium
+weight. Rail suit labels are 11px bold full white. If a new background is
+introduced, recompute contrast against it before shipping.
+
 VISIBLE ACTIONS RULE. Where a panel has a primary action, it renders as a
 pill, never as a small text link: a text-peri link is for secondary or
 row-level navigation only. The Start page leads with why the app exists

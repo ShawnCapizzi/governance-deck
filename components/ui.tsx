@@ -119,9 +119,9 @@ export function SuitCard({ card, children }: { card: DeckCard; children?: ReactN
       {/* The rail says what the card governs in plain words. Deck suit
           names and internal card ids are not shown: a person answering a
           question should not have to learn a taxonomy first. */}
-      <div className={"w-9 md:w-10 shrink-0 flex flex-col items-center justify-between py-3.5 " + s.rail}>
+      <div className={"w-10 md:w-11 shrink-0 flex flex-col items-center justify-between py-3.5 " + s.rail}>
         <span className="text-white/95 text-sm leading-none" aria-hidden="true">{s.glyph}</span>
-        <span className="font-mono text-white/90 uppercase tracking-[0.18em] text-[9px] whitespace-nowrap"
+        <span className="font-mono text-white font-bold uppercase tracking-[0.14em] text-[11px] whitespace-nowrap"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
           {s.label}
         </span>
@@ -130,7 +130,7 @@ export function SuitCard({ card, children }: { card: DeckCard; children?: ReactN
         {card.feeds && (
           <p className="text-xs font-mono text-ink-3 mb-2">Feeds {card.feeds}</p>
         )}
-        <p className="text-base text-ink mb-3 leading-relaxed">{card.prompt}</p>
+        <p className="text-lg md:text-xl text-ink font-medium tracking-tight mb-3 leading-snug">{card.prompt}</p>
         {children}
       </div>
     </div>
