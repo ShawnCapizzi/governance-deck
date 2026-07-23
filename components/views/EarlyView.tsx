@@ -123,8 +123,7 @@ export default function EarlyView() {
         {/* Hero. Glow peak computed at 0.26 alpha so body copy holds 9.46:1
             at its brightest point. */}
         <section className="relative py-14 md:py-20">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10"
-            style={{ background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(107,92,255,0.26) 0%, rgba(107,92,255,0.08) 45%, transparent 75%)" }} />
+          <div aria-hidden="true" className="mesh-hero pointer-events-none absolute inset-0 -z-10" />
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="eyebrow text-peri">Early access</p>

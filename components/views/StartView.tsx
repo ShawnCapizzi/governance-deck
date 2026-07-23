@@ -11,6 +11,8 @@ import { CARDS } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
 import { SpineCard, SpineCardData } from "../SpineCard";
+import { QuestionDeal } from "../QuestionDeal";
+import { SUIT_COLOR } from "../../lib/deck";
 import { IconTransformation } from "../Icons";
 import { useSession } from "../../lib/store";
 
@@ -23,18 +25,18 @@ const DEMO_SEED: Record<string, string> = {
 const STEPS = ["Answer", "See where it stands", "Reconcile", "Artifact"];
 
 const LOOP: SpineCardData[] = [
-  { rank: "01", suit: "Answer", color: "#6355BB", glyph: "\u25C6",
-    eyebrow: "Everyone, on their own time", prompt: "Gather",
-    clarifier: "Each person answers privately. Nobody sees anyone else's answer, so nobody anchors on the loudest voice." },
-  { rank: "02", suit: "Resolve", color: "#42499E", glyph: "\u25A0",
-    eyebrow: "Only where answers differ", prompt: "Converge",
-    clarifier: "Matching answers settle themselves. Only the real gaps need attention, and each is settled on the record." },
-  { rank: "03", suit: "Track", color: "#AC64B4", glyph: "\u25B2",
-    eyebrow: "Measured every cycle", prompt: "Health",
-    clarifier: "Each problem climbs five stages, from no agreed rule to a team that corrects itself without you." },
-  { rank: "04", suit: "Share", color: "#1B6D68", glyph: "\u2726",
-    eyebrow: "Yours to keep and send", prompt: "Documents",
-    clarifier: "Your decisions become dated documents you can download, drop into a deck, or hand to someone new." },
+  { rank: "01", suit: "Answer", color: SUIT_COLOR.signals, glyph: "\u25C6",
+    eyebrow: "On your own time", prompt: "Gather",
+    clarifier: "Everyone answers privately, so nobody anchors on the loudest voice in the room." },
+  { rank: "02", suit: "Resolve", color: SUIT_COLOR.bounds, glyph: "\u25A0",
+    eyebrow: "Where answers differ", prompt: "Align",
+    clarifier: "Matching answers settle themselves. Only the real gaps need anyone's attention." },
+  { rank: "03", suit: "Track", color: SUIT_COLOR.trace, glyph: "\u25B2",
+    eyebrow: "Every cycle", prompt: "Measure",
+    clarifier: "Each area climbs five stages, from no agreed rule to a team that corrects itself." },
+  { rank: "04", suit: "Share", color: SUIT_COLOR.spine, glyph: "\u2726",
+    eyebrow: "Yours to keep", prompt: "Decide",
+    clarifier: "Decisions become dated documents you can send, present, or hand to someone new." },
 ];
 
 const ROLES_INFO = [
@@ -79,20 +81,20 @@ export default function StartView() {
 
   return (
     <div className="grid gap-4">
-      <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" glow>
+      <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" className="mesh-hero raise-2">
         <p className="text-base text-ink-2 max-w-2xl mb-5 leading-relaxed">
           Most teams lose speed to the same thing: decisions nobody actually made. Everyone assumes there is alignment on who decides what, until something breaks and it turns out there never was. This app asks those questions directly, shows exactly where your team is aligned and where it is not, settles the open ones on the record, and turns the answers into documents your whole business can run on.
         </p>
         <div className="grid gap-3 sm:grid-cols-3 mb-6">
-          <div className="rounded-xl border border-line bg-ground/60 p-4">
+          <div className="lit raise-1 rounded-xl border border-line bg-ground/60 p-4">
             <p className="text-base text-ink font-medium tracking-tight">Fewer meetings</p>
             <p className="text-base text-ink-2 mt-1">Everyone answers on their own time. No calendar hunt, no room, no anchoring on the loudest voice.</p>
           </div>
-          <div className="rounded-xl border border-line bg-ground/60 p-4">
+          <div className="lit raise-1 rounded-xl border border-line bg-ground/60 p-4">
             <p className="text-base text-ink font-medium tracking-tight">Less rework</p>
             <p className="text-base text-ink-2 mt-1">Gaps show up at the start, not in launch week when they are expensive.</p>
           </div>
-          <div className="rounded-xl border border-line bg-ground/60 p-4">
+          <div className="lit raise-1 rounded-xl border border-line bg-ground/60 p-4">
             <p className="text-base text-ink font-medium tracking-tight">A faster yes</p>
             <p className="text-base text-ink-2 mt-1">Settled decisions stop being reopened, so work moves and stays moved.</p>
           </div>
@@ -122,6 +124,13 @@ export default function StartView() {
             Deal again
           </button>
         </div>
+      </Widget>
+
+      <Widget eyebrow="Start here" title="The kind of questions it asks" sub="Deal for a different three">
+        <p className="text-base text-ink-2 mb-4 max-w-2xl">
+          These are real questions from the deck. Most take a few words to answer, and the useful ones are the questions a team assumes it has already settled.
+        </p>
+        <QuestionDeal />
       </Widget>
 
       <div id="try" className="scroll-mt-6">

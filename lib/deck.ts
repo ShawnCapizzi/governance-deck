@@ -62,6 +62,17 @@ export const STAGES = ["Ad hoc", "Documented", "Practiced", "Enforced", "Self-co
 // internal. The working app shows a plain label that says what the card
 // actually governs, so a first-time user never has to learn a taxonomy
 // before answering a question. Color still does the grouping work.
+// Canonical suit colours. Every consumer reads from here: card rails,
+// card faces, and the loop deck. All five clear AA on white stock, which
+// is the constraint that darkened Trace and Diagnostic.
+export const SUIT_COLOR = {
+  signals: "#6355BB",   // 5.92 on white
+  bounds: "#42499E",    // 7.84 on white
+  trace: "#9B519F",     // 5.16 on white
+  spine: "#1B6D68",     // 6.12 on white
+  diagnostic: "#CC3D10", // 4.95 on white
+} as const;
+
 export const SUIT_STYLE: Record<Suit, { label: string; rail: string; chip: string; shade: string; glyph: string }> = {
   Signals: { label: "Beliefs", rail: "bg-[#6355BB]", chip: "bg-peri/10 text-peri border border-peri/30", shade: "shade-signals", glyph: "\u25C6" },
   Bounds: { label: "Guardrails", rail: "bg-[#42499E]", chip: "bg-cobalt/10 text-[#9DA9FF] border border-cobalt/40", shade: "shade-bounds", glyph: "\u25A0" },

@@ -18,7 +18,7 @@ const ROWS = [
 
 export function ProductVisual() {
   return (
-    <div aria-hidden="true" className="select-none rounded-2xl border border-line bg-surface overflow-hidden shadow-2xl">
+    <div aria-hidden="true" className="lit raise-2 select-none rounded-2xl border border-line bg-surface overflow-hidden">
       <div className="flex items-center gap-1.5 px-4 py-3 border-b border-line bg-raised">
         <span className="w-2.5 h-2.5 rounded-full bg-line-strong" />
         <span className="w-2.5 h-2.5 rounded-full bg-line-strong" />

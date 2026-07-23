@@ -123,9 +123,9 @@ body {
    dimension in SpineCard is a calc() off --card-w, so the card holds
    its shape at every breakpoint, same contract as the site component.
    ============================================================ */
-.clarity-deck { --card-w: 150px; }
-@media (min-width: 640px) { .clarity-deck { --card-w: 168px; } }
-@media (min-width: 1024px) { .clarity-deck { --card-w: 182px; } }
+.clarity-deck { --card-w: 194px; }
+@media (min-width: 640px) { .clarity-deck { --card-w: 212px; } }
+@media (min-width: 1024px) { .clarity-deck { --card-w: 236px; } }
 
 .spine-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
 .spine-card:hover { transform: translateY(-6px) rotate(0deg) !important; }
@@ -209,3 +209,43 @@ body {
 .nav-active {
   background-image: linear-gradient(90deg, rgba(107, 92, 255, 0.18) 0%, rgba(107, 92, 255, 0.07) 60%, transparent 100%);
 }
+
+/* ============================================================
+   DEPTH AND LIGHT
+   A mesh of offset radial washes reads as light falling across a
+   surface rather than a flat tint. Peak alphas computed so body
+   copy holds 7.37:1 where two washes overlap at full strength:
+   brand at 0.32, magenta at 0.10. Do not raise either without
+   recomputing, and do not add a third wash at the same origin.
+   ============================================================ */
+.mesh-hero {
+  background-image:
+    radial-gradient(ellipse 60% 55% at 18% 0%, rgba(107, 92, 255, 0.32) 0%, rgba(107, 92, 255, 0.10) 42%, transparent 72%),
+    radial-gradient(ellipse 45% 45% at 88% 12%, rgba(232, 121, 249, 0.10) 0%, rgba(232, 121, 249, 0.03) 45%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(95, 201, 192, 0.07) 0%, transparent 65%);
+}
+
+/* Panel light: a soft top-left key light so cards read as lit objects
+   rather than flat rectangles. Subtle by design, it sits under content. */
+.lit {
+  position: relative;
+}
+.lit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 0% 0%, rgba(255, 255, 255, 0.045) 0%, transparent 60%),
+    linear-gradient(160deg, rgba(107, 92, 255, 0.05) 0%, transparent 45%);
+}
+
+/* The mesh IS the light on that surface, so the panel sheen must not stack
+   on top of it. Together they pushed secondary text to 4.34 and the eyebrow
+   to 4.11, both below AA. Suppressed, the mesh alone holds every value. */
+.mesh-hero.lit::before { display: none; }
+
+/* Raised objects cast a real shadow, which is most of what "depth" means. */
+.raise-1 { box-shadow: 0 1px 2px rgba(0,0,0,0.30), 0 8px 24px -12px rgba(0,0,0,0.55); }
+.raise-2 { box-shadow: 0 2px 4px rgba(0,0,0,0.35), 0 18px 44px -18px rgba(0,0,0,0.70); }

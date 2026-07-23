@@ -51,7 +51,7 @@ export function Widget({ eyebrow, title, sub, children, className = "", laser = 
 }) {
   const t = TONE[tone];
   return (
-    <section className={"relative overflow-hidden border border-line rounded-2xl " + t.surface + " " + className}>
+    <section className={"lit raise-1 relative overflow-hidden border border-line rounded-2xl " + t.surface + " " + className}>
       <div aria-hidden="true" className={"absolute inset-x-0 top-0 h-[3px] " + t.rule} />
       {glow && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0"
@@ -115,7 +115,7 @@ export function GapChip({ gap }: { gap: { leads: string; team: string } | null }
 export function SuitCard({ card, children }: { card: DeckCard; children?: ReactNode }) {
   const s = SUIT_STYLE[card.suit];
   return (
-    <div className={"flex rounded-2xl border border-line overflow-hidden " + s.shade}>
+    <div className={"lit raise-1 flex rounded-2xl border border-line overflow-hidden " + s.shade}>
       {/* The rail says what the card governs in plain words. Deck suit
           names and internal card ids are not shown: a person answering a
           question should not have to learn a taxonomy first. */}

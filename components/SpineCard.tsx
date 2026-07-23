@@ -27,22 +27,22 @@ export function SpineCard({ card, tilt = 0, dealIndex, dealing = false }: {
       style={{
         ["--deal-i" as string]: dealIndex ?? 0,
         width: "var(--card-w)",
-        height: "calc(var(--card-w) * 1.45)",
+        height: "calc(var(--card-w) * 1.5)",
         borderRadius: "calc(var(--card-w) * 0.045)",
         transform: "rotate(" + tilt + "deg)",
-        boxShadow: "0 1px 2px rgba(0,0,0,0.28), 0 10px 28px rgba(0,0,0,0.45)",
+        boxShadow: "0 1px 2px rgba(0,0,0,0.30), 0 16px 40px -12px rgba(0,0,0,0.60)",
       }}
     >
       <div
         className="flex flex-col items-center justify-between shrink-0"
         style={{
-          width: "calc(var(--card-w) * 0.2)",
+          width: "calc(var(--card-w) * 0.17)",
           background: card.color,
           padding: "calc(var(--card-w) * 0.06) 0",
         }}
       >
         <span className="font-mono font-bold text-white leading-none"
-          style={{ fontSize: "calc(var(--card-w) * 0.09)" }}>
+          style={{ fontSize: "calc(var(--card-w) * 0.085)" }}>
           {card.rank}
         </span>
         <span className="font-mono text-white/85 uppercase whitespace-nowrap"
@@ -59,25 +59,25 @@ export function SpineCard({ card, tilt = 0, dealIndex, dealing = false }: {
         </span>
       </div>
 
-      <div className="flex flex-col" style={{ flex: 1, minWidth: 0, padding: "calc(var(--card-w) * 0.075)" }}>
+      <div className="flex flex-col" style={{ flex: 1, minWidth: 0, padding: "calc(var(--card-w) * 0.085)" }}>
         <p className="font-mono uppercase"
           style={{
             color: card.color,
-            letterSpacing: "0.14em",
-            fontSize: "max(9px, calc(var(--card-w) * 0.032))",
+            letterSpacing: "0.10em",
+            fontSize: "max(8px, calc(var(--card-w) * 0.028))",
             marginBottom: "calc(var(--card-w) * 0.04)",
           }}>
           {card.eyebrow}
         </p>
         <p className="font-semibold tracking-tight"
-          style={{ color: INK, lineHeight: 1.12, fontSize: "calc(var(--card-w) * 0.098)" }}>
+          style={{ color: INK, lineHeight: 1.08, fontSize: "calc(var(--card-w) * 0.125)" }}>
           {card.prompt}
         </p>
         <p style={{
           color: MUTE,
           marginTop: "calc(var(--card-w) * 0.055)",
-          fontSize: "max(11px, calc(var(--card-w) * 0.052))",
-          lineHeight: 1.35,
+          fontSize: "max(12px, calc(var(--card-w) * 0.058))",
+          lineHeight: 1.42,
         }}>
           {card.clarifier}
         </p>

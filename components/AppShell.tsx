@@ -26,6 +26,12 @@ const NAV = [
 
 const GROUPS = ["", "Set up", "Run it", "Results"] as const;
 
+const GROUP_RULE: Record<string, string> = {
+  "Set up": "bg-brand",
+  "Run it": "bg-peri",
+  "Results": "bg-[#5FC9C0]",
+};
+
 export type NavKey = (typeof NAV)[number]["key"];
 
 export default function AppShell({ active, children }: { active: NavKey; children: ReactNode }) {
@@ -55,7 +61,11 @@ export default function AppShell({ active, children }: { active: NavKey; childre
             {GROUPS.map((g) => (
               <div key={g || "top"} className="space-y-1">
                 {g && (
-                  <p className="px-3 pb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-3">{g}</p>
+                  <div className="px-3 pt-3 pb-1.5 flex items-center gap-2">
+                    <span aria-hidden="true" className={"h-3 w-[3px] rounded-full shrink-0 " + (GROUP_RULE[g] ?? "bg-line-strong")} />
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-3">{g}</p>
+                    <span aria-hidden="true" className="h-px flex-1 bg-line" />
+                  </div>
                 )}
                 {NAV.filter((n) => n.group === g).map((n) => {
                   const on = active === n.key;
@@ -128,7 +138,11 @@ export default function AppShell({ active, children }: { active: NavKey; childre
                 {GROUPS.map((g) => (
                   <div key={g || "top"}>
                     {g && (
-                      <p className="pb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-3">{g}</p>
+                      <div className="pb-2 flex items-center gap-2">
+                        <span aria-hidden="true" className={"h-3.5 w-[3px] rounded-full shrink-0 " + (GROUP_RULE[g] ?? "bg-line-strong")} />
+                        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-3">{g}</p>
+                        <span aria-hidden="true" className="h-px flex-1 bg-line" />
+                      </div>
                     )}
                     {NAV.filter((n) => n.group === g).map((n) => {
                       const on = active === n.key;

@@ -58,6 +58,33 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+DEPTH AND LIGHT. .mesh-hero is three offset radial washes reading as light
+across a surface: brand 0.32, magenta 0.10, teal 0.07. Those peaks are the
+computed ceiling, where body copy holds 7.37:1. .lit adds a soft key light
+to panels and .raise-1 / .raise-2 give real shadow. Critical: .lit is
+suppressed under .mesh-hero, because stacked they pushed secondary text to
+4.34 and the eyebrow to 4.11, both failing. Never stack two light layers on
+one surface without recomputing.
+
+NAV STAGE RAMP. The three nav groups are a sequence, not three topics, so
+their rules run brand to peri to teal in stage order. Hue here encodes
+ORDER, which is a fourth bounded use and does not collide with topic hue on
+cards or state hue on panels. All three clear 3:1 as non-text graphics.
+
+SUIT_COLOR IS THE SINGLE SOURCE. lib/deck.ts exports the five canonical
+suit hexes and every consumer reads from it: rails, card faces, and the loop
+deck. The loop deck previously duplicated the hexes, which is why darkening
+Trace once fixed the rail but left the card face failing at 4.01 on white.
+All five clear AA on white stock.
+
+CARDS: TWO KINDS, DELIBERATELY DIFFERENT JOBS. The four loop cards explain
+the four steps and are a sequence, so they deal in order and never shuffle.
+The question deal (components/QuestionDeal) is the shuffle: it deals three
+real questions from the deck and Deal three more brings up three different
+ones, verified over 200 consecutive deals to never repeat the previous hand.
+Without it the deck metaphor did no work, because a card that never changes
+is not a deck.
+
 THREE COLOUR SCOPES, EACH BOUNDED. Extends the one-colour rule rather than
 replacing it. (1) TOPIC hue lives on question cards only: Beliefs,
 Guardrails, Recovery, Change, Reality check. (2) STATE lives on panels only:
