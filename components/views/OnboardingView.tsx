@@ -115,7 +115,9 @@ export default function OnboardingView() {
           )}
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <a href="/team" className="pill-primary px-5 py-2.5 text-sm">Go to your team</a>
-            <a href="/roles" className="text-sm text-peri hover:text-ink">Set up roles first &rarr;</a>
+            <a href="/roles" className="px-5 py-2.5 rounded-full text-sm border border-line-strong text-ink-2 hover:text-ink hover:border-ink-3">
+              Set up roles first
+            </a>
           </div>
         </Widget>
       </div>

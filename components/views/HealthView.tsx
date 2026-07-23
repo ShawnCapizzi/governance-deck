@@ -97,6 +97,11 @@ export default function HealthView() {
             ))}
           </div>
         )}
+        {queue.length > 0 && (
+          <div className="mt-4">
+            <Link href="/converge" className="pill-primary px-5 py-2.5 text-sm">Settle these now</Link>
+          </div>
+        )}
       </Widget>
 
       {ISSUES.map((issue) => {

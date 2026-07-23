@@ -38,7 +38,7 @@ const LOOP: SpineCardData[] = [
 ];
 
 const ROLES_INFO = [
-  { name: "Facilitator", copy: "Runs the session, reconciles split cards with a rationale, and publishes the artifacts." },
+  { name: "Facilitator", copy: "Runs the round, settles split answers with a reason on record, and publishes the documents." },
   { name: "Leads", copy: "Run the deep pass first. They set the spine: truth signals, decision rights, and guardrails." },
   { name: "Team", copy: "Run the second pass. They pressure-test the spine against daily reality, which is where perception gaps surface." },
 ];
@@ -79,9 +79,35 @@ export default function StartView() {
 
   return (
     <div className="grid gap-4">
-      <Widget eyebrow="Start here" title="How the deck works" sub="Two minutes, start to spine">
+      <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" glow>
+        <p className="text-base text-ink-2 max-w-2xl mb-5 leading-relaxed">
+          Most teams lose speed to the same thing: decisions nobody actually made. Everyone assumes there is agreement on who decides what, until something breaks and it turns out there never was. This app asks those questions directly, shows exactly where your team is split, settles each one on the record, and turns the answers into documents your whole business can run on.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-3 mb-6">
+          <div className="rounded-xl border border-line bg-ground/60 p-4">
+            <p className="text-base text-ink font-medium tracking-tight">Fewer meetings</p>
+            <p className="text-sm text-ink-2 mt-1">Everyone answers on their own time. No calendar hunt, no room, no anchoring on the loudest voice.</p>
+          </div>
+          <div className="rounded-xl border border-line bg-ground/60 p-4">
+            <p className="text-base text-ink font-medium tracking-tight">Less rework</p>
+            <p className="text-sm text-ink-2 mt-1">Disagreements surface at the start, not in launch week when they are expensive.</p>
+          </div>
+          <div className="rounded-xl border border-line bg-ground/60 p-4">
+            <p className="text-base text-ink font-medium tracking-tight">A faster yes</p>
+            <p className="text-sm text-ink-2 mt-1">Settled decisions stop being re-argued, so work moves and stays moved.</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/gather" className="pill-primary px-6 py-3 text-base">Start answering</Link>
+          <a href="#try" className="px-5 py-2.5 rounded-full text-sm border border-line-strong text-ink-2 hover:text-ink hover:border-ink-3">
+            Watch it work in 60 seconds
+          </a>
+        </div>
+      </Widget>
+
+      <Widget eyebrow="Start here" title="How it works" sub="Four steps, on your schedule">
         <p className="text-sm text-ink-2 mb-4 max-w-2xl">
-          Most teams assume they agree on who decides what, until something breaks and it turns out they never did. This tool asks the questions directly, shows you exactly where your team is split, settles each one on the record with a name and a reason attached, and hands you the decisions as documents anyone can follow.
+          You answer questions privately, the app finds where the team truly disagrees, a named decider settles each one with a reason attached, and the decisions become dated documents anyone new can pick up and follow.
         </p>
         <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
           {LOOP.map((card, i) => (
@@ -98,6 +124,7 @@ export default function StartView() {
         </div>
       </Widget>
 
+      <div id="try" className="scroll-mt-6">
       <Widget eyebrow="Try it" title="Try the loop" sub="One card, 60 seconds" glow>
         <div className="flex flex-wrap gap-2 mb-4">
           {STEPS.map((s, i) => (
@@ -177,16 +204,18 @@ export default function StartView() {
           <div>
             <pre className="bg-ground border border-line text-ink-2 text-xs rounded-xl p-4 overflow-x-auto whitespace-pre-wrap font-mono mb-3">{artifactMd}</pre>
             <p className="text-sm text-ink-2 mb-4 max-w-xl">
-              That is the whole loop. A disagreement your team did not know it had is now a documented decision with a name and a reason attached. The full session does this across five suits and emits one artifact per suit.
+              That is the whole loop. A disagreement your team did not know it had is now a documented decision with a name and a reason attached. A full round does this across every question area and produces one document per area.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <Link href="/gather" className="pill-primary px-5 py-2.5 text-sm">Run the full session</Link>
+              <Link href="/gather" className="pill-primary px-5 py-2.5 text-sm">Start answering for real</Link>
               <Link href="/" className="text-sm text-peri hover:text-ink">See Governance Health &rarr;</Link>
               <button onClick={() => { setStep(0); setPick(""); setResValue(""); }} className="text-sm text-ink-3 hover:text-ink-2">Replay</button>
             </div>
           </div>
         )}
       </Widget>
+
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <Widget eyebrow="Who does what" title="Who does what">
@@ -217,11 +246,13 @@ export default function StartView() {
 
       <Widget eyebrow="Going further" title="Bring this to your org" laser>
         <p className="text-sm text-ink-2 mb-4 max-w-2xl">
-          You can run everything here on your own. When a team needs to go wider than one session, there is a facilitated version: a printed card deck and a workshop that works through the same questions in a room, plus the broader method behind it. Worth exploring only if you want to take this further than the app.
+          You can run everything here on your own. When a team needs to go wider than the app, there is a facilitated version: a printed card deck and a workshop that works through the same questions in a room, plus the broader method behind it. Worth exploring only if you want to take this further than the app.
         </p>
         <div className="flex flex-wrap items-center gap-3">
-          <a href="https://www.shawncapizzi.com" className="pill-primary px-5 py-2.5 text-sm">Explore the workshop and card deck</a>
-          <Link href="/gather" className="text-sm text-peri hover:text-ink">Or just start a session &rarr;</Link>
+          <Link href="/gather" className="pill-primary px-5 py-2.5 text-sm">Start a round</Link>
+          <a href="https://www.shawncapizzi.com" className="px-5 py-2.5 rounded-full text-sm border border-line-strong text-ink-2 hover:text-ink hover:border-ink-3">
+            Explore the workshop and card deck
+          </a>
         </div>
         <p className="text-xs text-ink-3 mt-4">
           Built by Shawn Capizzi. The method behind it is the Capizzi Process: listen first, make it visible, prove it worked.

@@ -58,6 +58,13 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+VISIBLE ACTIONS RULE. Where a panel has a primary action, it renders as a
+pill, never as a small text link: a text-peri link is for secondary or
+row-level navigation only. The Start page leads with why the app exists
+(outcomes: fewer meetings, less rework, a faster yes) and a large Start
+answering pill before any explanation of mechanics. The word session never
+appears in user-facing copy; the unit of work is a round.
+
 ONE COLOR SYSTEM, NON-NEGOTIABLE. Hue means subject and only subject. The
 five topic hues live on question cards alone (Beliefs, Guardrails, Recovery,
 Change, Reality check). Panels carry state, never topic: neutral (nothing
