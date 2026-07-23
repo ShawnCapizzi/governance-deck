@@ -58,6 +58,35 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+THREE COLOUR SCOPES, EACH BOUNDED. Extends the one-colour rule rather than
+replacing it. (1) TOPIC hue lives on question cards only: Beliefs,
+Guardrails, Recovery, Change, Reality check. (2) STATE lives on panels only:
+neutral, action (ember), done (teal). (3) CHROME is brand purple and lives
+on navigation and identity only: the brand lockup, page header accent bars,
+and the active nav wash (.nav-active, 0.18 alpha over raised, label 13.09:1,
+periwinkle icon 5.83:1). A hue never crosses scopes. The earlier all-neutral
+pass was correct about collisions but left the chrome with nothing, which is
+what made every page read as one flat dark tone.
+
+PAGE HEADERS. Every page opens with components/PageHeader outside the card
+stack: gradient accent bar, periwinkle eyebrow, large title, and a lead
+line. Pages used to open straight into six identical panels with no sense
+of place. Do not restate the header title in the first widget below it.
+
+BRAND LOCKUP. components/BrandLockup is the only approved way to render
+identity: signature wordmark, gradient rule, then the product name in
+tracked mono. Never render the wordmark and a plain text product name as
+two loose elements; that reads as a caption, not a logo.
+
+HELP AFFORDANCE. components/HelpButton is a persistent question mark in the
+bottom right that opens a getting-started panel. White on brand purple
+computes at 4.18 and fails, so the trigger is a raised surface with a
+periwinkle glyph (7.06). Keep it on every app page: people testing this did
+not ask to be here and will not read a manual.
+
+OUTPUT NAMING. The output is called Decisions, and the page reads What your
+team decided. Documents named the file format rather than the value.
+
 ALIGNMENT VOCABULARY, NON-NEGOTIABLE. This product is about alignment and
 clarity, never about conflict. The words disagree, disagreement, argument,
 argue, conflict, and split must never appear in user-facing copy. What the

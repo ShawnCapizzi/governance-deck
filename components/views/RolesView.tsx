@@ -10,6 +10,7 @@ import { useState } from "react";
 import { DECISION_MODES, DEPARTMENTS, DecisionMode, Role, ROLE_KITS } from "../../lib/deck";
 import { useSession } from "../../lib/store";
 import { Widget, Chip } from "../ui";
+import { PageHeader } from "../PageHeader";
 import {
   IconProduct, IconTransformation, IconSystem, IconRegulated,
   IconDecidesAlone, IconConsults, IconConsensus, IconEscalates, IconAdd,
@@ -75,11 +76,11 @@ export default function RolesView() {
 
   return (
     <div className="grid gap-4">
-      <Widget eyebrow="Roles" title="Roles and decision rights" sub={roles.length + " roles"}>
-        <p className="text-base text-ink-2 max-w-2xl">
-          The deck asks who decides, and it asks for a role rather than a person so the answer survives turnover. Every decider card pulls its options from this list. Set the department that owns each call, how that role decides when the team is working async, and which role it has to agree with before anything is final.
-        </p>
-      </Widget>
+      <PageHeader
+        eyebrow="Set up"
+        title="Roles and decision rights"
+        lead="Questions ask who decides, and they ask for a role rather than a person so the answer survives turnover. Set the department that owns each call, how the role decides when the team is working async, and which role it has to agree with before anything is final."
+      />
 
       <Widget eyebrow="Roles" title="Name a role" sub="The task you will do most">
         <p className="text-base text-ink-2 max-w-2xl mb-4">

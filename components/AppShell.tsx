@@ -10,18 +10,21 @@ import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 import { useSession } from "../lib/store";
 import { getBrowserClient, isConfigured } from "../lib/supabase/client";
-import { Wordmark } from "./Wordmark";
+import { BrandLockup } from "./BrandLockup";
+import { HelpButton } from "./HelpButton";
 import { IconHealth, IconStart, IconRoles, IconGather, IconConverge, IconArtifacts, IconProduct } from "./Icons";
 
 const NAV = [
-  { key: "start", label: "Start here", href: "/start", Icon: IconStart },
-  { key: "team", label: "Team", href: "/team", Icon: IconRoles },
-  { key: "roles", label: "Roles", href: "/roles", Icon: IconProduct },
-  { key: "health", label: "Governance Health", href: "/", Icon: IconHealth },
-  { key: "gather", label: "Your questions", href: "/gather", Icon: IconGather },
-  { key: "converge", label: "Alignment", href: "/converge", Icon: IconConverge },
-  { key: "artifacts", label: "Documents", href: "/artifacts", Icon: IconArtifacts },
+  { key: "start", label: "Start here", href: "/start", Icon: IconStart, group: "" },
+  { key: "team", label: "Team", href: "/team", Icon: IconRoles, group: "Set up" },
+  { key: "roles", label: "Roles", href: "/roles", Icon: IconProduct, group: "Set up" },
+  { key: "gather", label: "Your questions", href: "/gather", Icon: IconGather, group: "Run it" },
+  { key: "converge", label: "Alignment", href: "/converge", Icon: IconConverge, group: "Run it" },
+  { key: "health", label: "Where you stand", href: "/", Icon: IconHealth, group: "Results" },
+  { key: "artifacts", label: "Decisions", href: "/artifacts", Icon: IconArtifacts, group: "Results" },
 ] as const;
+
+const GROUPS = ["", "Set up", "Run it", "Results"] as const;
 
 export type NavKey = (typeof NAV)[number]["key"];
 
@@ -45,23 +48,33 @@ export default function AppShell({ active, children }: { active: NavKey; childre
     <div className="relative z-10 min-h-screen text-ink">
       <div className="mx-auto flex max-w-6xl">
         <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-line bg-raised/90 backdrop-blur-sm min-h-screen sticky top-0">
-          <div className="px-5 pt-6 pb-4 border-b border-line">
-            <Wordmark className="h-5 w-auto text-ink" />
-            <p className="text-sm text-ink-2 mt-2 tracking-tight">Governance Deck</p>
+          <div className="px-5 pt-6 pb-5 border-b border-line">
+            <BrandLockup />
           </div>
-          <nav className="flex-1 px-3 py-4 space-y-1">
-            {NAV.map((n) => (
-              <Link key={n.key} href={n.href}
-                aria-current={active === n.key ? "page" : undefined}
-                className={"block rounded-lg px-3 py-2 text-sm tracking-tight border-l-2 transition-colors " +
-                  (active === n.key
-                    ? "border-brand bg-surface text-ink font-medium"
-                    : "border-transparent text-ink-2 hover:text-ink hover:bg-surface")}>
-                <span className="flex items-center gap-2.5">
-                  <n.Icon size={17} />
-                  {n.label}
-                </span>
-              </Link>
+          <nav className="flex-1 px-3 py-4 space-y-4">
+            {GROUPS.map((g) => (
+              <div key={g || "top"} className="space-y-1">
+                {g && (
+                  <p className="px-3 pb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-3">{g}</p>
+                )}
+                {NAV.filter((n) => n.group === g).map((n) => {
+                  const on = active === n.key;
+                  return (
+                    <Link key={n.key} href={n.href}
+                      aria-current={on ? "page" : undefined}
+                      className={"group flex items-center gap-3 rounded-lg pl-2.5 pr-3 py-2 text-base tracking-tight border-l-2 transition-colors " +
+                        (on
+                          ? "border-brand nav-active text-ink font-medium"
+                          : "border-transparent text-ink-2 hover:text-ink hover:bg-surface")}>
+                      <span className={"grid place-items-center w-7 h-7 rounded-md border shrink-0 transition-colors " +
+                        (on ? "bg-brand/25 border-peri/40 text-peri" : "bg-transparent border-transparent text-ink-3 group-hover:text-ink-2")}>
+                        <n.Icon size={16} />
+                      </span>
+                      {n.label}
+                    </Link>
+                  );
+                })}
+              </div>
             ))}
           </nav>
           <div className="px-5 py-4 border-t border-line">
@@ -93,7 +106,7 @@ export default function AppShell({ active, children }: { active: NavKey; childre
         </aside>
         <div className="flex-1 min-w-0">
           <header className="md:hidden sticky top-0 z-40 bg-raised/85 backdrop-blur-md border-b border-line px-4 h-14 flex items-center justify-between">
-            <Wordmark className="h-4 w-auto text-ink" />
+            <BrandLockup compact />
             <button type="button" onClick={() => setMobileOpen((v) => !v)}
               className="inline-flex items-center justify-center w-10 h-10 -mr-2 text-ink"
               aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen}>
@@ -111,17 +124,28 @@ export default function AppShell({ active, children }: { active: NavKey; childre
           </header>
           {mobileOpen ? (
             <div className="fixed inset-0 z-30 bg-raised md:hidden pt-14 overflow-y-auto">
-              <nav className="px-6 py-8 flex flex-col">
-                {NAV.map((n) => (
-                  <Link key={n.key} href={n.href} onClick={() => setMobileOpen(false)}
-                    aria-current={active === n.key ? "page" : undefined}
-                    className={"py-4 border-b border-line text-2xl tracking-tight " +
-                      (active === n.key ? "text-ink font-semibold" : "text-ink-2 font-medium")}>
-                    <span className="flex items-center gap-3">
-                      <n.Icon size={22} />
-                      {n.label}
-                    </span>
-                  </Link>
+              <nav className="px-6 py-6 flex flex-col gap-6">
+                {GROUPS.map((g) => (
+                  <div key={g || "top"}>
+                    {g && (
+                      <p className="pb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-3">{g}</p>
+                    )}
+                    {NAV.filter((n) => n.group === g).map((n) => {
+                      const on = active === n.key;
+                      return (
+                        <Link key={n.key} href={n.href} onClick={() => setMobileOpen(false)}
+                          aria-current={on ? "page" : undefined}
+                          className={"flex items-center gap-3 py-3.5 border-b border-line text-xl tracking-tight " +
+                            (on ? "text-ink font-semibold" : "text-ink-2 font-medium")}>
+                          <span className={"grid place-items-center w-9 h-9 rounded-lg border shrink-0 " +
+                            (on ? "bg-brand/25 border-peri/40 text-peri" : "bg-raised border-line-strong text-ink-3")}>
+                            <n.Icon size={19} />
+                          </span>
+                          {n.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 ))}
                 <a href="https://www.shawncapizzi.com" onClick={() => setMobileOpen(false)}
                   className="pill-primary mt-8 px-8 py-4 text-base w-full">
@@ -131,6 +155,7 @@ export default function AppShell({ active, children }: { active: NavKey; childre
             </div>
           ) : null}
           <main className="px-4 md:px-8 py-6 md:py-8">{children}</main>
+          <HelpButton />
         </div>
       </div>
     </div>

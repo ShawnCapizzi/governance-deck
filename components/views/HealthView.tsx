@@ -10,6 +10,7 @@ import { CARDS, ISSUES, STAGES, PERSONAS, DEMO_ME } from "../../lib/deck";
 import { classifyCard, openWork } from "../../lib/converge";
 import { useSession } from "../../lib/store";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
+import { PageHeader } from "../PageHeader";
 import { WordmarkWatermark } from "../Wordmark";
 import { IconSystem, IconArtifacts, IconListen, IconSplit, IconAligned, IconHealth } from "../Icons";
 
@@ -36,7 +37,13 @@ export default function HealthView() {
   const queue = openWork(CARDS, responses, resolved).slice(0, 3);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div>
+      <PageHeader
+        eyebrow="Results"
+        title="Where you stand"
+        lead="Who has finished, what is still open, and how far each area has moved toward a rule the team follows without you."
+      />
+      <div className="grid gap-4 md:grid-cols-2">
       <Widget eyebrow="Progress" title="Governance Health" sub="Workshop 01" className="md:col-span-2" laser icon={<IconHealth size={19} />}>
         <WordmarkWatermark className="-right-6 -bottom-4 w-64 md:w-80 text-ink opacity-[0.045]" />
         <div className="flex items-end justify-between gap-4">
@@ -137,6 +144,7 @@ export default function HealthView() {
           </Widget>
         );
       })}
+      </div>
     </div>
   );
 }

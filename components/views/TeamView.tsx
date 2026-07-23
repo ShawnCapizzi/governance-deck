@@ -12,6 +12,7 @@ import {
 } from "../../lib/team";
 import { useSession } from "../../lib/store";
 import { Widget, Chip } from "../ui";
+import { PageHeader } from "../PageHeader";
 import {
   IconRoles, IconAdd, IconTransformation, IconEscalates,
   IconAligned, IconSplit, IconProduct,
@@ -76,11 +77,11 @@ export default function TeamView() {
 
   return (
     <div className="grid gap-4">
-      <Widget eyebrow="People" title="Your team" sub={people.length + (people.length === 1 ? " person" : " people")}>
-        <p className="text-base text-ink-2 max-w-2xl">
-          Everyone who takes part sits here. Levels decide what a person can do: run things, answer questions, or just watch. When somebody goes away or leaves, hand their questions to someone else so a round never stalls waiting on an empty chair.
-        </p>
-      </Widget>
+      <PageHeader
+        eyebrow="Set up"
+        title="Your team"
+        lead="Everyone who takes part sits here. Levels decide what a person can do: run things, answer questions, or just watch. When somebody goes away or leaves, hand their questions to someone else so a round never stalls waiting on an empty chair."
+      />
 
       {uncovered.length > 0 && (
         <Widget eyebrow="Needs attention" title="Needs cover" sub={uncovered.length + " unassigned"}

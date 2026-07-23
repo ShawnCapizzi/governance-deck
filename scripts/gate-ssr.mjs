@@ -29,12 +29,12 @@ const checks = {
   start: ["Run smarter, together", "Fewer meetings", "Start answering", "Try the loop", "Explore the workshop and card deck", "Start a round", "spine-card", "Deal again"],
   signin: ["Running in demo mode", "no database connected"],
   onboarding: ["How this works", "Everyone answers alone", "Documents you keep", "shared space"],
-  team: ["Your team", "Programs", "Covering for", "Jo Nakamura", "Handoff record", "Curator", "surface-neutral"],
-  roles: ["surface-neutral", "Name a role", "Held by (person)", "Start from a kit", "AI usage guardrails", "Held by Dana Whitfield"],
-  health: ["aria-label=\"Capizzi\"", "Governance Health", "Waiting on", "Gaps to close", "Settle these now", "Manuscript discipline", "sc-frame"],
-  gather: ["questions left", "Your questions", "shade-signals", "surface-action", "minute"],
-  converge: ["Where you are not aligned yet", "Recovery", "aligned", "surface-action"],
-  artifacts: ["truth-signals.md", "Your documents", "THE CAPIZZI PROCESS", "Download .md", "artifact-paper"],
+  team: ["Your team", "Set up", "Programs", "Covering for", "Jo Nakamura", "Handoff record", "Curator", "surface-neutral"],
+  roles: ["Roles and decision rights", "Name a role", "Held by (person)", "Start from a kit", "AI usage guardrails", "Held by Dana Whitfield"],
+  health: ["Where you stand", "aria-label=\"Capizzi\"", "Governance Health", "Waiting on", "Gaps to close", "Settle these now", "Manuscript discipline", "sc-frame"],
+  gather: ["Your questions", "questions left", "Your questions", "shade-signals", "surface-action", "minute"],
+  converge: ["Needs your decision", "Alignment", "Recovery", "aligned", "surface-action"],
+  artifacts: ["truth-signals.md", "What your team decided", "THE CAPIZZI PROCESS", "Download .md", "artifact-paper"],
 };
 let fail = false;
 for (const [view, markers] of Object.entries(checks)) {

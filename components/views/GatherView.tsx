@@ -14,6 +14,7 @@ import Link from "next/link";
 import { CARDS, FREQ, PERSONAS, DEMO_ME } from "../../lib/deck";
 import { useSession } from "../../lib/store";
 import { SuitCard, Widget, Chip } from "../ui";
+import { PageHeader } from "../PageHeader";
 import { IconDecidesAlone, IconAligned, IconSplit } from "../Icons";
 
 export default function GatherView() {
@@ -50,8 +51,10 @@ export default function GatherView() {
 
   return (
     <div className="space-y-4">
+      <PageHeader eyebrow="Run it" title="Your questions" lead="Answer on your own schedule. Nobody sees your answers until everyone has finished." />
+
       <Widget
-        eyebrow="Your questions"
+        eyebrow="Progress"
         title={done ? "You are done" : remaining.length + (remaining.length === 1 ? " question left" : " questions left")}
         sub={answeredIds.size + " of " + CARDS.length}
         tone={done ? "done" : "action"}
@@ -78,7 +81,9 @@ export default function GatherView() {
               <div className="h-full bg-ember transition-all duration-300" style={{ width: pct + "%" }} />
             </div>
             <p className="text-sm text-ink-3 mt-2 font-mono">
-              {myName}{myTeam ? " \u00b7 " + myTeam : ""} \u00b7 about {Math.max(1, remaining.length)} minute{remaining.length === 1 ? "" : "s"} left
+              {myName}
+              {myTeam && myTeam !== "Unassigned" ? <> &middot; {myTeam}</> : null}
+              {" "}&middot; about {Math.max(1, remaining.length)} minute{remaining.length === 1 ? "" : "s"} left
             </p>
           </div>
         )}
