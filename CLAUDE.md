@@ -58,6 +58,25 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+GATE 4: CARD TEXT FIT (scripts/gate-fit.mjs, npm run gates). Every prompt
+must fit inside the card face at its computed size, checked at all three
+--card-w breakpoints. This gate exists because one fixed prompt size
+overflowed the longest question by 151px: the markup was valid, the SSR
+render succeeded, and the words were simply gone off the end of a
+fixed-height box. Compile and render checks cannot see that.
+
+SpineCard sizes the prompt by character count (promptRatio: 0.125 down to
+0.064) because a card face carries anything from a one word verb to a 116
+character question. If you change a tier or the card geometry, re-run gate
+4; the ratios in the gate must match the component.
+
+HIERARCHY WITHOUT MORE COLOUR. Pages read as one flat stack when every
+panel has equal weight. Two devices fix it without adding a fourth colour
+meaning: Widget takes lead for the panel that opens a page (bigger title,
+more padding, thicker rule), and components/SectionRule puts a labelled
+divider between groups of panels. Section dots follow the nav stage ramp,
+so a section on a page and its group in the sidebar carry the same colour.
+
 ROUNDS ARE THE UNIT OF PERSISTENCE (migration 0005). Answers and decisions
 belong to a round, not to the app. A round moves gathering -> aligning ->
 closed, and only owners and curators advance it.

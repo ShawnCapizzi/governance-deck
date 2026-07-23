@@ -13,6 +13,7 @@ import {
 import { useSession } from "../../lib/store";
 import { Widget, Chip } from "../ui";
 import { PageHeader } from "../PageHeader";
+import { SectionRule } from "../SectionRule";
 import {
   IconRoles, IconAdd, IconTransformation, IconEscalates,
   IconAligned, IconSplit, IconProduct,
@@ -104,6 +105,8 @@ export default function TeamView() {
         </Widget>
       )}
 
+      <SectionRule label="Programs" stage="set" />
+
       <Widget eyebrow="Programs" title="Programs" sub={programs.length === 0 ? "None yet" : programs.length + (programs.length === 1 ? " program" : " programs")}
         icon={<IconProduct size={19} />}>
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
@@ -157,6 +160,7 @@ export default function TeamView() {
         </div>
       </Widget>
 
+      {live && <SectionRule label="Current round" stage="run" />}
       {live && (
         <Widget eyebrow="Run it" title={round ? round.label : "No round open"}
           sub={round ? round.programName : undefined}
@@ -305,6 +309,8 @@ export default function TeamView() {
           </div>
         </Widget>
       )}
+
+      <SectionRule label="People and levels" stage="set" />
 
       {people.map((p: Person) => {
         const perms = permissionsFor(p.level);

@@ -11,6 +11,7 @@ import { DECISION_MODES, DEPARTMENTS, DecisionMode, Role, ROLE_KITS } from "../.
 import { useSession } from "../../lib/store";
 import { Widget, Chip } from "../ui";
 import { PageHeader } from "../PageHeader";
+import { SectionRule } from "../SectionRule";
 import {
   IconProduct, IconTransformation, IconSystem, IconRegulated,
   IconDecidesAlone, IconConsults, IconConsensus, IconEscalates, IconAdd,
@@ -82,6 +83,8 @@ export default function RolesView() {
         lead="Questions ask who decides, and they ask for a role rather than a person so the answer survives turnover. Set the department that owns each call, how the role decides when the team is working async, and which role it has to agree with before anything is final."
       />
 
+      <SectionRule label="Add a role" stage="set" />
+
       <Widget eyebrow="Roles" title="Name a role" sub="The task you will do most">
         <p className="text-base text-ink-2 max-w-2xl mb-4">
           Governance decides by role so the answer survives turnover, but a live session still needs to know who is in the seat today. Name the role, then name the person holding it. The role is what the deck asks about; the person is who gets chased when a card is waiting.
@@ -123,6 +126,8 @@ export default function RolesView() {
         </div>
       </Widget>
 
+      <SectionRule label="Or start from a template" stage="set" />
+
       <Widget eyebrow="Templates" title="Start from a kit" sub="Loads in one click, edit anything after">
         <p className="text-base text-ink-2 max-w-2xl mb-4">
           Nobody should start governance from a blank form. Each kit is a working set of roles with departments, decision modes, and pairing already reasoned through for a common shape of team. Load the closest one, then edit until it matches how you actually work.
@@ -148,6 +153,8 @@ export default function RolesView() {
           ))}
         </div>
       </Widget>
+
+      <SectionRule label="Your roles" stage="results" />
 
       <Widget eyebrow="Your roles" title="Your roles" sub={roles.length + " active"}>
         <p className="text-base text-ink-2 max-w-2xl">

@@ -16,6 +16,18 @@ export interface SpineCardData {
 }
 
 const INK = "#16161A";
+
+// Prompt size as a fraction of --card-w, by character count. Verified
+// against every prompt in the deck: the longest (116 chars) lands at nine
+// lines inside a 238px box. Do not raise a tier without re-running the fit
+// check in scripts/gate-fit.mjs.
+function promptRatio(len: number): number {
+  if (len <= 20) return 0.125;
+  if (len <= 45) return 0.098;
+  if (len <= 70) return 0.084;
+  if (len <= 95) return 0.074;
+  return 0.064;
+}
 const MUTE = "#6A6A73";
 
 export function SpineCard({ card, tilt = 0, dealIndex, dealing = false }: {
@@ -59,7 +71,7 @@ export function SpineCard({ card, tilt = 0, dealIndex, dealing = false }: {
         </span>
       </div>
 
-      <div className="flex flex-col" style={{ flex: 1, minWidth: 0, padding: "calc(var(--card-w) * 0.085)" }}>
+      <div className="flex flex-col" style={{ flex: 1, minWidth: 0, padding: "calc(var(--card-w) * 0.085)", overflow: "hidden" }}>
         <p className="font-mono uppercase"
           style={{
             color: card.color,
@@ -70,12 +82,13 @@ export function SpineCard({ card, tilt = 0, dealIndex, dealing = false }: {
           {card.eyebrow}
         </p>
         <p className="font-semibold tracking-tight"
-          style={{ color: INK, lineHeight: 1.08, fontSize: "calc(var(--card-w) * 0.125)" }}>
+          style={{ color: INK, lineHeight: 1.12, fontSize: "calc(var(--card-w) * " + promptRatio(card.prompt.length) + ")" }}>
           {card.prompt}
         </p>
         <p style={{
           color: MUTE,
-          marginTop: "calc(var(--card-w) * 0.055)",
+          marginTop: "auto",
+          paddingTop: "calc(var(--card-w) * 0.045)",
           fontSize: "max(12px, calc(var(--card-w) * 0.058))",
           lineHeight: 1.42,
         }}>

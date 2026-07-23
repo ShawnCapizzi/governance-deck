@@ -44,20 +44,20 @@ const TONE: Record<WidgetTone, { surface: string; rule: string; tile: string; la
   },
 };
 
-export function Widget({ eyebrow, title, sub, children, className = "", laser = false, glow = false, laserDelay = 0, icon, tone = "neutral" }: {
+export function Widget({ eyebrow, title, sub, children, className = "", laser = false, glow = false, laserDelay = 0, icon, tone = "neutral", lead = false }: {
   eyebrow: string; title: string; sub?: string; children: ReactNode;
   className?: string; laser?: boolean; glow?: boolean; laserDelay?: number;
-  icon?: ReactNode; tone?: WidgetTone;
+  icon?: ReactNode; tone?: WidgetTone; lead?: boolean;
 }) {
   const t = TONE[tone];
   return (
     <section className={"lit raise-1 relative overflow-hidden border border-line rounded-2xl " + t.surface + " " + className}>
-      <div aria-hidden="true" className={"absolute inset-x-0 top-0 h-[3px] " + t.rule} />
+      <div aria-hidden="true" className={"absolute inset-x-0 top-0 " + (lead ? "h-1" : "h-[3px]") + " " + t.rule} />
       {glow && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(107,92,255,0.22) 0%, rgba(107,92,255,0.06) 45%, transparent 75%)" }} />
       )}
-      <div className="relative p-5 md:p-6">
+      <div className={"relative " + (lead ? "p-6 md:p-8" : "p-5 md:p-6")}>
         <header className="mb-4 flex items-start gap-3">
           {icon && (
             <span className={"mt-0.5 shrink-0 grid place-items-center w-9 h-9 rounded-xl border " + t.tile}>
@@ -67,7 +67,7 @@ export function Widget({ eyebrow, title, sub, children, className = "", laser = 
           <div className="min-w-0 flex-1">
             <p className={"eyebrow " + t.label}>{eyebrow}</p>
             <div className="flex flex-wrap items-baseline justify-between gap-2 mt-0.5">
-              <h2 className="text-ink text-base md:text-lg font-semibold tracking-tight">{title}</h2>
+              <h2 className={"text-ink font-semibold tracking-tight " + (lead ? "text-xl md:text-2xl" : "text-base md:text-lg")}>{title}</h2>
               {sub && <span className="text-sm text-ink-2">{sub}</span>}
             </div>
           </div>

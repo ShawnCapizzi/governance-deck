@@ -12,6 +12,7 @@ import { classifyCard } from "../../lib/converge";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
 import { SpineCard, SpineCardData } from "../SpineCard";
 import { QuestionDeal } from "../QuestionDeal";
+import { SectionRule } from "../SectionRule";
 import { SUIT_COLOR } from "../../lib/deck";
 import { IconTransformation } from "../Icons";
 import { useSession } from "../../lib/store";
@@ -81,7 +82,7 @@ export default function StartView() {
 
   return (
     <div className="grid gap-4">
-      <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" className="mesh-hero raise-2">
+      <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" className="mesh-hero raise-2" lead>
         <p className="text-base text-ink-2 max-w-2xl mb-5 leading-relaxed">
           Most teams lose speed to the same thing: decisions nobody actually made. Everyone assumes there is alignment on who decides what, until something breaks and it turns out there never was. This app asks those questions directly, shows exactly where your team is aligned and where it is not, settles the open ones on the record, and turns the answers into documents your whole business can run on.
         </p>
@@ -107,6 +108,8 @@ export default function StartView() {
         </div>
       </Widget>
 
+      <SectionRule label="How it works" stage="set" />
+
       <Widget eyebrow="Start here" title="How it works" sub="Four steps, on your schedule">
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
           You answer questions privately, the app finds where your answers differ, a named decider settles each one with a reason attached, and the decisions become dated documents anyone new can pick up and follow.
@@ -126,12 +129,16 @@ export default function StartView() {
         </div>
       </Widget>
 
+      <SectionRule label="What it asks" stage="run" />
+
       <Widget eyebrow="Start here" title="The kind of questions it asks" sub="Deal for a different three">
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
           These are real questions from the deck. Most take a few words to answer, and the useful ones are the questions a team assumes it has already settled.
         </p>
         <QuestionDeal />
       </Widget>
+
+      <SectionRule label="Try it yourself" stage="run" />
 
       <div id="try" className="scroll-mt-6">
       <Widget eyebrow="Try it" title="Try the loop" sub="One card, 60 seconds" glow>
@@ -226,6 +233,8 @@ export default function StartView() {
 
       </div>
 
+      <SectionRule label="Setting it up" stage="results" />
+
       <div className="grid gap-4 md:grid-cols-2">
         <Widget eyebrow="Who does what" title="Who does what">
           <div className="divide-y divide-line">
@@ -252,6 +261,8 @@ export default function StartView() {
           </div>
         </Widget>
       </div>
+
+      <SectionRule label="Going further" stage="results" />
 
       <Widget eyebrow="Going further" title="Bring this to your org" laser>
         <p className="text-base text-ink-2 mb-4 max-w-2xl">

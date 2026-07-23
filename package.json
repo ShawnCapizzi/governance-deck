@@ -9,7 +9,8 @@
     "gate:transpile": "node scripts/gate-transpile.mjs",
     "gate:types": "tsc --noEmit",
     "gate:ssr": "node scripts/gate-ssr.mjs",
-    "gates": "npm run gate:transpile && npm run gate:types && npm run gate:ssr"
+    "gates": "npm run gate:transpile && npm run gate:types && npm run gate:ssr && npm run gate:fit",
+    "gate:fit": "node scripts/gate-fit.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",
