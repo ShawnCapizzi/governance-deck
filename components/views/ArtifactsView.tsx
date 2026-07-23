@@ -62,7 +62,7 @@ export default function ArtifactsView() {
         lead="Every question your team has settled becomes a dated document. Download it, drop the image into a deck, or hand it to someone joining next week."
       />
 
-      <Widget eyebrow="Results" title="What your team decided" sub={finalCount + " of " + docs.length + " final"}
+      <Widget eyebrow="Output" title="What your team decided" sub={finalCount + " of " + docs.length + " final"}
         tone={finalCount === docs.length ? "done" : "neutral"} icon={<IconArtifacts size={19} />}>
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
           One document per area, built from the questions your team has settled. Each version is dated and kept: changes create a new version rather than overwriting the old one, so you can always see what was agreed and when. Download it, drop the image into a deck, or print it for a review packet.

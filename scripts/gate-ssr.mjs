@@ -26,7 +26,7 @@ const html = renderAll();
 // "Covering for <!-- -->Jo Nakamura" and a concatenated marker will miss.
 const checks = {
   early: ["Early access", "Align your team once", "Request early access", "Fewer meetings", "Gaps come into view", "Not aligned yet", "decision-rights.md", "shawncapizzi.com"],
-  start: ["Run smarter, together", "Fewer meetings", "Start answering", "Try the loop", "Explore the workshop and card deck", "Start a round", "spine-card", "Deal again", "Deal three more", "mesh-hero", "How it works", "What it asks", "Going further"],
+  start: ["Run smarter, together", "Fewer meetings", "Start answering", "Try the loop", "Explore the workshop and card deck", "Start a round", "spine-card", "Deal again", "Deal again", "mesh-hero", "How it works", "What it asks", "See how it works", "Going further"],
   signin: ["Running in demo mode", "no database connected"],
   onboarding: ["How this works", "Everyone answers alone", "Documents you keep", "shared space"],
   team: ["Your team", "Set up", "Programs", "Covering for", "Jo Nakamura", "Handoff record", "Curator", "surface-neutral"],

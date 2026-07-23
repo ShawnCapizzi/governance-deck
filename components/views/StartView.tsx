@@ -5,16 +5,13 @@
 // The demo uses the real convergence engine on one real card, with
 // teammates pre-seeded so the perception gap always fires.
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { CARDS } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
-import { SpineCard, SpineCardData } from "../SpineCard";
-import { QuestionDeal } from "../QuestionDeal";
+import { DeckExplorer } from "../DeckExplorer";
 import { SectionRule } from "../SectionRule";
-import { SUIT_COLOR } from "../../lib/deck";
-import { IconTransformation } from "../Icons";
 import { useSession } from "../../lib/store";
 
 const DEMO_SEED: Record<string, string> = {
@@ -25,20 +22,6 @@ const DEMO_SEED: Record<string, string> = {
 };
 const STEPS = ["Answer", "See where it stands", "Reconcile", "Artifact"];
 
-const LOOP: SpineCardData[] = [
-  { rank: "01", suit: "Answer", color: SUIT_COLOR.signals, glyph: "\u25C6",
-    eyebrow: "On your own time", prompt: "Gather",
-    clarifier: "Everyone answers privately, so nobody anchors on the loudest voice in the room." },
-  { rank: "02", suit: "Resolve", color: SUIT_COLOR.bounds, glyph: "\u25A0",
-    eyebrow: "Where answers differ", prompt: "Align",
-    clarifier: "Matching answers settle themselves. Only the real gaps need anyone's attention." },
-  { rank: "03", suit: "Track", color: SUIT_COLOR.trace, glyph: "\u25B2",
-    eyebrow: "Every cycle", prompt: "Measure",
-    clarifier: "Each area climbs five stages, from no agreed rule to a team that corrects itself." },
-  { rank: "04", suit: "Share", color: SUIT_COLOR.spine, glyph: "\u2726",
-    eyebrow: "Yours to keep", prompt: "Decide",
-    clarifier: "Decisions become dated documents you can send, present, or hand to someone new." },
-];
 
 const ROLES_INFO = [
   { name: "Facilitator", copy: "Runs the round, settles open questions with a reason on record, and publishes the documents." },
@@ -55,15 +38,6 @@ const SETUP = [
 
 export default function StartView() {
   const { roles } = useSession();
-  // The loop deals in order and is never shuffled: 01 through 04 is a
-  // sequence, and randomizing it would damage first-read comprehension.
-  const [dealKey, setDealKey] = useState(0);
-  const [dealing, setDealing] = useState(false);
-  useEffect(() => {
-    setDealing(true);
-    const t = setTimeout(() => setDealing(false), 1100);
-    return () => clearTimeout(t);
-  }, [dealKey]);
   const demoCard = CARDS.find((c) => c.id === "SIG-4")!;
   const [step, setStep] = useState(0);
   const [pick, setPick] = useState("");
@@ -82,7 +56,7 @@ export default function StartView() {
 
   return (
     <div className="grid gap-4">
-      <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" className="mesh-hero raise-2" lead>
+      <Widget eyebrow="Why this exists" title="Run smarter, together" sub="Two minutes" className="mesh-hero raise-2" lead>
         <p className="text-base text-ink-2 max-w-2xl mb-5 leading-relaxed">
           Most teams lose speed to the same thing: decisions nobody actually made. Everyone assumes there is alignment on who decides what, until something breaks and it turns out there never was. This app asks those questions directly, shows exactly where your team is aligned and where it is not, settles the open ones on the record, and turns the answers into documents your whole business can run on.
         </p>
@@ -108,40 +82,20 @@ export default function StartView() {
         </div>
       </Widget>
 
-      <SectionRule label="How it works" stage="set" />
+      <SectionRule label="See how it works" stage="set" />
 
-      <Widget eyebrow="Start here" title="How it works" sub="Four steps, on your schedule">
-        <p className="text-base text-ink-2 mb-4 max-w-2xl">
+      <Widget eyebrow="The loop" title="How it works, and what it asks"
+        sub="Two views, one deck">
+        <p className="text-base text-ink-2 mb-5 max-w-2xl">
           You answer questions privately, the app finds where your answers differ, a named decider settles each one with a reason attached, and the decisions become dated documents anyone new can pick up and follow.
         </p>
-        <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
-          {LOOP.map((card, i) => (
-            <SpineCard key={card.rank + "-" + dealKey} card={card}
-              tilt={[-2.5, 1.5, -1.5, 2.5][i]} dealIndex={i} dealing={dealing} />
-          ))}
-        </div>
-        <div className="flex justify-center pt-4">
-          <button onClick={() => setDealKey((k) => k + 1)}
-            className="text-sm text-peri hover:text-ink inline-flex items-center gap-2">
-            <IconTransformation size={15} />
-            Deal again
-          </button>
-        </div>
-      </Widget>
-
-      <SectionRule label="What it asks" stage="run" />
-
-      <Widget eyebrow="Start here" title="The kind of questions it asks" sub="Deal for a different three">
-        <p className="text-base text-ink-2 mb-4 max-w-2xl">
-          These are real questions from the deck. Most take a few words to answer, and the useful ones are the questions a team assumes it has already settled.
-        </p>
-        <QuestionDeal />
+        <DeckExplorer />
       </Widget>
 
       <SectionRule label="Try it yourself" stage="run" />
 
       <div id="try" className="scroll-mt-6">
-      <Widget eyebrow="Try it" title="Try the loop" sub="One card, 60 seconds" glow>
+      <Widget eyebrow="Live demo" title="Try the loop" sub="One card, 60 seconds" glow>
         <div className="flex flex-wrap gap-2 mb-4">
           {STEPS.map((s, i) => (
             <Chip key={s} tone={i === step ? "brand" : i < step ? "peri" : "neutral"}>{i + 1}. {s}</Chip>
@@ -236,7 +190,7 @@ export default function StartView() {
       <SectionRule label="Setting it up" stage="results" />
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Widget eyebrow="Who does what" title="Who does what">
+        <Widget eyebrow="Levels" title="Who does what">
           <div className="divide-y divide-line">
             {ROLES_INFO.map((r) => (
               <div key={r.name} className="py-3 first:pt-0 last:pb-0">

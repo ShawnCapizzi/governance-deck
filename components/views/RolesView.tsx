@@ -85,7 +85,7 @@ export default function RolesView() {
 
       <SectionRule label="Add a role" stage="set" />
 
-      <Widget eyebrow="Roles" title="Name a role" sub="The task you will do most">
+      <Widget eyebrow="Add one" title="Name a role" sub="The task you will do most">
         <p className="text-base text-ink-2 max-w-2xl mb-4">
           Governance decides by role so the answer survives turnover, but a live session still needs to know who is in the seat today. Name the role, then name the person holding it. The role is what the deck asks about; the person is who gets chased when a card is waiting.
         </p>
@@ -156,7 +156,7 @@ export default function RolesView() {
 
       <SectionRule label="Your roles" stage="results" />
 
-      <Widget eyebrow="Your roles" title="Your roles" sub={roles.length + " active"}>
+      <Widget eyebrow="Current" title="Your roles" sub={roles.length + " active"}>
         <p className="text-base text-ink-2 max-w-2xl">
           These are the options your team will see on every decider card during gather. Edit a role and the change reaches the whole session.
         </p>

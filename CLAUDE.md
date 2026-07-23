@@ -58,6 +58,21 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+EYEBROWS NAME THE PANEL, NOT THE PAGE. An eyebrow says what kind of thing
+this panel is. It must never repeat the page name, never repeat another
+eyebrow on the same page (except across mutually exclusive branches), and
+never echo its own title. Three panels reading START HERE is what made the
+Start page feel undifferentiated: a repeated label is a signal the panels
+are not distinct enough to be separate panels.
+
+ONE CARD MOMENT PER PAGE. Start previously had three: four step cards,
+three question cards, and an interactive demo that also shows a question.
+components/DeckExplorer merges the first two into one card area with a
+toggle, How it works and What it asks. Steps deal 01 to 04 in order and
+never shuffle because they are a sequence; questions shuffle to four
+different ones because they are a deck. Do not reintroduce a second
+standalone deck on the same page.
+
 GATE 4: CARD TEXT FIT (scripts/gate-fit.mjs, npm run gates). Every prompt
 must fit inside the card face at its computed size, checked at all three
 --card-w breakpoints. This gate exists because one fixed prompt size

@@ -44,7 +44,7 @@ export default function HealthView() {
         lead="Who has finished, what is still open, and how far each area has moved toward a rule the team follows without you."
       />
       <div className="grid gap-4 md:grid-cols-2">
-      <Widget eyebrow="Progress" title="Governance Health" sub="Workshop 01" className="md:col-span-2" laser icon={<IconHealth size={19} />}>
+      <Widget eyebrow="Score" title="Governance Health" sub="Workshop 01" className="md:col-span-2" laser icon={<IconHealth size={19} />}>
         <WordmarkWatermark className="-right-6 -bottom-4 w-64 md:w-80 text-ink opacity-[0.045]" />
         <div className="flex items-end justify-between gap-4">
           <p className="text-sm text-ink-2 max-w-md">
@@ -57,7 +57,7 @@ export default function HealthView() {
         </div>
       </Widget>
 
-      <Widget eyebrow="Progress" title={waiting.length === 0 ? "Everyone has answered" : "Waiting on " + waiting.length}
+      <Widget eyebrow="Participation" title={waiting.length === 0 ? "Everyone has answered" : "Waiting on " + waiting.length}
         sub={finished.length + " of " + roster.length + " done"}
         tone={waiting.length === 0 ? "done" : "action"}
         icon={waiting.length === 0 ? <IconAligned size={19} /> : <IconSplit size={19} />}
@@ -77,7 +77,7 @@ export default function HealthView() {
         </div>
       </Widget>
 
-      <Widget eyebrow="Alignment" title="Gaps to close" sub={queue.length + " open"}
+      <Widget eyebrow="Open work" title="Gaps to close" sub={queue.length + " open"}
         tone={queue.length ? "action" : "done"} icon={<IconSplit size={19} />} className="md:col-span-2">
         {queue.length === 0 ? (
           <p className="text-sm text-ink-2">Every card is aligned or reconciled. The spine holds.</p>

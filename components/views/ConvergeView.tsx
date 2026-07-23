@@ -29,7 +29,7 @@ export default function ConvergeView() {
     <div className="space-y-4">
       <PageHeader eyebrow="Run it" title="Alignment" lead="Where your team answered the same question differently, a named decider settles it and writes down why." />
 
-      <Widget eyebrow="Alignment" title="Needs your decision" sub={counts.split + counts.review + " need attention"}
+      <Widget eyebrow="Open work" title="Needs your decision" sub={counts.split + counts.review + " need attention"}
         tone={counts.split + counts.review > 0 ? "action" : "done"} icon={<IconSplit size={19} />}>
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
           Questions your team answered the same way are already aligned. The ones below came back with different answers, and that is where the real clarity is won. Pick the answer that stands, say why, and it goes on the record with your name against it.
@@ -42,7 +42,7 @@ export default function ConvergeView() {
         </div>
       </Widget>
       {gathering && (
-        <Widget eyebrow="Alignment" title="Answers are sealed until everyone finishes"
+        <Widget eyebrow="Sealed" title="Answers are sealed until everyone finishes"
           tone="neutral" icon={<IconReview size={19} />}>
           <p className="text-base text-ink-2 max-w-2xl">
             Nobody can see anyone else&apos;s answers while a round is gathering, including whoever is running it. That is deliberate: if you can see what the room said before you answer, your answer is worth less. When everyone has finished, a curator closes gathering and every answer becomes visible at the same moment.

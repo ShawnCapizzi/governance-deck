@@ -56,7 +56,7 @@ export default function GatherView() {
       <PageHeader eyebrow="Run it" title="Your questions" lead="Answer on your own schedule. Nobody sees your answers until everyone has finished." />
 
       {noRound && (
-        <Widget eyebrow="Run it" title="No round is open yet" tone="neutral" icon={<IconSplit size={19} />}>
+        <Widget eyebrow="Nothing to answer" title="No round is open yet" tone="neutral" icon={<IconSplit size={19} />}>
           <p className="text-base text-ink-2 max-w-2xl mb-4">
             Questions are asked inside a round, which is one pass through the deck that you can run again next quarter and compare. A curator opens the first one.
           </p>
@@ -65,7 +65,7 @@ export default function GatherView() {
       )}
 
       {sealed && (
-        <Widget eyebrow="Run it" title="This round has closed for answers" tone="done" icon={<IconAligned size={19} />}>
+        <Widget eyebrow="Closed" title="This round has closed for answers" tone="done" icon={<IconAligned size={19} />}>
           <p className="text-base text-ink-2 max-w-2xl mb-4">
             Gathering is finished, so answers can no longer be changed. Every answer is now visible to the whole team, which is the point: you can see where you already agree and where you do not.
           </p>
@@ -152,7 +152,7 @@ export default function GatherView() {
       )}
 
       {answeredIds.size > 0 && !noRound && (
-        <Widget eyebrow="Your questions" title="Answered" sub={answeredIds.size + " done"} tone="done"
+        <Widget eyebrow="Your answers" title="Answered" sub={answeredIds.size + " done"} tone="done"
           icon={<IconAligned size={19} />}>
           <div className="divide-y divide-line/70 border-y border-line/70">
             {CARDS.filter((c) => answeredIds.has(c.id)).map((c) => (

@@ -107,7 +107,7 @@ export default function TeamView() {
 
       <SectionRule label="Programs" stage="set" />
 
-      <Widget eyebrow="Programs" title="Programs" sub={programs.length === 0 ? "None yet" : programs.length + (programs.length === 1 ? " program" : " programs")}
+      <Widget eyebrow="Brands and projects" title="Programs" sub={programs.length === 0 ? "None yet" : programs.length + (programs.length === 1 ? " program" : " programs")}
         icon={<IconProduct size={19} />}>
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
           A program is one brand, client, or initiative. Rounds run inside it on a cadence, so you can compare where a team stood last quarter against where it stands now. A curator owns each one.
@@ -162,7 +162,7 @@ export default function TeamView() {
 
       {live && <SectionRule label="Current round" stage="run" />}
       {live && (
-        <Widget eyebrow="Run it" title={round ? round.label : "No round open"}
+        <Widget eyebrow="Current round" title={round ? round.label : "No round open"}
           sub={round ? round.programName : undefined}
           tone={round ? (round.status === "gathering" ? "action" : "done") : "neutral"}
           icon={<IconTransformation size={19} />}>
@@ -223,7 +223,7 @@ export default function TeamView() {
       )}
 
       {live && user && (
-        <Widget eyebrow="Your profile" title="How you appear to your team" sub="Everyone sees this">
+        <Widget eyebrow="You" title="How you appear to your team" sub="Everyone sees this">
           <p className="text-base text-ink-2 mb-4 max-w-2xl">
             Your name came from your email address, so it probably needs fixing. This is what teammates see next to your answers.
           </p>
@@ -252,7 +252,7 @@ export default function TeamView() {
       )}
 
       {live ? (
-        <Widget eyebrow="People" title="Invite your team" sub="Share this code">
+        <Widget eyebrow="Invites" title="Invite your team" sub="Share this code">
           <p className="text-base text-ink-2 mb-4 max-w-2xl">
             Send this code to anyone you want in. They sign in with their email, choose Join with a code, and land here as a Contributor. You can raise anyone to Curator below once they need to run rounds.
           </p>
@@ -276,7 +276,7 @@ export default function TeamView() {
           )}
         </Widget>
       ) : (
-        <Widget eyebrow="People" title="Invite someone" sub="Sample data only">
+        <Widget eyebrow="Invites" title="Invite someone" sub="Sample data only">
           <div className="grid gap-3 sm:grid-cols-2">
             <Field label="Name">
               <input className={inputClass} value={invite.name} placeholder="Alex Moreau"
