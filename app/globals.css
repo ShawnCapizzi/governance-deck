@@ -21,7 +21,8 @@
   --color-peri: #A798FF;
   --color-cobalt: #4F46E5;
   --color-magenta: #E879F9;
-  --color-ember: #FF5722;
+  --color-ember: #FF5722; /* fill only: rails, bars, rules */
+  --color-ember-text: #FF8A65; /* text: 5.76:1 on the worst shade edge, computed */
   --color-focus-ring: #6B5CFF;
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: var(--font-geist-mono), 'SFMono-Regular', Menlo, monospace;

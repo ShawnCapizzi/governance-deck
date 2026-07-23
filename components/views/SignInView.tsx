@@ -67,7 +67,7 @@ export default function SignInView() {
               className="pill-primary px-5 py-2.5 text-sm mt-3">
               {state === "sending" ? "Sending" : "Email me a link"}
             </button>
-            {state === "error" && <p className="text-sm text-ember mt-3">{message}</p>}
+            {state === "error" && <p className="text-sm text-ember-text mt-3">{message}</p>}
           </div>
         )}
       </Widget>

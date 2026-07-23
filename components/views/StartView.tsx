@@ -20,15 +20,15 @@ const DEMO_SEED: Record<string, string> = {
   p4: "Brand Owner",
   p5: "Brand Owner",
 };
-const STEPS = ["Answer", "See the split", "Reconcile", "Artifact"];
+const STEPS = ["Answer", "See where it stands", "Reconcile", "Artifact"];
 
 const LOOP: SpineCardData[] = [
   { rank: "01", suit: "Answer", color: "#6355BB", glyph: "\u25C6",
     eyebrow: "Everyone, on their own time", prompt: "Gather",
     clarifier: "Each person answers privately. Nobody sees anyone else's answer, so nobody anchors on the loudest voice." },
   { rank: "02", suit: "Resolve", color: "#42499E", glyph: "\u25A0",
-    eyebrow: "Only where you disagree", prompt: "Converge",
-    clarifier: "Matching answers settle themselves. Only real disagreements need attention, and each is settled on the record." },
+    eyebrow: "Only where answers differ", prompt: "Converge",
+    clarifier: "Matching answers settle themselves. Only the real gaps need attention, and each is settled on the record." },
   { rank: "03", suit: "Track", color: "#AC64B4", glyph: "\u25B2",
     eyebrow: "Measured every cycle", prompt: "Health",
     clarifier: "Each problem climbs five stages, from no agreed rule to a team that corrects itself without you." },
@@ -38,7 +38,7 @@ const LOOP: SpineCardData[] = [
 ];
 
 const ROLES_INFO = [
-  { name: "Facilitator", copy: "Runs the round, settles split answers with a reason on record, and publishes the documents." },
+  { name: "Facilitator", copy: "Runs the round, settles open questions with a reason on record, and publishes the documents." },
   { name: "Leads", copy: "Run the deep pass first. They set the spine: truth signals, decision rights, and guardrails." },
   { name: "Team", copy: "Run the second pass. They pressure-test the spine against daily reality, which is where perception gaps surface." },
 ];
@@ -81,20 +81,20 @@ export default function StartView() {
     <div className="grid gap-4">
       <Widget eyebrow="Start here" title="Run smarter, together" sub="Why this exists" glow>
         <p className="text-base text-ink-2 max-w-2xl mb-5 leading-relaxed">
-          Most teams lose speed to the same thing: decisions nobody actually made. Everyone assumes there is agreement on who decides what, until something breaks and it turns out there never was. This app asks those questions directly, shows exactly where your team is split, settles each one on the record, and turns the answers into documents your whole business can run on.
+          Most teams lose speed to the same thing: decisions nobody actually made. Everyone assumes there is alignment on who decides what, until something breaks and it turns out there never was. This app asks those questions directly, shows exactly where your team is aligned and where it is not, settles the open ones on the record, and turns the answers into documents your whole business can run on.
         </p>
         <div className="grid gap-3 sm:grid-cols-3 mb-6">
           <div className="rounded-xl border border-line bg-ground/60 p-4">
             <p className="text-base text-ink font-medium tracking-tight">Fewer meetings</p>
-            <p className="text-sm text-ink-2 mt-1">Everyone answers on their own time. No calendar hunt, no room, no anchoring on the loudest voice.</p>
+            <p className="text-base text-ink-2 mt-1">Everyone answers on their own time. No calendar hunt, no room, no anchoring on the loudest voice.</p>
           </div>
           <div className="rounded-xl border border-line bg-ground/60 p-4">
             <p className="text-base text-ink font-medium tracking-tight">Less rework</p>
-            <p className="text-sm text-ink-2 mt-1">Disagreements surface at the start, not in launch week when they are expensive.</p>
+            <p className="text-base text-ink-2 mt-1">Gaps show up at the start, not in launch week when they are expensive.</p>
           </div>
           <div className="rounded-xl border border-line bg-ground/60 p-4">
             <p className="text-base text-ink font-medium tracking-tight">A faster yes</p>
-            <p className="text-sm text-ink-2 mt-1">Settled decisions stop being re-argued, so work moves and stays moved.</p>
+            <p className="text-base text-ink-2 mt-1">Settled decisions stop being reopened, so work moves and stays moved.</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -107,7 +107,7 @@ export default function StartView() {
 
       <Widget eyebrow="Start here" title="How it works" sub="Four steps, on your schedule">
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
-          You answer questions privately, the app finds where the team truly disagrees, a named decider settles each one with a reason attached, and the decisions become dated documents anyone new can pick up and follow.
+          You answer questions privately, the app finds where your answers differ, a named decider settles each one with a reason attached, and the decisions become dated documents anyone new can pick up and follow.
         </p>
         <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
           {LOOP.map((card, i) => (
@@ -204,7 +204,7 @@ export default function StartView() {
           <div>
             <pre className="bg-ground border border-line text-ink-2 text-xs rounded-xl p-4 overflow-x-auto whitespace-pre-wrap font-mono mb-3">{artifactMd}</pre>
             <p className="text-sm text-ink-2 mb-4 max-w-xl">
-              That is the whole loop. A disagreement your team did not know it had is now a documented decision with a name and a reason attached. A full round does this across every question area and produces one document per area.
+              That is the whole loop. A gap your team did not know it had is now a documented decision with a name and a reason attached. A full round does this across every question area and produces one document per area.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/gather" className="pill-primary px-5 py-2.5 text-sm">Start answering for real</Link>

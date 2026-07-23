@@ -22,9 +22,9 @@ const STEPS: {
   },
   {
     Icon: IconSplit,
-    tile: "bg-ember/10 border-ember/30 text-ember",
-    title: "Disagreements surface",
-    copy: "Matching answers settle themselves. Where the team split, it gets flagged, often where everyone assumed agreement.",
+    tile: "bg-ember/10 border-ember/30 text-ember-text",
+    title: "Gaps come into view",
+    copy: "Matching answers settle themselves. Where answers differ, it gets flagged, usually somewhere everyone assumed they were aligned.",
   },
   {
     Icon: IconAligned,

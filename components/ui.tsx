@@ -36,7 +36,7 @@ const TONE: Record<WidgetTone, { surface: string; rule: string; tile: string; la
   },
   action: {
     surface: "surface-action", rule: "bg-ember",
-    tile: "bg-ember/12 border-ember/40 text-ember", label: "text-ember",
+    tile: "bg-ember/12 border-ember/40 text-ember-text", label: "text-ember-text",
   },
   done: {
     surface: "surface-done", rule: "bg-[#5FC9C0]",
@@ -87,7 +87,7 @@ const CHIP_TONES: Record<ChipTone, string> = {
   cobalt: "bg-cobalt/10 text-peri border border-cobalt/40",
   brand: "bg-brand/15 text-peri border border-brand/40",
   magenta: "bg-magenta/10 text-magenta border border-magenta/30",
-  ember: "bg-ember/10 text-ember border border-ember/30",
+  ember: "bg-ember/10 text-ember-text border border-ember/30",
 };
 
 export function Chip({ tone = "neutral", children, icon }: { tone?: ChipTone; children: ReactNode; icon?: ReactNode }) {
@@ -102,7 +102,7 @@ export function Chip({ tone = "neutral", children, icon }: { tone?: ChipTone; ch
 export function StatusChip({ status, resolved }: { status: string; resolved: boolean }) {
   if (resolved) return <Chip tone="brand" icon={<IconAligned size={13} />}>Reconciled</Chip>;
   if (status === "agreed") return <Chip tone="peri" icon={<IconAligned size={13} />}>Aligned</Chip>;
-  if (status === "divergent") return <Chip tone="ember" icon={<IconSplit size={13} />}>Split</Chip>;
+  if (status === "divergent") return <Chip tone="ember" icon={<IconSplit size={13} />}>Not aligned yet</Chip>;
   if (status === "review") return <Chip tone="cobalt" icon={<IconReview size={13} />}>Facilitator review</Chip>;
   return <Chip>Pending</Chip>;
 }

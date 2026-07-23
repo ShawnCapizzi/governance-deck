@@ -20,16 +20,16 @@ export default function ConvergeView() {
 
   return (
     <div className="space-y-4">
-      <Widget eyebrow="Disagreements" title="Where you disagree" sub={counts.split + counts.review + " need attention"}
+      <Widget eyebrow="Alignment" title="Where you are not aligned yet" sub={counts.split + counts.review + " need attention"}
         tone={counts.split + counts.review > 0 ? "action" : "done"} icon={<IconSplit size={19} />}>
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
-          Questions your team answered the same way are already settled. The ones below split, and that is the real work. Pick the answer that stands, say why, and it goes on the record with your name against it.
+          Questions your team answered the same way are already aligned. The ones below came back with different answers, and that is where the real clarity is won. Pick the answer that stands, say why, and it goes on the record with your name against it.
         </p>
         <div className="flex flex-wrap gap-2">
           <Chip tone="peri" icon={<IconAligned size={13} />}>{counts.aligned} aligned</Chip>
-          <Chip tone="ember" icon={<IconSplit size={13} />}>{counts.split} split</Chip>
+          <Chip tone="ember" icon={<IconSplit size={13} />}>{counts.split} open</Chip>
           <Chip tone="cobalt" icon={<IconReview size={13} />}>{counts.review} in review</Chip>
-          <Chip tone="brand" icon={<IconAligned size={13} />}>{counts.reconciled} reconciled</Chip>
+          <Chip tone="brand" icon={<IconAligned size={13} />}>{counts.reconciled} settled</Chip>
         </div>
       </Widget>
       {results.map(({ card, result }) => {

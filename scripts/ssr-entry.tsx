@@ -12,6 +12,7 @@ import RolesView from "../components/views/RolesView";
 import TeamView from "../components/views/TeamView";
 import SignInView from "../components/views/SignInView";
 import OnboardingView from "../components/views/OnboardingView";
+import EarlyView from "../components/views/EarlyView";
 
 export function renderAll(): Record<string, string> {
   const wrap = (active: NavKey, node: React.ReactNode) =>
@@ -20,7 +21,10 @@ export function renderAll(): Record<string, string> {
         <AppShell active={active}>{node}</AppShell>
       </SessionProvider>
     );
+  const bare = (node: React.ReactNode) =>
+    renderToString(<SessionProvider>{node}</SessionProvider>);
   return {
+    early: bare(<EarlyView />),
     start: wrap("start", <StartView />),
     roles: wrap("roles", <RolesView />),
     team: wrap("team", <TeamView />),

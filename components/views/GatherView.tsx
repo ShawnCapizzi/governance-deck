@@ -60,10 +60,10 @@ export default function GatherView() {
         {done ? (
           <div>
             <p className="text-base text-ink-2 mb-4 max-w-2xl">
-              Every question has your answer on it. Nothing else is needed from you right now. Once your teammates finish, whoever is settling disagreements will work through the ones where the team split, and the decisions become documents everyone can read.
+              Every question has your answer on it. Nothing else is needed from you right now. Once your teammates finish, whoever is settling open questions will work through the ones where answers differed, and the decisions become documents everyone can read.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <Link href="/converge" className="pill-primary px-5 py-2.5 text-sm">See where the team split</Link>
+              <Link href="/converge" className="pill-primary px-5 py-2.5 text-sm">See where the team stands</Link>
               <button onClick={() => setOpenId(CARDS[0].id)} className="text-sm text-peri hover:text-ink">
                 Change an answer
               </button>

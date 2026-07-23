@@ -245,7 +245,7 @@ export default function TeamView() {
             <div className="flex flex-wrap gap-2 mb-3">
               <Chip tone={LEVEL_TONE[p.level]}>{p.level}</Chip>
               {roleTitle(p.roleId) && <Chip tone="cobalt">{roleTitle(p.roleId)}</Chip>}
-              {perms.reconcile && <Chip tone="peri" icon={<IconAligned size={13} />}>Can settle disagreements</Chip>}
+              {perms.reconcile && <Chip tone="peri" icon={<IconAligned size={13} />}>Can settle open questions</Chip>}
               {!perms.answer && <Chip>Read only</Chip>}
               {handedTo && <Chip tone="ember" icon={<IconEscalates size={13} />}>Questions handed to {handedTo}</Chip>}
               {covers.map((cv) => (

@@ -25,14 +25,15 @@ const html = renderAll();
 // adjacent text nodes, so "Covering for {name}" renders as
 // "Covering for <!-- -->Jo Nakamura" and a concatenated marker will miss.
 const checks = {
+  early: ["Early access", "Align your team once", "Request early access", "Fewer meetings", "Gaps come into view", "Not aligned yet", "decision-rights.md", "shawncapizzi.com"],
   start: ["Run smarter, together", "Fewer meetings", "Start answering", "Try the loop", "Explore the workshop and card deck", "Start a round", "spine-card", "Deal again"],
   signin: ["Running in demo mode", "no database connected"],
   onboarding: ["How this works", "Everyone answers alone", "Documents you keep", "shared space"],
   team: ["Your team", "Programs", "Covering for", "Jo Nakamura", "Handoff record", "Curator", "surface-neutral"],
   roles: ["surface-neutral", "Name a role", "Held by (person)", "Start from a kit", "AI usage guardrails", "Held by Dana Whitfield"],
-  health: ["aria-label=\"Capizzi\"", "Governance Health", "Waiting on", "Settle these now", "Manuscript discipline", "sc-frame"],
+  health: ["aria-label=\"Capizzi\"", "Governance Health", "Waiting on", "Gaps to close", "Settle these now", "Manuscript discipline", "sc-frame"],
   gather: ["questions left", "Your questions", "shade-signals", "surface-action", "minute"],
-  converge: ["Where you disagree", "Recovery", "aligned", "surface-action"],
+  converge: ["Where you are not aligned yet", "Recovery", "aligned", "surface-action"],
   artifacts: ["truth-signals.md", "Your documents", "THE CAPIZZI PROCESS", "Download .md", "artifact-paper"],
 };
 let fail = false;

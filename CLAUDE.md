@@ -58,6 +58,39 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+ALIGNMENT VOCABULARY, NON-NEGOTIABLE. This product is about alignment and
+clarity, never about conflict. The words disagree, disagreement, argument,
+argue, conflict, and split must never appear in user-facing copy. What the
+app detects is that people answered the same question differently while
+each assuming the team agreed; that is an alignment gap, not a fight, and
+framing it as conflict makes a neutral diagnostic feel like it assigns
+fault, which discourages honest answers.
+
+Approved vocabulary: aligned / not aligned yet (the yet matters: it is a
+stage, not a verdict) / answers differ / gap / gaps to close / open
+question / settled / settle an open question / where you are not aligned
+yet. Nav reads Your questions, Alignment, Documents. Internal identifiers
+(status divergent, counts.split, IconSplit) may keep their names; only
+rendered strings are governed by this rule.
+
+EMBER IS TWO TOKENS. --color-ember (#FF5722) is fill only: rails, bars,
+rules, anywhere it is never text. --color-ember-text (#FF8A65) is for
+words, and clears AA on every surface it lands on including the worst
+shaded card edge (5.76:1). The single-token version failed at 4.22 on
+shaded cards. Never set text in --color-ember.
+
+CAMPAIGN PAGE (/early). Cold-traffic landing page, deliberately outside
+AppShell: no sidebar, no app nav, because on a campaign page every link is
+an exit. One conversion action (email capture) repeated at top and bottom,
+with the demo as the only secondary path. Real credentials only as proof;
+never invent logos, customer counts, or testimonials. Hero glow peaks at
+0.26 alpha brand over ground, computed so body copy holds 9.46:1 at the
+brightest point; all ten text surfaces verified AA. Capture writes to
+early_access (migration 0004), which is INSERT-only under RLS with no
+select policy, so the list cannot be read back through the public anon key.
+With no database configured the form becomes a real mailto link rather than
+a button that pretends to capture (honesty rule).
+
 READABILITY TOKENS, COMPUTED NOT EYEBALLED. ink-2 is #CBD0D9 (8.6:1 on the
 worst shaded card edge) and ink-3 is #A2ABBA (5.8:1 worst case). The old
 values passed AA on flat panels but fell to 5.3:1 on suit shade edges,

@@ -18,9 +18,9 @@ const NAV = [
   { key: "team", label: "Team", href: "/team", Icon: IconRoles },
   { key: "roles", label: "Roles", href: "/roles", Icon: IconProduct },
   { key: "health", label: "Governance Health", href: "/", Icon: IconHealth },
-  { key: "gather", label: "Gather", href: "/gather", Icon: IconGather },
-  { key: "converge", label: "Converge", href: "/converge", Icon: IconConverge },
-  { key: "artifacts", label: "Artifacts", href: "/artifacts", Icon: IconArtifacts },
+  { key: "gather", label: "Your questions", href: "/gather", Icon: IconGather },
+  { key: "converge", label: "Alignment", href: "/converge", Icon: IconConverge },
+  { key: "artifacts", label: "Documents", href: "/artifacts", Icon: IconArtifacts },
 ] as const;
 
 export type NavKey = (typeof NAV)[number]["key"];

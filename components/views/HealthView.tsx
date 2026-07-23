@@ -57,7 +57,7 @@ export default function HealthView() {
         className="md:col-span-2">
         <p className="text-base text-ink-2 mb-4 max-w-2xl">
           {waiting.length === 0
-            ? "Every person has finished their questions, so nothing is blocked. What is left is settling the ones where the team disagreed."
+            ? "Every person has finished their questions, so nothing is blocked. What is left is closing the gaps where answers differed."
             : "A round cannot be settled until everyone has answered, because a missing voice looks the same as agreement. These people still have questions open."}
         </p>
         <div className="flex flex-wrap gap-2">
@@ -70,7 +70,7 @@ export default function HealthView() {
         </div>
       </Widget>
 
-      <Widget eyebrow="Needs you" title="Where the team disagreed" sub={queue.length + " open"}
+      <Widget eyebrow="Alignment" title="Gaps to close" sub={queue.length + " open"}
         tone={queue.length ? "action" : "done"} icon={<IconSplit size={19} />} className="md:col-span-2">
         {queue.length === 0 ? (
           <p className="text-sm text-ink-2">Every card is aligned or reconciled. The spine holds.</p>
@@ -82,7 +82,7 @@ export default function HealthView() {
                 <p className="text-sm text-ink-2 mt-1">
                   {result.gap
                     ? "Leads and team answered differently. Reconcile before it hardens into two realities."
-                    : "Answers split in gather. The named decider resolves with a documented rationale."}
+                    : "Answers differed. The named decider settles it with a reason on record."}
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Chip tone="neutral">{card.id}</Chip>

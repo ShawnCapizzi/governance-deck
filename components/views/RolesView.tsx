@@ -30,7 +30,7 @@ const MODE_ICON: Record<DecisionMode, (p: { size?: number }) => React.ReactEleme
 };
 
 const MODE_NOTE: Record<DecisionMode, string> = {
-  "Decides alone": "Resolves split cards without waiting. Fastest, and the rationale carries the weight.",
+  "Decides alone": "Settles open questions without waiting. Fastest, and the reason carries the weight.",
   "Consults, then decides": "Gathers input async, then calls it. Input is required, agreement is not.",
   "Consensus with paired role": "Both roles must agree before a card is reconciled. Slower, and harder to overturn later.",
   "Escalates to a lead": "Does not resolve alone. Routes the card up with the divergence attached.",
@@ -195,7 +195,7 @@ export default function RolesView() {
                     Done
                   </button>
                   <button onClick={() => { removeRole(role.id); setEditingId(null); }}
-                    className="text-sm text-ember hover:text-ink">
+                    className="text-sm text-ember-text hover:text-ink">
                     Remove role
                   </button>
                 </div>

@@ -99,7 +99,7 @@ export const CARDS: DeckCard[] = [
   { id: "SIG-4", suit: "Signals", kind: "normative", type: "single_select", options: ROLES, feeds: "decision-rights.md",
     prompt: "Who decides what good looks like for a deliverable? Choose the role, not the person." },
   { id: "SIG-5", suit: "Signals", kind: "normative", type: "single_select", options: ROLES, feeds: "decision-rights.md",
-    prompt: "When best in the abstract conflicts with best for us now, who makes that call?" },
+    prompt: "When best in the abstract pulls against best for us now, who makes that call?" },
   { id: "BND-1", suit: "Bounds", kind: "normative", type: "text", feeds: "guardrails.md",
     prompt: "What can never be changed by a single individual, regardless of seniority or conviction?" },
   { id: "BND-4", suit: "Bounds", kind: "normative", type: "single_select", options: ROLES, feeds: "decision-rights.md",
