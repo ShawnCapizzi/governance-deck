@@ -20,9 +20,10 @@ export default function ConvergeView() {
 
   return (
     <div className="space-y-4">
-      <Widget eyebrow="Make it visible" title="Convergence" sub={counts.split + counts.review + " need attention"}>
+      <Widget eyebrow="Disagreements" title="Where you disagree" sub={counts.split + counts.review + " need attention"}
+        tone={counts.split + counts.review > 0 ? "action" : "done"} icon={<IconSplit size={19} />}>
         <p className="text-sm text-ink-2 mb-4">
-          Aligned cards settle on their own. Split and review cards are the real governance work: the named decider reconciles each with a documented rationale. Only the conflicts need a room.
+          Questions your team answered the same way are already settled. The ones below split, and that is the real work. Pick the answer that stands, say why, and it goes on the record with your name against it.
         </p>
         <div className="flex flex-wrap gap-2">
           <Chip tone="peri" icon={<IconAligned size={13} />}>{counts.aligned} aligned</Chip>
@@ -43,11 +44,14 @@ export default function ConvergeView() {
               <GapChip gap={result.gap} />
               {result.alignment != null && <Chip tone="cobalt">Alignment score: {result.alignment}/100</Chip>}
             </div>
-            <div className="space-y-1.5 mb-3">
+            <div className="mb-4 divide-y divide-line/70 border-y border-line/70">
               {result.entries.map((e) => (
-                <div key={e.personaId} className="flex gap-3 text-sm md:text-base">
-                  <span className="font-mono text-xs text-ink-3 w-24 shrink-0 pt-0.5">{e.name} &middot; {e.tier}</span>
-                  <span className="text-ink-2">{e.value}</span>
+                <div key={e.personaId} className="flex flex-wrap gap-x-4 gap-y-0.5 py-2.5">
+                  <span className="font-mono text-xs text-ink-2 w-28 shrink-0 pt-1 uppercase tracking-wide">
+                    {e.name}
+                    <span className="text-ink-3 normal-case"> &middot; {e.tier}</span>
+                  </span>
+                  <span className="text-sm md:text-base text-ink flex-1 min-w-0">{e.value}</span>
                 </div>
               ))}
             </div>

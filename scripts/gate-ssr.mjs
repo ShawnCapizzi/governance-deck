@@ -10,7 +10,10 @@ await build({
   platform: "node",
   outfile: ".gates/ssr-bundle.mjs",
   external: ["react", "react/jsx-runtime", "react-dom", "react-dom/server"],
-  alias: { "next/link": path.resolve("scripts/link-stub.tsx") },
+  alias: {
+    "next/link": path.resolve("scripts/link-stub.tsx"),
+    "next/navigation": path.resolve("scripts/navigation-stub.tsx"),
+  },
   loader: { ".css": "empty" },
   jsx: "automatic",
   logLevel: "silent",
@@ -18,13 +21,19 @@ await build({
 
 const { renderAll } = await import(path.resolve(".gates/ssr-bundle.mjs"));
 const html = renderAll();
+// Markers must be single text nodes. React SSR inserts <!-- --> between
+// adjacent text nodes, so "Covering for {name}" renders as
+// "Covering for <!-- -->Jo Nakamura" and a concatenated marker will miss.
 const checks = {
-  start: ["How the deck works", "Try the loop", "Bring this to your org", "spine-card", "Deal again"],
-  roles: ["Name a role", "Held by (person)", "Start from a kit", "AI usage guardrails", "Held by Dana Whitfield", "surface-visible"],
-  health: ["aria-label=\"Capizzi\"", "Governance Health", "Facilitator queue", "Manuscript discipline", "sc-frame"],
-  gather: ["Async gather", "SIG-1", "shade-signals", "surface-listen"],
-  converge: ["Convergence", "SIG-4", "aligned", "surface-visible"],
-  artifacts: ["truth-signals.md", "decision-rights.md", "surface-proved"],
+  start: ["How the deck works", "Try the loop", "Explore the workshop and card deck", "spine-card", "Deal again"],
+  signin: ["Running in demo mode", "no database connected"],
+  onboarding: ["How this works", "Everyone answers alone", "Documents you keep", "shared space"],
+  team: ["Your team", "Programs", "Covering for", "Jo Nakamura", "Handoff record", "Curator", "surface-neutral"],
+  roles: ["surface-neutral", "Name a role", "Held by (person)", "Start from a kit", "AI usage guardrails", "Held by Dana Whitfield"],
+  health: ["aria-label=\"Capizzi\"", "Governance Health", "Waiting on", "Manuscript discipline", "sc-frame"],
+  gather: ["questions left", "Your questions", "shade-signals", "surface-action", "minute"],
+  converge: ["Where you disagree", "Recovery", "aligned", "surface-action"],
+  artifacts: ["truth-signals.md", "Your documents", "THE CAPIZZI PROCESS", "Download .md", "artifact-paper"],
 };
 let fail = false;
 for (const [view, markers] of Object.entries(checks)) {

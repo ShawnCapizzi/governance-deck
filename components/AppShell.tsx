@@ -8,12 +8,15 @@
 
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
+import { useSession } from "../lib/store";
+import { getBrowserClient, isConfigured } from "../lib/supabase/client";
 import { Wordmark } from "./Wordmark";
-import { IconHealth, IconStart, IconRoles, IconGather, IconConverge, IconArtifacts } from "./Icons";
+import { IconHealth, IconStart, IconRoles, IconGather, IconConverge, IconArtifacts, IconProduct } from "./Icons";
 
 const NAV = [
   { key: "start", label: "Start here", href: "/start", Icon: IconStart },
-  { key: "roles", label: "Roles", href: "/roles", Icon: IconRoles },
+  { key: "team", label: "Team", href: "/team", Icon: IconRoles },
+  { key: "roles", label: "Roles", href: "/roles", Icon: IconProduct },
   { key: "health", label: "Governance Health", href: "/", Icon: IconHealth },
   { key: "gather", label: "Gather", href: "/gather", Icon: IconGather },
   { key: "converge", label: "Converge", href: "/converge", Icon: IconConverge },
@@ -24,6 +27,12 @@ export type NavKey = (typeof NAV)[number]["key"];
 
 export default function AppShell({ active, children }: { active: NavKey; children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { mode, user, org } = useSession();
+
+  const signOut = async () => {
+    const sb = getBrowserClient();
+    if (sb) { await sb.auth.signOut(); window.location.href = "/start"; }
+  };
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -56,9 +65,30 @@ export default function AppShell({ active, children }: { active: NavKey; childre
             ))}
           </nav>
           <div className="px-5 py-4 border-t border-line">
-            <p className="eyebrow">Session</p>
-            <p className="text-sm text-ink mt-1">Governance Workshop 01</p>
-            <p className="text-xs text-ink-2">Async gather, then convergence</p>
+            {org ? (
+              <>
+                <p className="eyebrow">Organization</p>
+                <p className="text-sm text-ink mt-1">{org.orgName}</p>
+                <p className="text-sm text-ink-2">{org.level}</p>
+                <button onClick={signOut} className="mt-2 text-sm text-peri hover:text-ink">Sign out</button>
+              </>
+            ) : user ? (
+              <>
+                <p className="eyebrow">Signed in</p>
+                <p className="text-sm text-ink-2 mt-1">No organization yet</p>
+                <a href="/onboarding" className="mt-2 inline-block text-sm text-peri hover:text-ink">Finish setup &rarr;</a>
+              </>
+            ) : (
+              <>
+                <p className="eyebrow">{mode === "demo" ? "Demo" : "Not signed in"}</p>
+                <p className="text-sm text-ink-2 mt-1">
+                  {isConfigured ? "Sign in to run a real round." : "Sample data, nothing is saved."}
+                </p>
+                {isConfigured && (
+                  <a href="/signin" className="mt-2 inline-block text-sm text-peri hover:text-ink">Sign in &rarr;</a>
+                )}
+              </>
+            )}
           </div>
         </aside>
         <div className="flex-1 min-w-0">

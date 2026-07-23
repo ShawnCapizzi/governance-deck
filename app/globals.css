@@ -93,55 +93,28 @@ body {
 }
 
 /* ============================================================
-   PILLAR SURFACES
-   Segmentation by Capizzi pillar so the app does not read as one
-   uniform slab. Each variant keeps the card-surface anatomy (solid
-   base, top-down sheen) and swaps only the top-right atmospheric
-   glow. Hues follow the Clarity Cards sticky-note coding:
-   Listen First warm-indigo, Make It Visible cobalt, Prove It
-   Worked magenta, Continuity teal. Restraint holds: the tint is
-   atmosphere at low alpha, never a fill.
+   PANEL STATE SURFACES
+   Panels carry state, never topic. Topic hue belongs to question
+   cards alone (see SUIT SHADES), so a colour means one thing in
+   the whole app. Neutral is the default and should be most of
+   what anyone sees: colour is reserved for what needs doing.
    ============================================================ */
-
-.surface-listen,
-.surface-visible,
-.surface-proved,
-.surface-continuity,
-.surface-neutral {
+.surface-neutral, .surface-action, .surface-done {
   background-color: #04192B;
 }
-
-.surface-listen {
-  background-image:
-    radial-gradient(ellipse 100% 80% at 100% 0%, rgba(167, 152, 255, 0.16) 0%, rgba(167, 152, 255, 0.05) 35%, transparent 70%),
-    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
-}
-.surface-visible {
-  background-image:
-    radial-gradient(ellipse 100% 80% at 100% 0%, rgba(79, 70, 229, 0.20) 0%, rgba(79, 70, 229, 0.06) 35%, transparent 70%),
-    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
-}
-.surface-proved {
-  background-image:
-    radial-gradient(ellipse 100% 80% at 100% 0%, rgba(232, 121, 249, 0.13) 0%, rgba(232, 121, 249, 0.04) 35%, transparent 70%),
-    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
-}
-.surface-continuity {
-  background-image:
-    radial-gradient(ellipse 100% 80% at 100% 0%, rgba(27, 109, 104, 0.28) 0%, rgba(27, 109, 104, 0.08) 35%, transparent 70%),
-    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
-}
 .surface-neutral {
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
+}
+.surface-action {
   background-image:
+    radial-gradient(ellipse 100% 80% at 100% 0%, rgba(255, 87, 34, 0.14) 0%, rgba(255, 87, 34, 0.04) 35%, transparent 70%),
     linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
 }
-
-/* Pillar eyebrow colors, so the label agrees with its surface.
-   All four verified at or above WCAG AA on the card base. */
-.eyebrow-listen { color: #A798FF; }
-.eyebrow-visible { color: #9DA9FF; }
-.eyebrow-proved { color: #E879F9; }
-.eyebrow-continuity { color: #5FC9C0; }
+.surface-done {
+  background-image:
+    radial-gradient(ellipse 100% 80% at 100% 0%, rgba(27, 109, 104, 0.24) 0%, rgba(27, 109, 104, 0.07) 35%, transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.18) 100%);
+}
 
 /* ============================================================
    CLARITY DECK SIZING
@@ -207,4 +180,18 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .spine-card.is-dealing { opacity: 1; animation: none; }
+}
+
+/* ============================================================
+   ARTIFACT DOCUMENTS
+   Artifacts render as paper, not as UI: warm stock, dark ink, a
+   ruled masthead. Printing drops the app chrome so the browser
+   print dialog produces a clean review packet or PDF.
+   ============================================================ */
+@media print {
+  body { background: #FFFFFF !important; }
+  aside, header, nav, canvas, .artifact-actions, .sc-frame { display: none !important; }
+  main { padding: 0 !important; }
+  .artifact-doc { border: none !important; break-inside: avoid; page-break-inside: avoid; }
+  .artifact-paper { box-shadow: none !important; }
 }

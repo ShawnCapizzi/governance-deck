@@ -58,13 +58,23 @@ export const ROLES = DEFAULT_ROLES.map((r) => r.title);
 export const FREQ = ["Never", "Rarely", "Sometimes", "Often", "Always"];
 export const STAGES = ["Ad hoc", "Documented", "Practiced", "Enforced", "Self-correcting"];
 
-export const SUIT_STYLE: Record<Suit, { rail: string; chip: string; shade: string; glyph: string }> = {
-  Signals: { rail: "bg-[#6355BB]", chip: "bg-peri/10 text-peri border border-peri/30", shade: "shade-signals", glyph: "\u25C6" },
-  Bounds: { rail: "bg-[#42499E]", chip: "bg-cobalt/10 text-[#9DA9FF] border border-cobalt/40", shade: "shade-bounds", glyph: "\u25A0" },
-  Trace: { rail: "bg-[#AC64B4]", chip: "bg-magenta/10 text-magenta border border-magenta/30", shade: "shade-trace", glyph: "\u25B2" },
-  Spine: { rail: "bg-[#1B6D68]", chip: "bg-[#1B6D68]/25 text-[#5FC9C0] border border-[#5FC9C0]/40", shade: "shade-spine", glyph: "\u2726" },
-  Diagnostic: { rail: "bg-ember", chip: "bg-ember/10 text-ember border border-ember/30", shade: "shade-diagnostic", glyph: "\u25CF" },
+// Suit names (Signals, Bounds, Trace, Spine) are deck vocabulary and stay
+// internal. The working app shows a plain label that says what the card
+// actually governs, so a first-time user never has to learn a taxonomy
+// before answering a question. Color still does the grouping work.
+export const SUIT_STYLE: Record<Suit, { label: string; rail: string; chip: string; shade: string; glyph: string }> = {
+  Signals: { label: "Beliefs", rail: "bg-[#6355BB]", chip: "bg-peri/10 text-peri border border-peri/30", shade: "shade-signals", glyph: "\u25C6" },
+  Bounds: { label: "Guardrails", rail: "bg-[#42499E]", chip: "bg-cobalt/10 text-[#9DA9FF] border border-cobalt/40", shade: "shade-bounds", glyph: "\u25A0" },
+  Trace: { label: "Recovery", rail: "bg-[#AC64B4]", chip: "bg-magenta/10 text-magenta border border-magenta/30", shade: "shade-trace", glyph: "\u25B2" },
+  Spine: { label: "Change", rail: "bg-[#1B6D68]", chip: "bg-[#1B6D68]/25 text-[#5FC9C0] border border-[#5FC9C0]/40", shade: "shade-spine", glyph: "\u2726" },
+  Diagnostic: { label: "Reality check", rail: "bg-ember", chip: "bg-ember/10 text-ember border border-ember/30", shade: "shade-diagnostic", glyph: "\u25CF" },
 };
+
+// The seat a visitor answers from in demo mode. Deliberately outside
+// PERSONAS so convergence still classifies against five complete answer
+// sets: otherwise every card would read as pending and the demo would
+// have nothing to converge.
+export const DEMO_ME: Persona = { id: "p0", name: "You", role: "Visiting", tier: "team" };
 
 export const PERSONAS: Persona[] = [
   { id: "p1", name: "Dana", role: "Creative Director", tier: "leads" },

@@ -23,18 +23,18 @@ const DEMO_SEED: Record<string, string> = {
 const STEPS = ["Answer", "See the split", "Reconcile", "Artifact"];
 
 const LOOP: SpineCardData[] = [
-  { rank: "01", suit: "Signals", color: "#6355BB", glyph: "\u25C6",
-    eyebrow: "Listen first", prompt: "Gather",
-    clarifier: "Everyone answers on their own time. Answers stay private until convergence, so nobody anchors on the first voice." },
-  { rank: "02", suit: "Bounds", color: "#42499E", glyph: "\u25A0",
-    eyebrow: "Make it visible", prompt: "Converge",
-    clarifier: "Aligned cards settle themselves. Only the conflicts need attention, and each is reconciled with a written rationale." },
-  { rank: "03", suit: "Trace", color: "#AC64B4", glyph: "\u25B2",
-    eyebrow: "Prove it worked", prompt: "Health",
-    clarifier: "Every issue climbs five stages from Ad hoc to Self-correcting. The deltas each cadence are the progress." },
-  { rank: "04", suit: "Spine", color: "#1B6D68", glyph: "\u2726",
-    eyebrow: "Continuity", prompt: "Artifacts",
-    clarifier: "Sessions emit versioned markdown. Amendments create new versions with provenance, never an overwrite." },
+  { rank: "01", suit: "Answer", color: "#6355BB", glyph: "\u25C6",
+    eyebrow: "Everyone, on their own time", prompt: "Gather",
+    clarifier: "Each person answers privately. Nobody sees anyone else's answer, so nobody anchors on the loudest voice." },
+  { rank: "02", suit: "Resolve", color: "#42499E", glyph: "\u25A0",
+    eyebrow: "Only where you disagree", prompt: "Converge",
+    clarifier: "Matching answers settle themselves. Only real disagreements need attention, and each is settled on the record." },
+  { rank: "03", suit: "Track", color: "#AC64B4", glyph: "\u25B2",
+    eyebrow: "Measured every cycle", prompt: "Health",
+    clarifier: "Each problem climbs five stages, from no agreed rule to a team that corrects itself without you." },
+  { rank: "04", suit: "Share", color: "#1B6D68", glyph: "\u2726",
+    eyebrow: "Yours to keep and send", prompt: "Documents",
+    clarifier: "Your decisions become dated documents you can download, drop into a deck, or hand to someone new." },
 ];
 
 const ROLES_INFO = [
@@ -81,7 +81,7 @@ export default function StartView() {
     <div className="grid gap-4">
       <Widget eyebrow="Start here" title="How the deck works" sub="Two minutes, start to spine">
         <p className="text-sm text-ink-2 mb-4 max-w-2xl">
-          The Governance Deck turns the uncomfortable conversations every team avoids into a repeatable loop. You answer cards, the system finds where your team actually disagrees, a named decider settles it on the record, and the decisions become living documents your whole org can fall in line with.
+          Most teams assume they agree on who decides what, until something breaks and it turns out they never did. This tool asks the questions directly, shows you exactly where your team is split, settles each one on the record with a name and a reason attached, and hands you the decisions as documents anyone can follow.
         </p>
         <div className="clarity-deck flex flex-wrap justify-center gap-4 md:gap-5 pt-2 pb-1">
           {LOOP.map((card, i) => (
@@ -98,7 +98,7 @@ export default function StartView() {
         </div>
       </Widget>
 
-      <Widget eyebrow="Listen first" title="Try the loop" sub="One card, 60 seconds" glow>
+      <Widget eyebrow="Try it" title="Try the loop" sub="One card, 60 seconds" glow>
         <div className="flex flex-wrap gap-2 mb-4">
           {STEPS.map((s, i) => (
             <Chip key={s} tone={i === step ? "brand" : i < step ? "peri" : "neutral"}>{i + 1}. {s}</Chip>
@@ -189,7 +189,7 @@ export default function StartView() {
       </Widget>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Widget eyebrow="Make it visible" title="Who does what">
+        <Widget eyebrow="Who does what" title="Who does what">
           <div className="divide-y divide-line">
             {ROLES_INFO.map((r) => (
               <div key={r.name} className="py-3 first:pt-0 last:pb-0">
@@ -200,7 +200,7 @@ export default function StartView() {
           </div>
         </Widget>
 
-        <Widget eyebrow="Prove it worked" title="Set your team up for success">
+        <Widget eyebrow="Getting set up" title="Set your team up for success">
           <div className="divide-y divide-line">
             {SETUP.map((s) => (
               <div key={s.n} className="py-3 first:pt-0 last:pb-0 flex gap-3">
@@ -215,14 +215,17 @@ export default function StartView() {
         </Widget>
       </div>
 
-      <Widget eyebrow="The Capizzi Process" title="Bring this to your org" laser>
+      <Widget eyebrow="Going further" title="Bring this to your org" laser>
         <p className="text-sm text-ink-2 mb-4 max-w-2xl">
-          This app is the digital half of the Capizzi Governance Deck, a facilitated workshop that sets your team&apos;s spine in one session and measures it every cadence after. Run it yourself with the demo session, or bring in the facilitator who built it. Built by Shawn Capizzi on the Capizzi Process: Listen First, Make It Visible, Prove It Worked.
+          You can run everything here on your own. When a team needs to go wider than one session, there is a facilitated version: a printed card deck and a workshop that works through the same questions in a room, plus the broader method behind it. Worth exploring only if you want to take this further than the app.
         </p>
         <div className="flex flex-wrap items-center gap-3">
-          <a href="https://www.shawncapizzi.com" className="pill-primary px-5 py-2.5 text-sm">Book a workshop</a>
-          <Link href="/gather" className="text-sm text-peri hover:text-ink">Or run the demo session first &rarr;</Link>
+          <a href="https://www.shawncapizzi.com" className="pill-primary px-5 py-2.5 text-sm">Explore the workshop and card deck</a>
+          <Link href="/gather" className="text-sm text-peri hover:text-ink">Or just start a session &rarr;</Link>
         </div>
+        <p className="text-xs text-ink-3 mt-4">
+          Built by Shawn Capizzi. The method behind it is the Capizzi Process: listen first, make it visible, prove it worked.
+        </p>
       </Widget>
     </div>
   );

@@ -6,12 +6,12 @@
 // with a five-stage maturity strip.
 
 import Link from "next/link";
-import { CARDS, ISSUES, STAGES } from "../../lib/deck";
+import { CARDS, ISSUES, STAGES, PERSONAS, DEMO_ME } from "../../lib/deck";
 import { classifyCard, openWork } from "../../lib/converge";
 import { useSession } from "../../lib/store";
 import { Widget, Chip, StatusChip, GapChip } from "../ui";
 import { WordmarkWatermark } from "../Wordmark";
-import { IconSystem, IconArtifacts, IconListen, IconSplit } from "../Icons";
+import { IconSystem, IconArtifacts, IconListen, IconSplit, IconAligned, IconHealth } from "../Icons";
 
 const DOMAIN_ICON: Record<string, (p: { size?: number }) => React.ReactElement> = {
   "Design Ops": IconSystem,
@@ -20,7 +20,16 @@ const DOMAIN_ICON: Record<string, (p: { size?: number }) => React.ReactElement> 
 };
 
 export default function HealthView() {
-  const { responses, resolved } = useSession();
+  const { responses, resolved, mode, people } = useSession();
+  const roster = mode === "live"
+    ? people.map((p) => ({ id: p.id, name: p.name }))
+    : [DEMO_ME, ...PERSONAS].map((p) => ({ id: p.id, name: p.name }));
+  const progress = roster.map((p) => {
+    const n = CARDS.filter((c) => (responses[c.id] || {})[p.id]).length;
+    return { ...p, answered: n, done: n === CARDS.length };
+  });
+  const finished = progress.filter((p) => p.done);
+  const waiting = progress.filter((p) => !p.done);
   const overall = Math.round(
     (ISSUES.reduce((acc, i) => acc + Math.min(i.stage / i.target, 1), 0) / ISSUES.length) * 100
   );
@@ -28,7 +37,7 @@ export default function HealthView() {
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      <Widget eyebrow="Prove it worked" title="Governance Health" sub="Workshop 01" className="md:col-span-2" laser>
+      <Widget eyebrow="Progress" title="Governance Health" sub="Workshop 01" className="md:col-span-2" laser icon={<IconHealth size={19} />}>
         <WordmarkWatermark className="-right-6 -bottom-4 w-64 md:w-80 text-ink opacity-[0.045]" />
         <div className="flex items-end justify-between gap-4">
           <p className="text-sm text-ink-2 max-w-md">
@@ -41,7 +50,28 @@ export default function HealthView() {
         </div>
       </Widget>
 
-      <Widget eyebrow="Converge" title="Facilitator queue" sub={queue.length + " open"} className="md:col-span-2">
+      <Widget eyebrow="Progress" title={waiting.length === 0 ? "Everyone has answered" : "Waiting on " + waiting.length}
+        sub={finished.length + " of " + roster.length + " done"}
+        tone={waiting.length === 0 ? "done" : "action"}
+        icon={waiting.length === 0 ? <IconAligned size={19} /> : <IconSplit size={19} />}
+        className="md:col-span-2">
+        <p className="text-sm text-ink-2 mb-4 max-w-2xl">
+          {waiting.length === 0
+            ? "Every person has finished their questions, so nothing is blocked. What is left is settling the ones where the team disagreed."
+            : "A round cannot be settled until everyone has answered, because a missing voice looks the same as agreement. These people still have questions open."}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {waiting.map((p) => (
+            <Chip key={p.id} tone="ember">{p.name}: {CARDS.length - p.answered} left</Chip>
+          ))}
+          {finished.map((p) => (
+            <Chip key={p.id} tone="peri" icon={<IconAligned size={13} />}>{p.name}</Chip>
+          ))}
+        </div>
+      </Widget>
+
+      <Widget eyebrow="Needs you" title="Where the team disagreed" sub={queue.length + " open"}
+        tone={queue.length ? "action" : "done"} icon={<IconSplit size={19} />} className="md:col-span-2">
         {queue.length === 0 ? (
           <p className="text-sm text-ink-2">Every card is aligned or reconciled. The spine holds.</p>
         ) : (

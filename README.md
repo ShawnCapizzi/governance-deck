@@ -46,6 +46,11 @@ markers. All three must pass before any commit.
 | lib/store.tsx | In-memory session store (SessionProvider) |
 | supabase/migrations/0001_init.sql | Full schema and RLS |
 | supabase/seed.sql | Canonical deck seed |
+| lib/supabase/ | Browser and server clients, null when unconfigured |
+| lib/db.ts | The only app-to-database mapping layer |
+| middleware.ts | Auth session refresh |
+| supabase/migrations/ | 0001 core, 0002 team and programs, 0003 roles and auth |
+| SUPABASE_SETUP.md | Ten-minute setup guide |
 | CLAUDE.md | Production brief for Claude Code |
 
 ## Launch: exact git steps

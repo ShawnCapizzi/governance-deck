@@ -6,60 +6,66 @@
 import { ReactNode } from "react";
 import { DeckCard, SUIT_STYLE } from "../lib/deck";
 import { LaserFrame } from "./LaserFrame";
-import { IconListen, IconVisible, IconProved, IconSpine, IconAligned, IconSplit, IconReview, IconGap } from "./Icons";
+import { IconAligned, IconSplit, IconReview, IconGap } from "./Icons";
 
 // Pillar segmentation. The eyebrow already names the pillar, so the
 // surface tint and eyebrow color derive from it automatically. No view
 // has to remember which class to use, and the coding stays consistent.
-const PILLAR: Record<string, {
-  surface: string; eyebrow: string; tile: string; rule: string;
-  Icon: (p: { size?: number }) => React.ReactElement;
-}> = {
-  "listen first": {
-    surface: "surface-listen", eyebrow: "eyebrow-listen",
-    tile: "bg-peri/12 border-peri/35 text-peri", rule: "bg-peri/70", Icon: IconListen,
+// ONE COLOR SYSTEM.
+//
+// Hue means subject, and only subject. The five topic hues live on question
+// cards (Beliefs, Guardrails, Recovery, Change, Reality check) and nowhere
+// else, so a person can actually learn them.
+//
+// Panels do not carry topic hue. They carry state, and only three exist:
+//   neutral  nothing is required of you here
+//   action   something is waiting on you
+//   done     this is finished
+//
+// Before this, panels tinted by Capizzi pillar using hues 1 to 2 degrees
+// away from the card topic hues, so purple meant two different things
+// depending on what it was painted on. That is unlearnable, so panel topic
+// tint is gone. Structure comes from the icon tile and the hairline rule.
+
+export type WidgetTone = "neutral" | "action" | "done";
+
+const TONE: Record<WidgetTone, { surface: string; rule: string; tile: string; label: string }> = {
+  neutral: {
+    surface: "surface-neutral", rule: "bg-line-strong",
+    tile: "bg-raised border-line-strong text-ink-2", label: "text-ink-3",
   },
-  "make it visible": {
-    surface: "surface-visible", eyebrow: "eyebrow-visible",
-    tile: "bg-cobalt/18 border-cobalt/45 text-[#9DA9FF]", rule: "bg-cobalt", Icon: IconVisible,
+  action: {
+    surface: "surface-action", rule: "bg-ember",
+    tile: "bg-ember/12 border-ember/40 text-ember", label: "text-ember",
   },
-  "prove it worked": {
-    surface: "surface-proved", eyebrow: "eyebrow-proved",
-    tile: "bg-magenta/12 border-magenta/35 text-magenta", rule: "bg-magenta/70", Icon: IconProved,
-  },
-  continuity: {
-    surface: "surface-continuity", eyebrow: "eyebrow-continuity",
-    tile: "bg-[#1B6D68]/25 border-[#5FC9C0]/40 text-[#5FC9C0]", rule: "bg-[#5FC9C0]/70", Icon: IconSpine,
+  done: {
+    surface: "surface-done", rule: "bg-[#5FC9C0]",
+    tile: "bg-[#1B6D68]/25 border-[#5FC9C0]/40 text-[#5FC9C0]", label: "text-[#5FC9C0]",
   },
 };
 
-function pillarOf(eyebrow: string) {
-  return PILLAR[eyebrow.trim().toLowerCase()] ?? null;
-}
-
-export function Widget({ eyebrow, title, sub, children, className = "", laser = false, glow = false, laserDelay = 0, icon }: {
+export function Widget({ eyebrow, title, sub, children, className = "", laser = false, glow = false, laserDelay = 0, icon, tone = "neutral" }: {
   eyebrow: string; title: string; sub?: string; children: ReactNode;
   className?: string; laser?: boolean; glow?: boolean; laserDelay?: number;
-  icon?: ReactNode;
+  icon?: ReactNode; tone?: WidgetTone;
 }) {
-  const p = pillarOf(eyebrow);
-  const Icon = p?.Icon;
+  const t = TONE[tone];
   return (
-    <section className={"relative overflow-hidden border border-line rounded-2xl " + (p ? p.surface : "surface-neutral") + " " + className}>
-      {/* Color blocking: a solid pillar rule across the head of every card.
-          This is the structural cue that survives a squint test in a room. */}
-      <div aria-hidden="true" className={"absolute inset-x-0 top-0 h-[3px] " + (p ? p.rule : "bg-line-strong")} />
+    <section className={"relative overflow-hidden border border-line rounded-2xl " + t.surface + " " + className}>
+      <div aria-hidden="true" className={"absolute inset-x-0 top-0 h-[3px] " + t.rule} />
       {glow && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(107,92,255,0.22) 0%, rgba(107,92,255,0.06) 45%, transparent 75%)" }} />
       )}
       <div className="relative p-5 md:p-6">
         <header className="mb-4 flex items-start gap-3">
-          <span className={"mt-0.5 shrink-0 grid place-items-center w-9 h-9 rounded-xl border " + (p ? p.tile : "bg-raised border-line-strong text-ink-2")}>
-            {icon ?? (Icon ? <Icon size={19} /> : null)}
-          </span>
+          {icon && (
+            <span className={"mt-0.5 shrink-0 grid place-items-center w-9 h-9 rounded-xl border " + t.tile}>
+              {icon}
+            </span>
+          )}
           <div className="min-w-0 flex-1">
-            <p className={"eyebrow " + (p ? p.eyebrow : "")}>{eyebrow}</p>
+            <p className={"eyebrow " + t.label}>{eyebrow}</p>
             <div className="flex flex-wrap items-baseline justify-between gap-2 mt-0.5">
               <h2 className="text-ink text-base md:text-lg font-semibold tracking-tight">{title}</h2>
               {sub && <span className="text-sm text-ink-2">{sub}</span>}
@@ -110,22 +116,19 @@ export function SuitCard({ card, children }: { card: DeckCard; children?: ReactN
   const s = SUIT_STYLE[card.suit];
   return (
     <div className={"flex rounded-2xl border border-line overflow-hidden " + s.shade}>
-      {/* Deck-face rail: the card id reads as a rank, the suit name runs
-          up the rail, and the glyph anchors the foot, same anatomy as the
-          physical Spine cards. */}
-      <div className={"w-11 md:w-12 shrink-0 flex flex-col items-center justify-between py-3 " + s.rail}>
-        <span className="font-mono text-[11px] md:text-xs font-bold text-white leading-none tracking-tight">
-          {card.id}
-        </span>
-        <span className="font-mono text-white/80 uppercase tracking-[0.2em] text-[9px]"
+      {/* The rail says what the card governs in plain words. Deck suit
+          names and internal card ids are not shown: a person answering a
+          question should not have to learn a taxonomy first. */}
+      <div className={"w-9 md:w-10 shrink-0 flex flex-col items-center justify-between py-3.5 " + s.rail}>
+        <span className="text-white/95 text-sm leading-none" aria-hidden="true">{s.glyph}</span>
+        <span className="font-mono text-white/90 uppercase tracking-[0.18em] text-[9px] whitespace-nowrap"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-          {card.suit}
+          {s.label}
         </span>
-        <span className="text-white/90 text-sm leading-none" aria-hidden="true">{s.glyph}</span>
       </div>
       <div className="p-4 md:p-5 w-full min-w-0">
         {card.feeds && (
-          <p className="text-xs font-mono text-ink-3 mb-2">&rarr; {card.feeds}</p>
+          <p className="text-xs font-mono text-ink-3 mb-2">Feeds {card.feeds}</p>
         )}
         <p className="text-base text-ink mb-3 leading-relaxed">{card.prompt}</p>
         {children}

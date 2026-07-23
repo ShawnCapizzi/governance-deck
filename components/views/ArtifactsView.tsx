@@ -3,56 +3,78 @@
 import { CARDS, SESSION_DATE } from "../../lib/deck";
 import { classifyCard } from "../../lib/converge";
 import { useSession } from "../../lib/store";
-import { Widget } from "../ui";
+import { Widget, Chip } from "../ui";
+import { ArtifactDoc } from "../ArtifactDoc";
+import { IconAligned, IconSplit, IconArtifacts } from "../Icons";
+
+const SESSION = "Governance Workshop 01, async gather plus convergence";
 
 export default function ArtifactsView() {
   const { responses, resolved } = useSession();
 
-  const line = (cardId: string, label: string) => {
+  const line = (cardId: string, label: string): string[] => {
     const card = CARDS.find((c) => c.id === cardId)!;
     const result = classifyCard(card, responses[cardId]);
     const res = resolved[cardId];
-    if (res) return "- " + label + ": " + res.value + "\n  Rationale: " + res.rationale;
-    if (result.status === "agreed") return "- " + label + ": " + result.entries[0].value + " (aligned in gather)";
-    return "- " + label + ": PENDING RECONCILIATION";
+    if (res) return ["- " + label + ": " + res.value, "  Rationale: " + res.rationale];
+    if (result.status === "agreed") return ["- " + label + ": " + result.entries[0].value, "  Aligned in gather, no reconciliation needed."];
+    return ["- " + label + ": PENDING RECONCILIATION"];
   };
 
-  const decisionRights = [
-    "# decision-rights.md",
-    "Version: 1.0.0 (draft until every card reconciles)",
-    "Session: Governance Workshop 01, async gather plus convergence",
-    "Provenance: reconciled by Facilitator, " + SESSION_DATE,
-    "",
-    line("SIG-4", "What good looks like, decided by"),
-    line("SIG-5", "Best for us now, decided by"),
-    line("BND-4", "Craft-level sign-off"),
-    line("TRC-2", "Rollback execution"),
-  ].join("\n");
+  const decisionLines = [
+    ...line("SIG-4", "What good looks like, decided by"),
+    ...line("SIG-5", "Best for us now, decided by"),
+    ...line("BND-4", "Craft-level sign-off"),
+    ...line("TRC-2", "Rollback execution"),
+  ];
 
   const sig1 = classifyCard(CARDS.find((c) => c.id === "SIG-1")!, responses["SIG-1"]);
-  const truthSignals = [
-    "# truth-signals.md",
-    "Version: 1.0.0 (draft until every card reconciles)",
-    "Session: Governance Workshop 01",
-    "Provenance: reconciled by Facilitator, " + SESSION_DATE,
-    "",
-    resolved["SIG-1"]
-      ? "Adopted signal: " + resolved["SIG-1"].value + "\nRationale: " + resolved["SIG-1"].rationale
-      : "Candidate signals (facilitator review pending):",
-    ...(resolved["SIG-1"] ? [] : sig1.entries.map((e) => "- " + e.value + " (" + e.name + ")")),
-  ].join("\n");
+  const truthLines = resolved["SIG-1"]
+    ? ["- Adopted signal: " + resolved["SIG-1"].value, "  Rationale: " + resolved["SIG-1"].rationale]
+    : ["Candidate signals, facilitator review pending:",
+       ...sig1.entries.map((e) => "- " + e.value + " (" + e.name + ")")];
+
+  const docs = [
+    {
+      filename: "truth-signals.md",
+      title: "Truth Signals",
+      accent: "#6355BB",
+      lines: truthLines,
+      status: (resolved["SIG-1"] ? "final" : "draft") as "final" | "draft",
+    },
+    {
+      filename: "decision-rights.md",
+      title: "Decision Rights",
+      accent: "#42499E",
+      lines: decisionLines,
+      status: (decisionLines.some((l) => l.includes("PENDING")) ? "draft" : "final") as "final" | "draft",
+    },
+  ];
+
+  const finalCount = docs.filter((d) => d.status === "final").length;
 
   return (
     <div className="space-y-4">
-      <Widget eyebrow="Prove it worked" title="Generated artifacts" sub="Immutable versions">
-        <p className="text-sm text-ink-2">
-          Artifacts generate from reconciled and aligned cards, one file per suit. Versions are immutable. Amendments create a new version with provenance, never an overwrite. This is the rollback rule the deck teaches, enforced by the platform. Reconcile cards in Converge and watch these fill in.
+      <Widget eyebrow="Documents" title="Your documents" sub={finalCount + " of " + docs.length + " final"}
+        tone={finalCount === docs.length ? "done" : "neutral"} icon={<IconArtifacts size={19} />}>
+        <p className="text-sm text-ink-2 mb-4">
+          One document per area, built from the questions your team has settled. Each version is dated and kept: changes create a new version rather than overwriting the old one, so you can always see what was agreed and when. Download it, drop the image into a deck, or print it for a review packet.
         </p>
+        <div className="flex flex-wrap gap-2">
+          <Chip tone="peri" icon={<IconAligned size={13} />}>{finalCount} final</Chip>
+          <Chip tone="ember" icon={<IconSplit size={13} />}>{docs.length - finalCount} still draft</Chip>
+        </div>
       </Widget>
-      {[truthSignals, decisionRights].map((md, i) => (
-        <pre key={i} className="bg-ground border border-line text-ink-2 text-xs rounded-xl p-4 overflow-x-auto whitespace-pre-wrap font-mono">{md}</pre>
+
+      {docs.map((d) => (
+        <ArtifactDoc key={d.filename} filename={d.filename} title={d.title}
+          version="1.0.0" session={SESSION} accent={d.accent} lines={d.lines} status={d.status}
+          provenance={"Reconciled by Facilitator, " + SESSION_DATE + ". Generated by the Capizzi Governance Deck."} />
       ))}
-      <p className="text-sm text-ink-3">guardrails.md, rollback-rules.md, and change-protocol.md generate the same way from their suits.</p>
+
+      <p className="text-sm text-ink-3">
+        guardrails.md, rollback-rules.md, and change-protocol.md build the same way as your team settles those questions.
+      </p>
     </div>
   );
 }

@@ -58,6 +58,111 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+ONE COLOR SYSTEM, NON-NEGOTIABLE. Hue means subject and only subject. The
+five topic hues live on question cards alone (Beliefs, Guardrails, Recovery,
+Change, Reality check). Panels carry state, never topic: neutral (nothing
+required of you), action (something waits on you, ember), done (finished,
+teal). A previous version tinted panels by Capizzi pillar using hues 1 to 2
+degrees from the card topic hues, so purple meant two different things
+depending on what it was painted on. Never reintroduce a second meaning for
+a hue. Neutral should be most of what anyone sees; colour is reserved for
+what needs doing.
+
+PARTICIPATION DESIGN. Gather shows one question at a time, not a wall: a
+long list reads as homework and gets abandoned. Progress, a remaining count,
+and a time estimate are always visible, answered questions collapse to a
+tappable line, and finishing produces an explicit done state that says what
+happens next rather than dead-ending. Health names who has finished and who
+the round is waiting on, which is the strongest available nudge and is fair
+because it shows both sides. In live mode Gather answers as the signed-in
+user and the persona switcher is hidden: letting someone answer as a
+teammate would corrupt the premise. In demo mode the visitor answers from
+DEMO_ME, a seat deliberately outside PERSONAS so convergence still sees five
+complete answer sets while the visitor has real work to do.
+
+HONESTY RULE FOR CONTROLS. A control must do what its label says in the
+mode it is shown in. There is no email-invite backend, so live mode shows
+the join code rather than an invite form; the form survives in demo mode
+labelled Sample data only. If a feature is not wired, change the label or
+hide the control. Do not ship a button that silently writes to local state
+and looks like it worked.
+
+SUPABASE AND MODES. The app runs in one of two modes, decided by
+configuration rather than a flag. With no NEXT_PUBLIC_SUPABASE_* env vars
+it runs demo mode: seeded, in-memory, nothing saved, and every route still
+renders. That keeps a cold link to /start working for lead gen. With the
+env vars set and a signed-in member, it runs live and persists. Never make
+a code path assume Supabase exists; getBrowserClient returns null when it
+does not, and every caller must handle that.
+
+Auth is magic link. lib/supabase/client.ts (browser), lib/supabase/server.ts
+(route handlers), middleware.ts (session refresh, no-ops when unconfigured),
+app/auth/callback/route.ts (code exchange), /signin and /onboarding.
+Migrations run in order: 0001 then 0002 then 0003. See SUPABASE_SETUP.md.
+
+lib/db.ts is the only place that maps between app shapes and database rows.
+Enum mapping is bidirectional and verified: every app value maps to a DB
+value that exists in the migrations, and back without loss. If you add a
+decision mode, level, or handoff reason, update both maps and the SQL enum
+together.
+
+Store writes are optimistic: local state updates first so the UI stays
+responsive, then the write goes to Supabase, then refresh reconciles.
+
+Verification note: the SSR gate stubs next/link and next/navigation because
+it renders outside the Next runtime. Add a stub rather than removing a hook.
+
+STRUCTURE AND PERMISSIONS. Organization > Program > Round. A program is a
+brand, client, or initiative that a curator owns. A round is one repeatable
+pass of the questions, run on a cadence, so Round 2 can be compared against
+Round 1. Round replaces the earlier session naming in all user-facing copy;
+the sessions table remains as the engine record that a round points at.
+
+Four levels: Owner (full org control), Curator (runs programs and rounds,
+invites, assigns, reconciles), Contributor (answers), Observer (read only,
+and blocked from answering by a restrictive RLS policy, not just the UI).
+lib/team.ts permissionsFor is the single source of truth; do not scatter
+level checks through views.
+
+Handoffs are governed events, not settings changes. Each records who took
+over, why, when, and until when. Rows are never deleted: ending a cover
+sets active false so the history survives, which is the continuity record a
+new joiner reads. effectiveHolder follows the chain and is depth-capped at
+8 hops so a cycle terminates; the same guard exists in SQL as
+effective_holder. uncoveredPeople is the check that stops a round going
+dark when someone is away with no cover.
+
+Verification note: SSR gate markers must be single text nodes. React
+inserts an HTML comment between adjacent text nodes, so a marker spanning
+a JSX expression will never match.
+
+PLAIN LANGUAGE RULE, applies to all user-facing copy. Deck vocabulary
+(Signals, Bounds, Trace, Spine, suits, ranks) and internal card ids
+(SIG-4, D-FIG-1) are internal only and must never appear in the working
+app. A first-time user should never have to learn a taxonomy before
+answering a question. Suits carry a plain label in SUIT_STYLE that says
+what the card governs: Beliefs, Guardrails, Recovery, Change, Reality
+check. Color still does the grouping work. Section titles are plain too:
+Answer on your own time, Where you disagree, Your documents.
+
+The physical card deck and the Capizzi Process appear in exactly one
+place, the explore card at the foot of /start, framed as optional depth
+for someone who wants to take this further than the app. Do not
+reintroduce process branding into the working flow.
+
+Artifacts render as paper, not UI: components/ArtifactDoc.tsx uses warm
+stock (#FBFAF7) with dark ink, a ruled masthead, a draft or final status
+mark, and a provenance footer. The visual break from the dark app is
+deliberate, since an artifact is the thing you hand to someone. Exports are
+dependency-free: .md Blob download, .png drawn to canvas at 2x for slides,
+clipboard copy, and window.print (which also yields Save as PDF via the
+@media print rules that strip nav, canvas, and action bars). Every paper
+color verified at or above AA on the stock. Status derives from content:
+any PENDING line keeps a document in draft.
+
+Card rails carry suit identity only, never the card id. Codes like D-FIG-1
+cannot wrap in a narrow rail without breaking, so ids sit in the card body.
+
 Deck faces in-app: components/ui.tsx SuitCard carries the same anatomy as
 the physical cards. The card id reads as the rank in a suit-colored rail,
 the suit name runs vertically up the rail, and the suit glyph anchors the
