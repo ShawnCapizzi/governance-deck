@@ -9,7 +9,13 @@ import { PageHeader } from "../PageHeader";
 import { IconAligned, IconSplit, IconReview } from "../Icons";
 
 export default function ConvergeView() {
-  const { responses, resolved, reconcile } = useSession();
+  const { responses, resolved, reconcile, mode, round, saveDecision, people, org } = useSession();
+  const live = mode === "live";
+  // While a round is gathering, answers are deliberately hidden from
+  // everyone but their author, so there is nothing to settle here yet.
+  const gathering = live && round?.status === "gathering";
+  const canSettle = !live || (round?.status === "aligning" && (org?.level === "Owner" || org?.level === "Curator"));
+  const nameOf = (id: string) => people.find((p) => p.id === id)?.name ?? id.slice(0, 8);
   const [drafts, setDrafts] = useState<Record<string, Resolution>>({});
   const results = CARDS.map((c) => ({ card: c, result: classifyCard(c, responses[c.id]) }));
   const counts = {
@@ -35,6 +41,15 @@ export default function ConvergeView() {
           <Chip tone="brand" icon={<IconAligned size={13} />}>{counts.reconciled} settled</Chip>
         </div>
       </Widget>
+      {gathering && (
+        <Widget eyebrow="Alignment" title="Answers are sealed until everyone finishes"
+          tone="neutral" icon={<IconReview size={19} />}>
+          <p className="text-base text-ink-2 max-w-2xl">
+            Nobody can see anyone else&apos;s answers while a round is gathering, including whoever is running it. That is deliberate: if you can see what the room said before you answer, your answer is worth less. When everyone has finished, a curator closes gathering and every answer becomes visible at the same moment.
+          </p>
+        </Widget>
+      )}
+
       {results.map(({ card, result }) => {
         const res = resolved[card.id];
         const draft = drafts[card.id] || { value: "", rationale: "" };
@@ -64,7 +79,14 @@ export default function ConvergeView() {
                 <p className="text-ink-2 text-xs mt-1">Rationale: {res.rationale}</p>
               </div>
             )}
-            {needsWork && (
+            {needsWork && !canSettle && (
+              <div className="border-t border-line pt-3">
+                <p className="text-base text-ink-2">
+                  Waiting on a curator to settle this one and record the reason.
+                </p>
+              </div>
+            )}
+            {needsWork && canSettle && (
               <div className="border-t border-line pt-3 space-y-2">
                 <p className="text-sm text-ink-3">Facilitator: adopt an answer or write the resolved value, then record the rationale.</p>
                 <div className="flex flex-wrap gap-2">
@@ -85,7 +107,10 @@ export default function ConvergeView() {
                   placeholder="Rationale (required, becomes provenance)"
                   className="w-full rounded-lg bg-ground border border-line-strong px-3 py-2 text-sm text-ink placeholder:text-ink-3 focus:outline-none focus:ring-2 focus:ring-brand" />
                 <button disabled={!draft.value || !draft.rationale}
-                  onClick={() => reconcile(card.id, draft)}
+                  onClick={() => {
+                    reconcile(card.id, draft);
+                    if (live) void saveDecision(card.id, draft.value, draft.rationale);
+                  }}
                   className="pill-primary px-5 py-2.5 text-sm disabled:opacity-40">
                   Reconcile
                 </button>

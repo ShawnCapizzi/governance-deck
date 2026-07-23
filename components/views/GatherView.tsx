@@ -18,8 +18,10 @@ import { PageHeader } from "../PageHeader";
 import { IconDecidesAlone, IconAligned, IconSplit } from "../Icons";
 
 export default function GatherView() {
-  const { responses, setResponse, roles, mode, user, people } = useSession();
+  const { responses, setResponse, roles, mode, user, people, round } = useSession();
   const live = mode === "live";
+  const noRound = live && !round;
+  const sealed = live && round?.status !== "gathering";
   const [demoPersona, setDemoPersona] = useState(DEMO_ME.id);
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -53,6 +55,25 @@ export default function GatherView() {
     <div className="space-y-4">
       <PageHeader eyebrow="Run it" title="Your questions" lead="Answer on your own schedule. Nobody sees your answers until everyone has finished." />
 
+      {noRound && (
+        <Widget eyebrow="Run it" title="No round is open yet" tone="neutral" icon={<IconSplit size={19} />}>
+          <p className="text-base text-ink-2 max-w-2xl mb-4">
+            Questions are asked inside a round, which is one pass through the deck that you can run again next quarter and compare. A curator opens the first one.
+          </p>
+          <Link href="/team" className="pill-primary px-5 py-2.5 text-base">Open a round</Link>
+        </Widget>
+      )}
+
+      {sealed && (
+        <Widget eyebrow="Run it" title="This round has closed for answers" tone="done" icon={<IconAligned size={19} />}>
+          <p className="text-base text-ink-2 max-w-2xl mb-4">
+            Gathering is finished, so answers can no longer be changed. Every answer is now visible to the whole team, which is the point: you can see where you already agree and where you do not.
+          </p>
+          <Link href="/converge" className="pill-primary px-5 py-2.5 text-base">See where you stand</Link>
+        </Widget>
+      )}
+
+      {!noRound && !sealed && (
       <Widget
         eyebrow="Progress"
         title={done ? "You are done" : remaining.length + (remaining.length === 1 ? " question left" : " questions left")}
@@ -89,6 +110,8 @@ export default function GatherView() {
         )}
       </Widget>
 
+      )}
+
       {!live && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-ink-3">Sample team. You are answering as yourself; switch to see how others answered:</span>
@@ -103,7 +126,7 @@ export default function GatherView() {
         </div>
       )}
 
-      {current && (
+      {current && !noRound && !sealed && (
         <SuitCard card={current}>
           {current.type === "text" || current.type === "blind_definition" ? (
             <FreeText
@@ -128,7 +151,7 @@ export default function GatherView() {
         </SuitCard>
       )}
 
-      {answeredIds.size > 0 && (
+      {answeredIds.size > 0 && !noRound && (
         <Widget eyebrow="Your questions" title="Answered" sub={answeredIds.size + " done"} tone="done"
           icon={<IconAligned size={19} />}>
           <div className="divide-y divide-line/70 border-y border-line/70">

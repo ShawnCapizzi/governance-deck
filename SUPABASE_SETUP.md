@@ -23,6 +23,8 @@ Open the SQL Editor and run each file top to bottom, one at a time:
 1. `supabase/migrations/0001_init.sql`
 2. `supabase/migrations/0002_team_programs_rounds.sql`
 3. `supabase/migrations/0003_roles_profiles_bootstrap.sql`
+4. `supabase/migrations/0004_early_access.sql`
+5. `supabase/migrations/0005_round_answers.sql`
 
 Then optionally run `supabase/seed.sql` to load the canonical question deck.
 

@@ -248,3 +248,116 @@ export async function createProgram(sb: SupabaseClient, orgId: string, name: str
 export async function updateProfile(sb: SupabaseClient, userId: string, displayName: string) {
   return sb.from("profiles").update({ display_name: displayName }).eq("id", userId);
 }
+
+// --- rounds ----------------------------------------------------------------
+
+export type RoundStatus = "gathering" | "aligning" | "closed";
+
+export interface Round {
+  id: string;
+  programId: string;
+  programName: string;
+  sequence: number;
+  label: string;
+  status: RoundStatus;
+}
+
+export interface RoundAnswer {
+  cardKey: string;
+  userId: string;
+  value: string;
+}
+
+export interface RoundDecision {
+  cardKey: string;
+  value: string;
+  rationale: string;
+  decidedBy: string;
+  decidedAt: string;
+}
+
+export async function loadRounds(sb: SupabaseClient, orgId: string): Promise<Round[]> {
+  const { data, error } = await sb
+    .from("rounds")
+    .select("id, program_id, sequence, label, status, programs!inner(name, org_id)")
+    .eq("programs.org_id", orgId)
+    .order("sequence", { ascending: false });
+  if (error || !data) return [];
+  return data.map((r) => {
+    const pg = (Array.isArray(r.programs) ? r.programs[0] : r.programs) as { name: string } | undefined;
+    return {
+      id: r.id as string,
+      programId: r.program_id as string,
+      programName: pg?.name ?? "Program",
+      sequence: r.sequence as number,
+      label: (r.label as string) ?? "Round " + r.sequence,
+      status: (r.status as RoundStatus) ?? "gathering",
+    };
+  });
+}
+
+export async function openRound(sb: SupabaseClient, programId: string, label: string) {
+  return sb.rpc("open_round", { program: programId, round_label: label });
+}
+
+export async function advanceRound(sb: SupabaseClient, roundId: string, next: RoundStatus) {
+  return sb.rpc("advance_round", { r: roundId, next_state: next });
+}
+
+// Answers. While a round is gathering the database returns only the caller's
+// own rows, so this same query is correct in both phases: before the reveal
+// it yields your answers, after it yields everyone's.
+export async function loadAnswers(sb: SupabaseClient, roundId: string): Promise<RoundAnswer[]> {
+  const { data, error } = await sb
+    .from("round_answers")
+    .select("card_key, user_id, value")
+    .eq("round_id", roundId);
+  if (error || !data) return [];
+  return data.map((a) => ({
+    cardKey: a.card_key as string,
+    userId: a.user_id as string,
+    value: a.value as string,
+  }));
+}
+
+export async function saveAnswer(sb: SupabaseClient, roundId: string, userId: string, cardKey: string, value: string) {
+  return sb.from("round_answers")
+    .upsert({ round_id: roundId, user_id: userId, card_key: cardKey, value, updated_at: new Date().toISOString() },
+            { onConflict: "round_id,card_key,user_id" });
+}
+
+// Progress without exposure: counts only, never values, so a curator can
+// chase the people who have not finished without seeing what anyone said.
+export async function loadProgress(sb: SupabaseClient, roundId: string): Promise<Record<string, number>> {
+  const { data, error } = await sb.rpc("round_progress", { r: roundId });
+  if (error || !data) return {};
+  const out: Record<string, number> = {};
+  (data as { user_id: string; answered: number }[]).forEach((row) => {
+    out[row.user_id] = Number(row.answered);
+  });
+  return out;
+}
+
+export async function loadDecisions(sb: SupabaseClient, roundId: string): Promise<RoundDecision[]> {
+  const { data, error } = await sb
+    .from("round_decisions")
+    .select("card_key, resolved_value, rationale, decided_by, decided_at")
+    .eq("round_id", roundId);
+  if (error || !data) return [];
+  return data.map((d) => ({
+    cardKey: d.card_key as string,
+    value: d.resolved_value as string,
+    rationale: d.rationale as string,
+    decidedBy: d.decided_by as string,
+    decidedAt: String(d.decided_at).slice(0, 10),
+  }));
+}
+
+export async function saveDecision(
+  sb: SupabaseClient, roundId: string, userId: string,
+  cardKey: string, value: string, rationale: string
+) {
+  return sb.from("round_decisions")
+    .upsert({ round_id: roundId, card_key: cardKey, resolved_value: value, rationale, decided_by: userId },
+            { onConflict: "round_id,card_key" });
+}

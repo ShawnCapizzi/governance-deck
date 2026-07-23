@@ -8,7 +8,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import type { User } from "@supabase/supabase-js";
 import { getBrowserClient, isConfigured } from "./supabase/client";
 import * as db from "./db";
-import type { OrgContext } from "./db";
+import type { OrgContext, Round, RoundStatus, RoundDecision } from "./db";
 import { SEED, ResponseMap, Resolution, Role, DEFAULT_ROLES, RoleKit } from "./deck";
 import { PEOPLE, PROGRAMS, HANDOFFS, Person, Handoff, Program, Level, HandoffReason } from "./team";
 
@@ -40,6 +40,15 @@ interface SessionState {
   refresh: () => Promise<void>;
   updateMe: (patch: { displayName?: string; team?: string }) => Promise<void>;
   addProgram: (name: string, client: string) => Promise<void>;
+  // Rounds. In demo mode these stay null and the app runs on seeded data.
+  rounds: Round[];
+  round: Round | null;
+  setRoundId: (id: string) => void;
+  openRound: (programId: string, label: string) => Promise<void>;
+  advanceRound: (next: RoundStatus) => Promise<void>;
+  progress: Record<string, number>;
+  decisions: RoundDecision[];
+  saveDecision: (cardKey: string, value: string, rationale: string) => Promise<void>;
 }
 
 const Ctx = createContext<SessionState | null>(null);
@@ -55,6 +64,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [org, setOrg] = useState<OrgContext | null>(null);
   const [loading, setLoading] = useState(isConfigured);
+  const [rounds, setRounds] = useState<Round[]>([]);
+  const [roundId, setRoundIdState] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [decisions, setDecisions] = useState<RoundDecision[]>([]);
+
+  const round = rounds.find((r) => r.id === roundId) ?? rounds[0] ?? null;
 
   const mode: "demo" | "live" = org ? "live" : "demo";
 
@@ -80,6 +95,33 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setHandoffs(h);
       setPrograms(pg);
       setCurrentUserId(auth.user.id);
+
+      const rs = await db.loadRounds(sb, ctx.orgId);
+      setRounds(rs);
+      const active = rs.find((x) => x.id === roundId) ?? rs[0] ?? null;
+      setRoundIdState(active ? active.id : null);
+      if (active) {
+        const [answers, prog, decs] = await Promise.all([
+          db.loadAnswers(sb, active.id),
+          db.loadProgress(sb, active.id),
+          db.loadDecisions(sb, active.id),
+        ]);
+        const map: ResponseMap = {};
+        answers.forEach((a) => {
+          map[a.cardKey] = { ...(map[a.cardKey] || {}), [a.userId]: a.value };
+        });
+        setResponses(map);
+        setProgress(prog);
+        setDecisions(decs);
+        const res: Record<string, Resolution> = {};
+        decs.forEach((d) => { res[d.cardKey] = { value: d.value, rationale: d.rationale }; });
+        setResolved(res);
+      } else {
+        setResponses({});
+        setProgress({});
+        setDecisions([]);
+        setResolved({});
+      }
     }
     setLoading(false);
   };
@@ -95,6 +137,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, []);
   const setResponse = (cardId: string, personaId: string, value: string) => {
     setResponses((prev) => ({ ...prev, [cardId]: { ...(prev[cardId] || {}), [personaId]: value } }));
+    const sb = getBrowserClient();
+    if (sb && round && user && personaId === user.id && round.status === "gathering") {
+      void db.saveAnswer(sb, round.id, user.id, cardId, value);
+    }
   };
   const reconcile = (cardId: string, resolution: Resolution) => {
     setResolved((prev) => ({ ...prev, [cardId]: resolution }));
@@ -115,6 +161,31 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const sb = getBrowserClient();
     if (sb && org) void db.replaceRoles(sb, org.orgId, kit.roles).then(() => refresh());
   };
+  const setRoundId = (id: string) => { setRoundIdState(id); void refresh(); };
+
+  const openRoundFn = async (programId: string, label: string) => {
+    const sb = getBrowserClient();
+    if (!sb || !org) return;
+    const { data, error } = await db.openRound(sb, programId, label);
+    if (!error && data) setRoundIdState((data as { id: string }).id);
+    await refresh();
+  };
+
+  const advanceRoundFn = async (next: RoundStatus) => {
+    const sb = getBrowserClient();
+    if (!sb || !round) return;
+    await db.advanceRound(sb, round.id, next);
+    await refresh();
+  };
+
+  const saveDecisionFn = async (cardKey: string, value: string, rationale: string) => {
+    setResolved((prev) => ({ ...prev, [cardKey]: { value, rationale } }));
+    const sb = getBrowserClient();
+    if (!sb || !round || !user) return;
+    await db.saveDecision(sb, round.id, user.id, cardKey, value, rationale);
+    await refresh();
+  };
+
   const updateMe = async (patch: { displayName?: string; team?: string }) => {
     const sb = getBrowserClient();
     if (!sb || !org || !user) return;
@@ -162,7 +233,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     <Ctx.Provider value={{ responses, setResponse, resolved, reconcile, roles, addRole, updateRole, removeRole, applyKit,
       people, programs, handoffs, currentUserId, setCurrentUserId,
       addPerson, setLevel, setStatus, createHandoff, endHandoff,
-      mode, user, org, loading, refresh, updateMe, addProgram }}>
+      mode, user, org, loading, refresh, updateMe, addProgram,
+      rounds, round, setRoundId, openRound: openRoundFn, advanceRound: advanceRoundFn,
+      progress, decisions, saveDecision: saveDecisionFn }}>
       {children}
     </Ctx.Provider>
   );

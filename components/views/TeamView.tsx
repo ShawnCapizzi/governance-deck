@@ -18,6 +18,9 @@ import {
   IconAligned, IconSplit, IconProduct,
 } from "../Icons";
 
+import { CARDS } from "../../lib/deck";
+
+const TOTAL_QUESTIONS = CARDS.length;
 const REASONS: HandoffReason[] = ["Out of office", "Left the organization", "Workload change"];
 const TEAMS = ["Studio", "Creative", "Strategy", "Design Ops", "Content Ops", "Brand", "Delivery", "Legal and Compliance", "Executive"];
 
@@ -45,6 +48,7 @@ export default function TeamView() {
     people, programs, handoffs, roles,
     addPerson, setLevel, setStatus, createHandoff, endHandoff,
     mode, org, user, updateMe, addProgram,
+    rounds, round, setRoundId, openRound, advanceRound, progress,
   } = useSession();
 
   const [invite, setInvite] = useState({ name: "", email: "", level: "Contributor" as Level, team: TEAMS[1] });
@@ -53,6 +57,9 @@ export default function TeamView() {
   const [me, setMe] = useState({ displayName: "", team: TEAMS[1] });
   const [program, setProgram] = useState({ name: "", client: "" });
   const live = mode === "live";
+  const canRun = org?.level === "Owner" || org?.level === "Curator";
+  const answerers = people.filter((p) => p.level !== "Observer");
+  const doneCount = answerers.filter((p) => (progress[p.id] ?? 0) >= TOTAL_QUESTIONS).length;
   const [draft, setDraft] = useState({ toId: "", reason: REASONS[0], note: "", until: "" });
 
   const nameOf = (id: string) => people.find((p) => p.id === id)?.name ?? "A teammate";
@@ -134,6 +141,12 @@ export default function TeamView() {
             <div key={pg.id} className="rounded-xl border border-line bg-ground/60 p-4">
               <p className="text-base text-ink font-medium tracking-tight">{pg.name}</p>
               <p className="text-sm text-ink-2 mt-0.5">{pg.client}</p>
+              {live && canRun && (
+                <button onClick={() => void openRound(pg.id, "")}
+                  className="mt-3 px-4 py-2 rounded-full text-base border border-line-strong text-ink-2 hover:text-ink hover:border-ink-3">
+                  Open a round here
+                </button>
+              )}
               <div className="mt-3 flex flex-wrap gap-2">
                 <Chip tone="peri">Curator: {nameOf(pg.curatorId)}</Chip>
                 <Chip>{pg.roundCount} rounds</Chip>
@@ -143,6 +156,67 @@ export default function TeamView() {
           ))}
         </div>
       </Widget>
+
+      {live && (
+        <Widget eyebrow="Run it" title={round ? round.label : "No round open"}
+          sub={round ? round.programName : undefined}
+          tone={round ? (round.status === "gathering" ? "action" : "done") : "neutral"}
+          icon={<IconTransformation size={19} />}>
+          {round ? (
+            <div>
+              <p className="text-base text-ink-2 max-w-2xl mb-4">
+                {round.status === "gathering"
+                  ? "People are answering now. Every answer stays private until you close gathering, then all of them become visible at once."
+                  : round.status === "aligning"
+                    ? "Answers are open to the team. Curators settle the questions where answers differed, each with a reason on record."
+                    : "This round is closed. Open a new one to measure the same questions again and see what moved."}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Chip tone={round.status === "gathering" ? "ember" : "peri"}>
+                  {doneCount} of {answerers.length} finished
+                </Chip>
+                {answerers.filter((p) => (progress[p.id] ?? 0) < TOTAL_QUESTIONS).map((p) => (
+                  <Chip key={p.id}>{p.name}: {TOTAL_QUESTIONS - (progress[p.id] ?? 0)} left</Chip>
+                ))}
+              </div>
+              {canRun && (
+                <div className="flex flex-wrap items-center gap-3">
+                  {round.status === "gathering" && (
+                    <button onClick={() => void advanceRound("aligning")} className="pill-primary px-5 py-2.5 text-base">
+                      Close gathering and reveal answers
+                    </button>
+                  )}
+                  {round.status === "aligning" && (
+                    <button onClick={() => void advanceRound("closed")} className="pill-primary px-5 py-2.5 text-base">
+                      Close this round
+                    </button>
+                  )}
+                  {rounds.length > 1 && (
+                    <select value={round.id} onChange={(e) => setRoundId(e.target.value)}
+                      className="rounded-lg bg-ground border border-line-strong px-3 py-2 text-base text-ink focus:outline-none focus:ring-2 focus:ring-brand">
+                      {rounds.map((r) => (
+                        <option key={r.id} value={r.id}>{r.programName}: {r.label}</option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              )}
+              {round.status === "gathering" && !canRun && (
+                <p className="text-base text-ink-3">A curator closes gathering once everyone has finished.</p>
+              )}
+            </div>
+          ) : (
+            <div>
+              <p className="text-base text-ink-2 max-w-2xl mb-4">
+                A round is one pass through the questions. Run it again next quarter against the same questions and the difference is your progress. {canRun ? "Pick a program below and open the first one." : "A curator opens the first one."}
+              </p>
+              {canRun && programs.length === 0 && (
+                <p className="text-base text-ink-3">Create a program first, then open a round inside it.</p>
+              )}
+            </div>
+          )}
+        </Widget>
+      )}
 
       {live && user && (
         <Widget eyebrow="Your profile" title="How you appear to your team" sub="Everyone sees this">

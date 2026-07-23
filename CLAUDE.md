@@ -58,6 +58,35 @@ and a matching tinted icon tile. That is the squint-test hierarchy, and it
 is what makes the app scan as an enterprise tool rather than a page of
 uniform cards. Suit rails on cards are 1.5 units wide for the same reason.
 
+ROUNDS ARE THE UNIT OF PERSISTENCE (migration 0005). Answers and decisions
+belong to a round, not to the app. A round moves gathering -> aligning ->
+closed, and only owners and curators advance it.
+
+ANTI-ANCHORING IS ENFORCED IN THE DATABASE, NOT THE UI. While a round is
+gathering, round_answers RLS returns only the caller own rows. This applies
+to curators and owners too: nobody sees another person answer before the
+reveal, because if you can see what the room said your answer is worth less.
+When the round advances, every answer becomes visible to the whole org at
+the same instant. Curators still need to chase people, so round_progress is
+a security-definer function returning COUNTS ONLY, never values. Verified by
+executing the policy predicates across every caller, phase, and level: 18
+assertions in .gates/rls-check.cjs. Never add a select policy that widens
+gathering-phase visibility.
+
+Other guarantees in 0005: answers cannot be edited after the reveal, a
+decision cannot be recorded before gathering closes, decided_by must equal
+the caller, rationale cannot be blank, and there is no delete policy on
+answers (an answer is withdrawn by changing it, not by erasing it).
+
+Card keys in round_answers are text (SIG-1) because the deck lives in code
+at lib/deck.ts, which is its source of truth. If the deck moves into the
+database, add a cards lookup and migrate the keys; a foreign key today would
+maintain a fiction.
+
+Demo mode never mixes with live: when a round loads, the response map is
+rebuilt from the database rather than merged over seeded data, so a live
+team never sees sample personas answering their questions.
+
 DEPTH AND LIGHT. .mesh-hero is three offset radial washes reading as light
 across a surface: brand 0.32, magenta 0.10, teal 0.07. Those peaks are the
 computed ceiling, where body copy holds 7.37:1. .lit adds a soft key light
